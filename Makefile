@@ -12,4 +12,4 @@ clean :
 	rm -rf $(NAME)
 fclean : 
 		rm -rf $(NAME)
-re : fcleen all
+re : fclean all
