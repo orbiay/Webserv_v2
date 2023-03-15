@@ -1,12 +1,10 @@
 #include "http.hpp"
 #include <iostream>
 #include<array>
-#include"server.hpp"
-#include"client.hpp"
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8010
+#define PORT 8011
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
 {
@@ -101,6 +99,9 @@ void run_server(Server &server)
                         if (iter->fd_client == fd)
                         {
                             server.read_from_socket_client(*iter);
+                            // parse the request
+                            iter->parse.parse_request(iter->request);
+                            iter->parse.display_request(iter->parse);
                             break;
                         }
                     }
@@ -114,6 +115,8 @@ void run_server(Server &server)
                 {
                     if (iter->fd_client == fd)
                     {
+                        // check the request and response with error page if there is any
+                        iter->parse.check_request(server, *iter);
                         server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",*iter);
                         close(fd);
                         FD_CLR(fd,&server.current);

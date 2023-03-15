@@ -1,8 +1,6 @@
-#ifndef Server_HPP
-#define Server_HPP
+#ifndef SERVER_HPP
+#define SERVER_HPP
 #include"http.hpp"
-#include"client.hpp"
-#include<list>
 class Server{
     public:
     Server();
