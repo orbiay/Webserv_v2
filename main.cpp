@@ -1,12 +1,10 @@
 #include "http.hpp"
 #include <iostream>
 #include<array>
-#include"server.hpp"
-#include"client.hpp"
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8010
+#define PORT 8011
 
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)

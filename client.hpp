@@ -1,5 +1,8 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
+
+#include "http.hpp"
+
 class Client{
     public:
     Client(){
@@ -7,10 +10,12 @@ class Client{
     };
     ~Client(){};
     int fd_client;
+    parseRequest parse;
     std::string request;
     std::string response;
     int position;
     socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;
 };
+
 #endif

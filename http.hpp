@@ -15,6 +15,13 @@
 #include <cerrno>
 #include <fstream>
 #include <string>
+#include <list>
+#include "parseRequest.hpp"
+#include "client.hpp"
+#include "server.hpp"
+
+
+
 class Http{
     public:
     Http();
