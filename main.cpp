@@ -6,6 +6,7 @@
 #define num_of_servers 5
 #define PORT 8011
 
+
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
 {
     struct sockaddr_in address;
@@ -69,8 +70,10 @@ void run_server(Server &server)
     listen_for_conection(server.fd_serv);
     std::list<Client>::iterator iter = server.clients.begin();
     int ret;
-    while (1)
+    int i = 0;
+    while (i < 2)
     {
+        std::cout<<i<<std::endl;
         server.writable = server.current;
         server.readable = server.current;
         ret = select(server.maxfd + 1, &server.readable, &server.writable, nullptr, nullptr);
@@ -125,6 +128,7 @@ void run_server(Server &server)
                 }
             }
         }
+        i++;
     }
 }
 Server init_server(int id_servers,struct sockaddr_in addr){
@@ -153,27 +157,26 @@ int main ()
 
     std::list<Server> server_list;
 
-    std::list<Server>::iterator iter;
-
     while (i < 5)
     {
         server_list.push_back(init_server(id_servers[i],sed_struct[i]));
         std::cout<<id_servers[i]<<std::endl;
         i++;
     }
-    iter = server_list.begin();
-    for(std::list<Server>::iterator it = server_list.begin(); it != server_list.end();it++)
+    std::list<Server>::iterator iter = server_list.begin();
+    i = 0;
+    while(i < num_of_servers)
     {
-        //std::cout<<it->fd_serv<<std::endl;
-        run_server(*it);
-        //if (it++ == client_list.end())
-        it = iter;
+        run_server(*iter);
+        if (num_of_servers == i + 1)
+        {
+            i = 0;
+            iter = server_list.begin();
+        }
+        else
+        {
+            i++;
+            iter++;
+        }
     }
-    //while (i < num_of_servers)
-    //{
-    //    //std::cout<<id_servers[i]<<std::endl;
-    //    run_server(client_list);
-    //    if (i + 1 == num_of_servers)
-    //        i = 0;
-    //}
 }
