@@ -1,7 +1,9 @@
 #include"server.hpp"
 Server::Server(){
-
+    
 }
+
+
 Server::~Server(){
 
 }
@@ -34,4 +36,11 @@ void Server::write_in_socket_client(std::string str,std::string file ,const Clie
     char *s = read_from_file(file);
     str += s;
     write(client.fd_client,str.c_str(),strlen(str.c_str()));
+}
+
+
+fd_set Server::initializer()
+{
+    FD_ZERO(&current);
+    return (current);
 }

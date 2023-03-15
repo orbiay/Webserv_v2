@@ -53,127 +53,113 @@ void listen_for_conection(int fd_server)
 Client accept_new_connection(Server &server)
 {
     Client client;
-    client.fd_client = ::accept(server.fd_serv, (struct sockaddr *)&server.address, &server.sizeof_struct);
+    client.fd_client = ::accept(server.fd_serv, (struct sockaddr *)&client.addresStorage, &client.address_length);
     if (client.fd_client == -1)
     {
        std::cerr<<"failed accept method."<<std::endl;
         exit(EXIT_FAILURE);
     }
-    if (server.maxfd < client.fd_client)
-        server.maxfd = client.fd_client;
-    FD_SET(client.fd_client, &server.current);
+    if (Server::maxfd < client.fd_client)
+        Server::maxfd = client.fd_client;
+    FD_SET(client.fd_client, &Server::current);
     client.position = 0;
     sleep(1);
     return (client);
 }
 
-void run_server(Server &server)
+void run_server(std::list<Server> &server_list)
 {
-    listen_for_conection(server.fd_serv);
-    std::list<Client>::iterator iter = server.clients.begin();
-    int ret;
-    int i = 0;
-    while (i < 2)
+   
+    std::list<Client>::iterator iter;
+    int ret = 0;
+    while (1)
     {
-        std::cout<<i<<std::endl;
-        server.writable = server.current;
-        server.readable = server.current;
-        ret = select(server.maxfd + 1, &server.readable, &server.writable, nullptr, nullptr);
+        fd_set writable = Server::current;
+        fd_set readable = Server::current;
+        //std::cout << "beffor select \n\n";
+        ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
         if (ret < 0) {
-			std::perror("Error ");
-			exit(EXIT_FAILURE);
-		}
-		if (!ret)
-			continue ;
-        for(int fd = server.fd_serv; fd <= server.maxfd;++fd)
-        {
-            if (FD_ISSET(fd, &server.readable))
-            {
-                //exit(1);
-                //statement for new connection
-                if (fd == server.fd_serv)
-                {
-                    server.clients.push_back(accept_new_connection(server));
-                    std::cout<<"The server number "<< server.fd_serv << " accept new connection seccesfully"<<std::endl;
-                }
-                else {
-                    //statement for request
-                    for (iter = server.clients.begin();iter != server.clients.end();iter++)
-                    {
-                        std::cout<<fd<<std::endl;
-                        if (iter->fd_client == fd)
-                        {
-                            server.read_from_socket_client(*iter);
-                            break;
-                        }
-                    }
-                }
-            }
-            //statement for Response
-            if(FD_ISSET(fd, &server.writable))
-            {
-                //iter = it;
-                for (iter = server.clients.begin();iter != server.clients.end();iter++)
-                {
-                    if (iter->fd_client == fd)
-                    {
-                        server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",*iter);
-                        close(fd);
-                        FD_CLR(fd,&server.current);
-                        break;
-                    }
-                }
-            }
+            std::perror("Error ");
+            exit(EXIT_FAILURE);
         }
-        i++;
+        if (!ret)
+            continue;
+        //std::cout << "after select \n\n";
+        std::list<Server>::iterator server_iter = server_list.begin();
+        while (server_iter != server_list.end())
+        {
+            // If Statement for new connection.
+            if (FD_ISSET(server_iter->fd_serv, &readable))
+            {
+                std::cout<< "server Fd = " << server_iter->fd_serv <<std::endl;
+                server_iter->clients.push_back(accept_new_connection(*server_iter));
+                std::cout<<"The server number "<< server_iter->fd_serv << " accept new connection seccesfully"<<std::endl;
+            }
+            for (int i = 0; i < (int)server_iter->clients.size(); i++)
+            {
+                Client &client = server_iter->clients[i];
+                // IF statement for Request.
+                if (FD_ISSET(client.fd_client, &readable))
+                {
+                    server_iter->read_from_socket_client(client);
+                }
+                // IF statement for Response.
+                else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))
+                {
+                    server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
+                    close(client.fd_client);
+                    FD_CLR(client.fd_client,&server_iter->current);
+                    server_iter->clients.erase(std::next(server_iter->clients.begin(), i));
+                    i--;
+                }
+            }
+            server_iter++;
+        }
     }
 }
 Server init_server(int id_servers,struct sockaddr_in addr){
     Server server;
     server.fd_serv = id_servers;
-    FD_ZERO(&server.current);
     FD_ZERO(&server.readable);
     FD_ZERO(&server.writable);
-    FD_SET(server.fd_serv, &server.current);
-    server.maxfd = id_servers;
+    std::cout << "socket fd = "  << server.fd_serv << std::endl;
+    FD_SET(server.fd_serv, &Server::current);
+
+    Server::maxfd = std::max(server.fd_serv, Server::maxfd);
     server.sizeof_struct = sizeof(addr);
     std::cout<<server.sizeof_struct<<std::endl;
     server.address = addr;
     return (server);
 }
 
+
+fd_set Server::current = Server::initializer();
+int Server::maxfd = 0;
+
 int main ()
 {
     int i = 0;
-
     std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
     std::array<int, num_of_servers> id_servers;
 
     id_servers = create_servers(sed_struct);
+  
+
 
     std::list<Server> server_list;
-
+    std::list<Server>::iterator iter = server_list.begin();
     while (i < 5)
     {
         server_list.push_back(init_server(id_servers[i],sed_struct[i]));
         std::cout<<id_servers[i]<<std::endl;
         i++;
     }
-    std::list<Server>::iterator iter = server_list.begin();
-    i = 0;
-    while(i < num_of_servers)
+    iter = server_list.begin();
+    while(iter != server_list.end())
     {
-        run_server(*iter);
-        if (num_of_servers == i + 1)
-        {
-            i = 0;
-            iter = server_list.begin();
-        }
-        else
-        {
-            i++;
-            iter++;
-        }
+        listen_for_conection(iter->fd_serv);
+        iter++;
     }
+    run_server(server_list);
 }
