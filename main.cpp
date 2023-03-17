@@ -100,10 +100,13 @@ void run_server(std::list<Server> &server_list)
                 if (FD_ISSET(client.fd_client, &readable))
                 {
                     server_iter->read_from_socket_client(client);
+                    client.parse.parse_request(client.request);
+                    client.parse.display_request(client.parse);
                 }
                 // IF statement for Response.
                 else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))
                 {
+                    client.parse.check_request(*server_iter, client);
                     server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
                     close(client.fd_client);
                     FD_CLR(client.fd_client,&server_iter->current);

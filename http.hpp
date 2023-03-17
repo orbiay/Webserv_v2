@@ -20,6 +20,11 @@
 #include "client.hpp"
 #include "server.hpp"
 
+typedef struct s_hcode {
+    std::string location;
+    std::string root;
+    // std::string 
+} t_hcode;
 
 
 class Http{
