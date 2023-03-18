@@ -4,7 +4,7 @@
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8011
+#define PORT 8010
 
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
@@ -45,7 +45,7 @@ void listen_for_conection(int fd_server)
         std::cerr<<"fialed listen ."<<std::endl;
         exit(2);
     }
-    std::cout<<"the server "<< fd_server << " in listen mode"<<std::endl;
+    std::cout<<"the server "<< fd_server << " in listen mode\n\n"<<std::endl;
 }
 
 Client accept_new_connection(Server &server)
@@ -74,7 +74,6 @@ void run_server(std::list<Server> &server_list)
     {
         fd_set writable = Server::current;
         fd_set readable = Server::current;
-        //std::cout << "beffor select \n\n";
         ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
         if (ret < 0) {
             std::perror("Error ");
@@ -82,16 +81,16 @@ void run_server(std::list<Server> &server_list)
         }
         if (!ret)
             continue;
-        //std::cout << "after select \n\n";
         std::list<Server>::iterator server_iter = server_list.begin();
         while (server_iter != server_list.end())
         {
             // If Statement for new connection.
             if (FD_ISSET(server_iter->fd_serv, &readable))
             {
-                std::cout<< "server Fd = " << server_iter->fd_serv <<std::endl;
+                std::cout<<"Statement for new connection\n";
+                std::cout<< "server Fd = " << server_iter->fd_serv <<"\n\n"<<std::endl;
                 server_iter->clients.push_back(accept_new_connection(*server_iter));
-                std::cout<<"The server number "<< server_iter->fd_serv << " accept new connection seccesfully"<<std::endl;
+                std::cout<<"The server number "<< server_iter->fd_serv << " accept new connection seccesfully\n\n"<<std::endl;
             }
             for (int i = 0; i < (int)server_iter->clients.size(); i++)
             {
@@ -99,11 +98,16 @@ void run_server(std::list<Server> &server_list)
                 // IF statement for Request.
                 if (FD_ISSET(client.fd_client, &readable))
                 {
+                    std::cout<<"statement for Request.\n";
                     server_iter->read_from_socket_client(client);
+                    client.parse.parse_request(client.request);
+                    client.parse.display_request(client.parse);
                 }
                 // IF statement for Response.
                 else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))
                 {
+                    std::cout<<"statement for Response.\n";
+                    client.parse.check_request(*server_iter, client);
                     server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
                     close(client.fd_client);
                     FD_CLR(client.fd_client,&server_iter->current);
@@ -120,12 +124,12 @@ Server init_server(int id_servers,struct sockaddr_in addr){
     server.fd_serv = id_servers;
     FD_ZERO(&server.readable);
     FD_ZERO(&server.writable);
-    std::cout << "socket fd = "  << server.fd_serv << std::endl;
+    //std::cout << "socket fd = "  << server.fd_serv << std::endl;
     FD_SET(server.fd_serv, &Server::current);
 
     Server::maxfd = std::max(server.fd_serv, Server::maxfd);
     server.sizeof_struct = sizeof(addr);
-    std::cout<<server.sizeof_struct<<std::endl;
+    //std::cout<<server.sizeof_struct<<std::endl;
     server.address = addr;
     return (server);
 }
@@ -150,7 +154,7 @@ int main ()
     while (i < 5)
     {
         server_list.push_back(init_server(id_servers[i],sed_struct[i]));
-        std::cout<<id_servers[i]<<std::endl;
+        //std::cout<<id_servers[i]<<std::endl;
         i++;
     }
     iter = server_list.begin();

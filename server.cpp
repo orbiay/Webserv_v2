@@ -9,16 +9,21 @@ Server::~Server(){
 }
 void Server::read_from_socket_client(Client &client)
 {
-    char line[1000];
-    memset(line,'\0',1000);
-    recv(client.fd_client, line, 1000, 0);
-    client.request = std::string(line);
+    char line[100];
+
+    memset(line,'\0',100);
+    int i = recv(client.fd_client, line, 100, 0);
+    line[i] = '\0';
+    client.request += std::string(line);
     if (!client.request.c_str())
     {
         std::cerr<<"Dosen't found any request to work on it";
         exit(2);
     }
-    std::cout<<client.request<<std::endl;
+    if (i != 1024)
+        client.g = true;
+    std::cout<<client.g <<std::endl;
+    std::cout<<"\n\n"<<client.request<<"\n\n"<<std::endl;
 }
 
 char *read_from_file(std::string file)

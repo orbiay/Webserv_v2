@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:39:32 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/03/14 20:10:21 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:06:18 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,13 @@ void    parseRequest::parse_request(std::string request)
 
 	std::cout << "----------------------------------------------------" << std::endl;
 }
-
+		//--------------------------------checking request-------------------------------------------
 int	check_url(std::string url)
 {
-	std::cout << "url = " << url << std::endl;
+	// std::cout << "url = " << url << std::endl;
 	std::string::iterator it = url.begin();
 	while (it != url.end()) {
-		if (!isprint(*it))
-		{
+		if (!isprint(*it)){
 			return (1);
 		}
 		it++;
@@ -106,13 +105,60 @@ int	check_url(std::string url)
 	return (0);
 }
 
-int check_url_size (std::string url)
-{
+int check_url_size (std::string url) {
 	if (url.size() > 2048)
 		return (1);
 	return (0);
 }
 
+int	matched_location(std::string url)
+{
+	t_hcode g_v;
+	g_v.location = "/example";
+	g_v.root = "/var/www/html";
+
+	
+	// std::cout << "pos = " << url.find(g_v.location) << std::endl;
+	std::size_t pos = url.find(g_v.location);
+
+	if (pos == 0) {
+		std::string tmp = url.substr(g_v.location.length(), url.length());
+		g_v.root.insert(g_v.root.length(), tmp);
+		if (access(g_v.root.c_str(), R_OK) == -1) {
+			return (1);
+		}
+		std::cout << "root = " << g_v.root << std::endl;
+		
+	}
+	
+	// if (pos == std::string::npos) {
+	// 	std::cout << "invalid url" << std::endl;
+	// 	return (1);
+	// }
+	return (1);
+}
+		//-------------------------------------------------------------------------------------------
+
+
+		//--------------------------------checking methods-------------------------------------------
+void	parseRequest::check_methods(Server &server, const Client &client)
+{
+	if (this->_data["method"] == "GET") {
+		// GET();
+	}
+	else if (this->_data["method"] == "POST") {
+		// POST();
+	}
+
+	else if (this->_data["method"] == "DELETE") {
+		// DELETE();
+	}
+	else {
+		server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
+	}
+}
+
+		//-------------------------------------------------------------------------------------------
 void parseRequest::display_request(parseRequest parse)
 {
 	std::map<std::string, std::string>::iterator it = parse._data.begin();
@@ -124,7 +170,7 @@ void parseRequest::display_request(parseRequest parse)
  		}
 }
 
-void	parseRequest::check_request(Server server, const Client &iter) {
+void	parseRequest::check_request(Server &server, const Client &iter) {
 		
 	if (this->_data["method"] == "POST") {
 		printf("heer\n");
@@ -139,8 +185,13 @@ void	parseRequest::check_request(Server server, const Client &iter) {
 	else if (check_url_size(this->_data["path"])) {
 		server.write_in_socket_client("HTTP/1.1 414 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","414error.html", iter);
 	}
+		//---------------------------------this part need confg file------------------------------------>
 	// request body larger then client max body size in config file
-	
+	// else if (matched_location(this->_data["path"])) {
+    // 	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
+	// }
+		//---------------------------------------------------------------------------------------------->
+	this->check_methods(server, iter);
 	
 
 }
