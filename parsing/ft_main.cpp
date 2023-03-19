@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   ft_main.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 14:40:01 by aomman            #+#    #+#             */
-/*   Updated: 2023/03/11 18:21:10 by aomman           ###   ########.fr       */
+/*   Updated: 2023/03/19 14:10:00 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	count_servers(char **argv)
 	return (n_servr);
 }
 
-int main(int argc, char **argv)
+int parsing(int argc, char **argv)
 {
 	if (argc == 2)
 	{

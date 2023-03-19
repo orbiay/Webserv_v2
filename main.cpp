@@ -159,8 +159,9 @@ Server init_server(int id_servers,struct sockaddr_in addr){
 fd_set Server::current = Server::initializer();
 int Server::maxfd = 0;
 
-int main ()
+int main (int ac, char **av)
 {
+	//parsing(ac, av);
 	int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
