@@ -162,7 +162,14 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av)
 {
-	parsing(ac, av);
+	try
+	{
+		parsing(ac, av);
+	}
+	catch(std::exception &e)
+	{
+		std::cout << e.what() << "so9ek ?" << std::endl;
+	}
 	int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
