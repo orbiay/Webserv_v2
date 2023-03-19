@@ -21,8 +21,8 @@ void Server::read_from_socket_client(Client &client)
         exit(2);
     }
     if (i != 1024)
-        client.g = true;
-    std::cout<<client.g <<std::endl;
+        client.ready = true;
+    std::cout<<client.ready <<std::endl;
     std::cout<<"\n\n"<<client.request<<"\n\n"<<std::endl;
 }
 
