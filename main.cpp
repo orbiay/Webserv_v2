@@ -165,7 +165,7 @@ int Server::maxfd = 0;
 int main (int ac, char **av)
 {
 	parsing(ac, av);
-	int i = 0;
+    int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
 	std::array<int, num_of_servers> id_servers;
