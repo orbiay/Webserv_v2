@@ -1,4 +1,4 @@
-nserv: 3
+nserv: 2
 server:
 	listen 127.0.0.255:111
 	location /exampl:
