@@ -15,16 +15,16 @@
 #include"location.hpp"
 # include <new>
 
-class Server
+class Pserver
 {
 	private :
 		std::string	server;
 	public :
 		Location l[100];
-		Server();
+		Pserver();
 		void	set_server(std::ifstream &file);
 		std::string	get_server(void) const;
-		~Server();
+		~Pserver();
 };
 
 #endif

@@ -52,7 +52,7 @@ int parsing(int argc, char **argv)
 				throw ("not opened");
 			}
 			n_servr = count_servers(argv);
-			Server s[n_servr];
+			Pserver s[n_servr];
 			std::map<std::string, std::string>::iterator it;
 			s[0].l[0].set_host(rf, argv[1]);
 			s[0].l[0].set_config_items();
