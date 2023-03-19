@@ -11,6 +11,6 @@ echo "git satus"
 git status
 
 echo "push"
-git push git@github.com:mobo-9-0045/cpp.git
+git push git@github.com:orbiay/Webserv_v2.git master
 
 echo "done"
