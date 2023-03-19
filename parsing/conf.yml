@@ -1,7 +1,0 @@
-server:
-	listen 127.0.0.1:1122
-	location /exampl:
-		root /valid_path_file
-		index /(default)
-		upload /path
-		methods POST DELETE GIT
