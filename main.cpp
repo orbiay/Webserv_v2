@@ -104,7 +104,7 @@ void run_server(std::list<Server> &server_list)
                     client.parse.display_request(client.parse);
                 }
                 // IF statement for Response.
-                else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))
+                else if(i >= 0 && FD_ISSET(client.fd_client, &writable))
                 {
                     std::cout<<"statement for Response.\n";
                     client.parse.check_request(*server_iter, client);

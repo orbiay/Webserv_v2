@@ -9,10 +9,10 @@ Server::~Server(){
 }
 void Server::read_from_socket_client(Client &client)
 {
-    char line[100];
+    char line[1024];
 
-    memset(line,'\0',100);
-    int i = recv(client.fd_client, line, 100, 0);
+    memset(line,'\0',1024);
+    int i = recv(client.fd_client, line, 1024, 0);
     line[i] = '\0';
     client.request += std::string(line);
     if (!client.request.c_str())

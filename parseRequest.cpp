@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:39:32 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/03/16 13:06:18 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/03/18 13:13:51 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,28 @@ void	parseRequest::parse_infos(std::string _data)
 	}
 }
 
+void	parseRequest::save_body(std::string req) {
+
+			printf("                 herrr\n");
+	std::string token;
+	std::stringstream ss(req);
+	std::vector<std::string> tmp;
+	while (std::getline(ss, token)) {
+		tmp.push_back(token);
+	}
+	std::vector<std::string>::iterator it = tmp.begin();
+	while (it != tmp.end()) {
+		if (*it == "\n") {
+			break;	
+		}
+		it++;
+	}
+	while (it != tmp.end()) {
+		this->_body.push_back(*it);
+		it++;
+	}
+}
+
 void    parseRequest::parse_request(std::string request)
 {
 	std::cout << "----------------------------------------------------" << std::endl;
@@ -86,6 +108,13 @@ void    parseRequest::parse_request(std::string request)
 	parse_url(output[0]);
 	std::vector<std::string>::iterator it;
 	for (it = output.begin() + 1; it != output.end(); it++){
+		// if (*it == "\n") {
+		// 	// printf("here\n");
+		// 	// exit(1);
+		// 	it++;
+		// 	this->save_body(output, it);
+		// 	break;
+		// }
 		parse_infos(*it);
 	}
 
@@ -117,7 +146,7 @@ int	matched_location(std::string url)
 	g_v.location = "/example";
 	g_v.root = "/var/www/html";
 
-	
+
 	// std::cout << "pos = " << url.find(g_v.location) << std::endl;
 	std::size_t pos = url.find(g_v.location);
 
@@ -148,8 +177,8 @@ void	parseRequest::check_methods(Server &server, const Client &client)
 	}
 	else if (this->_data["method"] == "POST") {
 		// POST();
-	}
 
+	}
 	else if (this->_data["method"] == "DELETE") {
 		// DELETE();
 	}
@@ -165,8 +194,8 @@ void parseRequest::display_request(parseRequest parse)
 					// showning results by iterating inside map container
 		while (it != parse._data.end())
  		{
- 		  std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
- 		  ++it;
+			std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
+			++it;
  		}
 }
 
@@ -192,8 +221,6 @@ void	parseRequest::check_request(Server &server, const Client &iter) {
 	// }
 		//---------------------------------------------------------------------------------------------->
 	this->check_methods(server, iter);
-	
-
 }
 
 
