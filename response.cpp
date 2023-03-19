@@ -16,16 +16,16 @@ Response::Response() {
 	
 }
 
-// Response::Response(const parseRequest &parse) {
-//     this->_parse = parse;
-// }
+Response::Response(const Client &_client) {
+	this->client = _client; 
+}
 
 Response::Response(const Response &r) {
 	*this = r;
 }
 
 Response Response::operator=(const Response &r) {
-	this->_parse = r._parse;
+	this->client = r.client;
 	return *this;
 }
 

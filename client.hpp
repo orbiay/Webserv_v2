@@ -7,7 +7,7 @@ class Client{
     public:
     Client(){
         address_length = sizeof(addresStorage);
-        g = false;
+        ready = false;
     };
     ~Client(){};
     int fd_client;
@@ -17,7 +17,7 @@ class Client{
     int position;
     std::string header;
     std::string body;
-    bool g;
+    bool ready;
     
     socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;

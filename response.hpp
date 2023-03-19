@@ -14,15 +14,18 @@
 #define RESPONSE_HPP
 
 #include "http.hpp"
+#include "client.hpp"
 
-class Response {
-	private:
-		parseRequest _parse;
+class Client;
+
+class Response{
 	public:
+		Client client;
 		
 		Response();
 		Response(const Response &r);
 		Response operator = (const Response &r);
+		Response(const Client &_client);
 		~Response();
 
 		void Get(Server &server, const Client &client, const parseRequest &parse);

@@ -164,12 +164,17 @@ int	matched_location(std::string url)
 
 
 		//--------------------------------checking methods-------------------------------------------
-void	parseRequest::check_methods(Server &server, const Client &client)
+void	check_methods(Server &server, Client &client)
 {
-	if (this->_data["method"] == "GET") {
+	Response res(client);
+	// res.client = client.parse;
+	if (client.parse._data["method"] == "GET") {
 		// GET();
+		std::cout << "----------------RAHA KHEDAMA A Z---------------------" << std::endl;
+		std::cout << res.client.parse._data["method"] << std::endl;
+		std::cout << "----------------RAHA  MaKHEDAMA A Z---------------------" << std::endl;
 	}
-	else if (this->_data["method"] == "POST") {
+	else if (client.parse._data["method"] == "POST") {
 		// POST();
 		// this->res.Post(server, client, *this);
 		// std::vector<std::string>::iterator it = this->_body.begin();
@@ -178,7 +183,7 @@ void	parseRequest::check_methods(Server &server, const Client &client)
 		std::cout << "--------------------------------------------\n";
 	}
 
-	else if (this->_data["method"] == "DELETE") {
+	else if (client.parse._data["method"] == "DELETE") {
 		// DELETE();
 	}
 	else {
@@ -198,7 +203,7 @@ void parseRequest::display_request(parseRequest parse)
  		}
 }
 
-void	parseRequest::check_request(Server &server, const Client &iter) {
+void	parseRequest::check_request(Server &server,Client &iter) {
 		
 	if (this->_data["method"] == "POST") {
 		if (this->_data["Content-Length"].length() == 1){
@@ -218,7 +223,7 @@ void	parseRequest::check_request(Server &server, const Client &iter) {
     // 	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
 	// }
 		//---------------------------------------------------------------------------------------------->
-	this->check_methods(server, iter);
+	check_methods(server, iter);
 }
 
 

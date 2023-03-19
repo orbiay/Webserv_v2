@@ -39,12 +39,11 @@ class parseRequest {
 		void	parse_request(std::string request);
 		void	parse_infos(std::string _data);
 		void	parse_url(std::string _url);
-		void	check_request(Server &server, const Client &iter);
+		void	check_request(Server &server,Client &iter);
 		void	display_request(parseRequest parse);
-		void	check_methods(Server &server, const Client &Client);
 		void	save_body(std::string req);
 };
 
-
+void	check_methods(Server &server, Client &client);
 
 #endif
