@@ -12,9 +12,9 @@
 
 #include"Webserv.hpp"
 
-Server::Server(){}
+Pserver::Pserver(){}
 
-void	Server::set_server(std::ifstream &file)
+void	Pserver::set_server(std::ifstream &file)
 {
 	std::string	line;
 
@@ -26,9 +26,9 @@ void	Server::set_server(std::ifstream &file)
 	}
 }
 
-std::string	Server::get_server(void) const
+std::string	Pserver::get_server(void) const
 {
 	return (this->server);
 }
 
-Server::~Server(){}
+Pserver::~Pserver(){}
