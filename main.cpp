@@ -6,6 +6,7 @@
 #define num_of_servers 5
 #define PORT 8010
 
+int	parsing(int argc, char **argv);
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
 {
@@ -161,7 +162,7 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av)
 {
-	//parsing(ac, av);
+	parsing(ac, av);
 	int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
