@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:39:32 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/03/18 13:13:51 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/03/18 18:01:33 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,6 @@ void    parseRequest::parse_request(std::string request)
 	parse_url(output[0]);
 	std::vector<std::string>::iterator it;
 	for (it = output.begin() + 1; it != output.end(); it++){
-		// if (*it == "\n") {
-		// 	// printf("here\n");
-		// 	// exit(1);
-		// 	it++;
-		// 	this->save_body(output, it);
-		// 	break;
-		// }
 		parse_infos(*it);
 	}
 
@@ -123,7 +116,6 @@ void    parseRequest::parse_request(std::string request)
 		//--------------------------------checking request-------------------------------------------
 int	check_url(std::string url)
 {
-	// std::cout << "url = " << url << std::endl;
 	std::string::iterator it = url.begin();
 	while (it != url.end()) {
 		if (!isprint(*it)){
@@ -156,6 +148,8 @@ int	matched_location(std::string url)
 		if (access(g_v.root.c_str(), R_OK) == -1) {
 			return (1);
 		}
+		else
+			return 0;
 		std::cout << "root = " << g_v.root << std::endl;
 		
 	}
@@ -177,8 +171,13 @@ void	parseRequest::check_methods(Server &server, const Client &client)
 	}
 	else if (this->_data["method"] == "POST") {
 		// POST();
-
+		// this->res.Post(server, client, *this);
+		// std::vector<std::string>::iterator it = this->_body.begin();
+		std::cout << "----------------------body--------------------\n";
+		std::cout << client.body << std::endl;
+		std::cout << "--------------------------------------------\n";
 	}
+
 	else if (this->_data["method"] == "DELETE") {
 		// DELETE();
 	}
@@ -202,7 +201,6 @@ void parseRequest::display_request(parseRequest parse)
 void	parseRequest::check_request(Server &server, const Client &iter) {
 		
 	if (this->_data["method"] == "POST") {
-		printf("heer\n");
 		if (this->_data["Content-Length"].length() == 1){
 			printf("here\n");
 			server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
