@@ -1,4 +1,5 @@
 server:
+	
 	listen 127.0.0.255:111
 	location /exampl:
 		root /valid_path_file
@@ -12,9 +13,7 @@ server:
 		root /valid_path_file2
 		index file_name2
 		upload off
-		method POST
-		method GIT
-		method DELETE
+		method POST GET DELETE
 server:
 	listen 2.2.2.2:1111
 	location /examplssssss2:

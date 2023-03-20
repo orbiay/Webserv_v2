@@ -28,9 +28,9 @@ class Response{
 		Response(const Client &_client);
 		~Response();
 
-		void Get(Server &server, const Client &client, const parseRequest &parse);
-		void Post(Server &server, const Client &client, const parseRequest &parse);
-		void Delete(Server &server, const Client &client, const parseRequest &parse);	
+		void Get(Server &server);
+		void Post(Server &server);
+		void Delete(Server &server);	
 };
 
 #endif

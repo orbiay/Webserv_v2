@@ -29,13 +29,13 @@ Response Response::operator=(const Response &r) {
 	return *this;
 }
 
-void Response::Get(Server &server, const Client &client, const parseRequest &parse) {
+void Response::Get(Server &server) {
 	(void)parse;
 	(void)client;
 	(void)server;
 }
 
-void Response::Post(Server &server, const Client &client, const parseRequest &parse) {
+void Response::Post(Server &server) {
 	(void)parse;
 	(void)client;
 	(void)server;
@@ -45,7 +45,7 @@ void Response::Post(Server &server, const Client &client, const parseRequest &pa
 	}
 }
 
-void Response::Delete(Server &server, const Client &client, const parseRequest &parse) {
+void Response::Delete(Server &server) {
 	(void)parse;
 	(void)client;
 	(void)server;
