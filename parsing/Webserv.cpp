@@ -14,21 +14,27 @@
 
 Pserver::Pserver(){}
 
-void	Pserver::set_server(std::ifstream &file)
+void	Pserver::set_nserv(std::ifstream &rf)
 {
 	std::string	line;
+	size_t		i;
 
-	while (!file.eof())
+	while (!rf.eof())
 	{
-		getline(file, line);
-		if (line == "server:")
-			this->server = line;
+		getline(rf, line);
+		if (line.compare(0, 6, "nserv:") == 0)
+		{
+			i = line.find(" ");
+			line = line.substr(i + 1, line.length());
+			this->nserv = std::atoi(line.c_str());
+			return ;
+		}
 	}
 }
 
-std::string	Pserver::get_server(void) const
+int	Pserver::get_nserv(void) const
 {
-	return (this->server);
+	return (this->nserv);
 }
 
 Pserver::~Pserver(){}

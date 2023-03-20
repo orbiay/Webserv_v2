@@ -121,19 +121,16 @@ void run_server(std::list<Server> &server_list)
 				{
 					std::cout<<"statement for Request.\n";
 					server_iter->read_from_socket_client(client);
-                    if (client.ready)
-                    {
-					    client.split_request(client.request);
-					    client.parse.parse_request(client.header);
-					    client.parse.display_request(client.parse);
-                    }
+					client.split_request(client.request);
+					client.parse.parse_request(client.header);
+					client.parse.display_request(client.parse);
 				}
 				// IF statement for Response.
 				else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))
 				{
 					std::cout<<"statement for Response.\n";
 					client.parse.check_request(*server_iter, client);
-					//server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
+					server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
 					close(client.fd_client);
 					FD_CLR(client.fd_client,&server_iter->current);
 					server_iter->clients.erase(std::next(server_iter->clients.begin(), i));
@@ -159,13 +156,14 @@ Server init_server(int id_servers,struct sockaddr_in addr){
 	return (server);
 }
 
+
 fd_set Server::current = Server::initializer();
 int Server::maxfd = 0;
 
 int main (int ac, char **av)
 {
 	parsing(ac, av);
-    int i = 0;
+	int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
 	std::array<int, num_of_servers> id_servers;
