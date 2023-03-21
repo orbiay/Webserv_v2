@@ -182,6 +182,11 @@ std::string	Location::get_host(void) const
 	return (this->host);
 }
 
+std::string	Location::get_port(void) const
+{
+	return (this->port);
+}
+
 void	Location::set_upload(std::ifstream &rf)
 {
 	std::string line;

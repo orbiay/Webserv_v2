@@ -94,6 +94,8 @@ class Location
 		void	set_host(std::ifstream &rf, char *str);
 		std::string	get_host(void) const;
 
+		std::string	get_port(void) const; 
+
 		std::map<std::string, std::string>	get_config_item(void) const;
 		virtual ~Location();
 };
