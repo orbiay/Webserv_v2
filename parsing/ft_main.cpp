@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"location.hpp"
+#include"config.hpp"
 #include"Webserv.hpp"
 
 int	count_servers(char **argv)
@@ -53,6 +53,8 @@ int parsing(int argc, char **argv)
 			}
 			n_servr = count_servers(argv);
 			Pserver s1;
+			Config cnf;
+			cnf.set_loc_conf();
 			s1.set_nserv(rf);
 			if (s1.get_nserv() != n_servr)
 				return (1);
