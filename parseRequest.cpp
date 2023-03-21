@@ -170,17 +170,17 @@ void	check_methods(Server &server, Client &client)
 	// res.client = client.parse;
 	if (client.parse._data["method"] == "GET") {
 		// GET();
-		std::cout << "----------------RAHA KHEDAMA A Z---------------------" << std::endl;
-		std::cout << res.client.parse._data["method"] << std::endl;
-		std::cout << "----------------RAHA  MaKHEDAMA A Z---------------------" << std::endl;
+		// std::cout << "----------------RAHA KHEDAMA A Z---------------------" << std::endl;
+		// std::cout << res.client.parse._data["method"] << std::endl;
+		// std::cout << "----------------RAHA  MaKHEDAMA A Z---------------------" << std::endl;
 	}
 	else if (client.parse._data["method"] == "POST") {
-		// POST();
+		res.Post(server);
 		// this->res.Post(server, client, *this);
 		// std::vector<std::string>::iterator it = this->_body.begin();
-		std::cout << "----------------------body--------------------\n";
-		std::cout << client.body << std::endl;
-		std::cout << "--------------------------------------------\n";
+		// std::cout << "----------------------body--------------------\n";
+		// std::cout << client.body << std::endl;
+		// std::cout << "--------------------------------------------\n";
 	}
 
 	else if (client.parse._data["method"] == "DELETE") {
