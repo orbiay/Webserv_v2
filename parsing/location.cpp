@@ -81,8 +81,6 @@ void	Location::set_config_items()
 		throw (SyntaxError());
 	if (this->host == "")
 		throw (SyntaxError());
-	if (this->methods[0] == "")
-		throw (SyntaxError());
 	this->config_items.insert(std::make_pair("location", this->location_val));
 	this->config_items.insert(std::make_pair("root", this->root_val));
 	this->config_items.insert(std::make_pair("index", this->index_val));
@@ -99,57 +97,24 @@ std::map<std::string, std::string>	Location::get_config_item(void) const
 	return (this->config_items);
 }
 
-void	Location::set_method2(std::ifstream &rf)
-{
-	std::string	line;
-	size_t	start;
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line.compare(0, 8, "\t\tmethod") == 0)
-		{
-			start = line.find("DELETE");
-			if (start == std::string::npos)
-				throw(SyntaxError());
-			this->methods[2] = line.substr(start, line.length());
-			return ;
-		}
-	}
-}
-
-void	Location::set_method1(std::ifstream &rf)
-{
-	std::string	line;
-	size_t	start;
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line.compare(0, 8, "\t\tmethod") == 0)
-		{
-			start = line.find("GIT");
-			if (start == std::string::npos)
-				throw(SyntaxError());
-			this->methods[1] = line.substr(start, line.length());
-			this->set_method2(rf);
-			return ;
-		}
-	}
-}
-
 void	Location::set_method(std::ifstream &rf)
 {
 	std::string	line;
-	size_t	start;
+	size_t	GIT;
+	size_t	DELETE;
+	size_t	POST;
 	while (!rf.eof())
 	{
 		getline(rf, line);
-		if (line.compare(0, 8, "\t\tmethod") == 0)
+		if (line.compare(0, 8, "\tmethods") == 0)
 		{
-			start = line.find("POST");
-			if (start == std::string::npos)
-				throw(SyntaxError());
-			this->methods[0] = line.substr(start, line.length());
-			this->set_method1(rf);
+			GIT = line.find("GIT");
+			DELETE = line.find("DELETE");
+			POST = line.find("POST");
+			this->methods[0] = line.substr(GIT, 3);
+			this->methods[1] = line.substr(POST, 4);
+			this->methods[2] = line.substr(DELETE, 6);
+			this->set_location(rf);
 			return ;
 		}
 	}
@@ -171,7 +136,7 @@ void	Location::set_host(std::ifstream &rf, char *str)
 				throw(SyntaxError());
 			this->host = line.substr(8, i - 8);
 			this->port = line.substr(i + 1, line.length() - i);
-			this->set_location(rf);
+			this->set_method(rf);
 			return ;
 		}
 	}
@@ -199,7 +164,6 @@ void	Location::set_upload(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			this->upload_val = line.substr(i + 1, line.length());
-			this->set_method(rf);
 			return ;
 		}
 	}
