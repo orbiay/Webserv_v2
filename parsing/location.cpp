@@ -79,8 +79,8 @@ void	Location::set_config_items()
 		throw (SyntaxError());
 	if (this->upload_val == "" || (this->upload_val != "on" && this->upload_val != "off"))
 		throw (SyntaxError());
-	if (this->host == "")
-		throw (SyntaxError());
+	//if (this->host == "")
+	//	throw (SyntaxError());
 	this->config_items.insert(std::make_pair("location", this->location_val));
 	this->config_items.insert(std::make_pair("root", this->root_val));
 	this->config_items.insert(std::make_pair("index", this->index_val));
@@ -136,7 +136,6 @@ void	Location::set_host(std::ifstream &rf, char *str)
 				throw(SyntaxError());
 			this->host = line.substr(8, i - 8);
 			this->port = line.substr(i + 1, line.length() - i);
-			this->set_method(rf);
 			return ;
 		}
 	}
