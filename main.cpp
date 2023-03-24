@@ -133,7 +133,7 @@ void run_server(std::list<Server> &server_list)
 				{
 					std::cout<<"statement for Response.\n";
 					client.parse.check_request(*server_iter, client);
-					server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
+					// server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
 					close(client.fd_client);
 					FD_CLR(client.fd_client,&server_iter->current);
 					server_iter->clients.erase(std::next(server_iter->clients.begin(), i));

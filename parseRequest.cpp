@@ -176,11 +176,6 @@ void	check_methods(Server &server, Client &client)
 	}
 	else if (client.parse._data["method"] == "POST") {
 		res.Post(server);
-		// this->res.Post(server, client, *this);
-		// std::vector<std::string>::iterator it = this->_body.begin();
-		// std::cout << "----------------------body--------------------\n";
-		// std::cout << client.body << std::endl;
-		// std::cout << "--------------------------------------------\n";
 	}
 
 	else if (client.parse._data["method"] == "DELETE") {
