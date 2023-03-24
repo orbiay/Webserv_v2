@@ -32,7 +32,7 @@ class Response{
 		Response();
 		Response(const Response &r);
 		Response operator = (const Response &r);
-		Response(const Client &_client);
+		//Response(Client &_client);
 		~Response();
 
 		void Get(Server &server);

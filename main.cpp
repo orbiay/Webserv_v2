@@ -4,7 +4,9 @@
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8011
+#define PORT 8015
+
+bool Http::finish = false;
 
 int	parsing(int argc, char **argv);
 
@@ -81,9 +83,9 @@ void	Client::split_request(std::string request) {
 		request.erase(0, pos + f.length());
 	}
 	this->body = request;
-	// std::cout << "------------------b---------------------------\n";
-	// std::cout << "body = " << request << std::endl;
-	// std::cout << "------------------b---------------------------\n";
+	std::cout << "------------------b---------------------------\n";
+	std::cout << "body = " << request << std::endl;
+	std::cout << "------------------b---------------------------\n";
 }
 
 void run_server(std::list<Server> &server_list)
@@ -133,10 +135,12 @@ void run_server(std::list<Server> &server_list)
 				{
 					std::cout<<"statement for Response.\n";
 					client.parse.check_request(*server_iter, client);
-					// server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
-					close(client.fd_client);
-					FD_CLR(client.fd_client,&server_iter->current);
-					server_iter->clients.erase(std::next(server_iter->clients.begin(), i));
+					 //server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
+					// if (Http::finish) {
+						close(client.fd_client);
+						FD_CLR(client.fd_client,&server_iter->current);
+						server_iter->clients.erase(std::next(server_iter->clients.begin(), i));
+					// }
 					i--;
 				}
 			}

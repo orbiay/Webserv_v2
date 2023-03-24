@@ -1,5 +1,5 @@
 #ifndef HTTP_HPP
-#define HTTP_HPP
+# define HTTP_HPP
 #include <sys/socket.h>
 #include <sys/types.h>
 #include<netinet/in.h>
@@ -27,6 +27,7 @@ typedef struct s_hcode {
     // std::string 
 } t_hcode;
 
+
 class Http{
     public:
     Http();
@@ -36,5 +37,6 @@ class Http{
     void naming_socket(struct sockaddr_in address);
     void bind();
     ~Http();
+    static bool finish;
 };
 #endif
