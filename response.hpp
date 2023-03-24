@@ -20,12 +20,19 @@ class Client;
 
 class Response{
 	public:
-		Client client;
+		Client			client;
+		int				readed;
+		int				content_length;
+		bool			is_done;
+		std::string		path;
+		int				result;
+		std::ifstream	is_exist;
+		std::ofstream	outfile;
 		
 		Response();
 		Response(const Response &r);
 		Response operator = (const Response &r);
-		Response(const Client &_client);
+		//Response(Client &_client);
 		~Response();
 
 		void Get(Server &server);

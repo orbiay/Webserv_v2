@@ -1,3 +1,4 @@
+
 #include"http.hpp"
 Server::Server(){
     
@@ -22,8 +23,8 @@ void Server::read_from_socket_client(Client &client)
     }
     if (i != 1024)
         client.ready = true;
-//     std::cout<<client.ready <<std::endl;
-//     std::cout<<"\n\n"<<client.request<<"\n\n"<<std::endl;
+     std::cout<<client.ready <<std::endl;
+     //std::cout<<"\n\n"<<client.request<<"\n\n"<<std::endl;
 }
 
 char *read_from_file(std::string file)
