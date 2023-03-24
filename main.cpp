@@ -4,7 +4,7 @@
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8010
+#define PORT 8011
 
 int	parsing(int argc, char **argv);
 
@@ -121,9 +121,12 @@ void run_server(std::list<Server> &server_list)
 				{
 					std::cout<<"statement for Request.\n";
 					server_iter->read_from_socket_client(client);
-					client.split_request(client.request);
-					client.parse.parse_request(client.header);
-					client.parse.display_request(client.parse);
+					if (client.ready)
+					{
+						client.split_request(client.request);
+						client.parse.parse_request(client.header);
+						client.parse.display_request(client.parse);
+					}
 				}
 				// IF statement for Response.
 				else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))

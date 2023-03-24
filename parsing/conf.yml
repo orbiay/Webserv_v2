@@ -24,3 +24,21 @@ server:
 		method POST
 		method GIT
 		method DELETE
+server:
+	listen 2.2.2.2:1111
+	location /examplssssss2:
+		root /valid_path_files2
+		index file_names2
+		upload on
+		method POST
+		method GIT
+		method DELETE
+server:
+	listen 2.2.2.2:1111
+	location /examplssssss2:
+		root /valid_path_files2
+		index file_names2
+		upload on
+		method POST
+		method GIT
+		method DELETE
