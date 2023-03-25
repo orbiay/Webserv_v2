@@ -2,18 +2,18 @@ nserv: 2
 server:
 	
 	listen 127.0.0.255:111
+	methods POST GIT DELETE
 	location /exampl:
 		root /valid_path_file
 		index file_name
 		upload on
-		method POST
-		method GIT
-		method DELETE
 	listen 1.1.1.1:222
+	methods POST GIT DELETE
 	location /exampl2:
 		root /valid_path_file2
 		index file_name2
 		upload off
+<<<<<<< HEAD
 		method POST GET DELETE
 server:
 	listen 2.2.2.2:1111
@@ -33,12 +33,12 @@ server:
 		method POST
 		method GIT
 		method DELETE
+=======
+>>>>>>> 2445c488c94fa77f5cfeb71f78ee16ff34ec27be
 server:
 	listen 2.2.2.2:1111
+	methods POST GIT DELETE
 	location /examplssssss2:
 		root /valid_path_files2
 		index file_names2
 		upload on
-		method POST
-		method GIT
-		method DELETE

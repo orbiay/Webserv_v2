@@ -88,8 +88,6 @@ class Location
 		void	set_config_items(void);
 
 		void	set_method(std::ifstream &rf);
-		void	set_method1(std::ifstream &rf);
-		void	set_method2(std::ifstream &rf);
 
 		void	set_host(std::ifstream &rf, char *str);
 		std::string	get_host(void) const;
