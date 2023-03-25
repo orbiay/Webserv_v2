@@ -13,6 +13,7 @@
 #ifndef CONFIG_HPP
 # define CONFIG_HPP
 # include"location.hpp"
+# include"Webserv.hpp"
 
 class Config
 {
@@ -24,9 +25,10 @@ class Config
 		std::string	index;
 		std::string	location;
 	public : 
+		static int nserv;
 		Location l;
 		Config();
-		void	set_loc_conf();
+		void	set_loc_conf(char **argv);
 
 		int	get_host() const;
 		int	get_port() const;
