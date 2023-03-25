@@ -4,8 +4,7 @@
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8011
-
+#define PORT 8015
 int	parsing(int argc, char **argv);
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
