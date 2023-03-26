@@ -7,7 +7,7 @@ OBJS = $(addprefix $(SRCS_DIR)/, $(SRCS))
 
 SRC = main.cpp http.cpp server.cpp  parseRequest.cpp response.cpp
 
-CPPFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 CC = c++
 NAME = server
 

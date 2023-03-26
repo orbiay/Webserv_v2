@@ -166,18 +166,15 @@ int	matched_location(std::string url)
 		//--------------------------------checking methods-------------------------------------------
 void	check_methods(Server &server, Client &client)
 {
-	Response res(client);
-	res.client = client;
+	Response res(&client);
+	//res.client = &client;
+	// res.client = client.parse;
 	if (client.parse._data["method"] == "GET") {
 		res.Get(server);
+		//server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
 	}
 	else if (client.parse._data["method"] == "POST") {
 		res.Post(server);
-		// this->res.Post(server, client, *this);
-		// std::vector<std::string>::iterator it = this->_body.begin();
-		// std::cout << "----------------------body--------------------\n";
-		// std::cout << client.body << std::endl;
-		// std::cout << "--------------------------------------------\n";
 	}
 
 	else if (client.parse._data["method"] == "DELETE") {
@@ -185,6 +182,7 @@ void	check_methods(Server &server, Client &client)
 	}
 	else {
 		server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
+		return ;
 	}
 }
 
@@ -198,21 +196,26 @@ void parseRequest::display_request(parseRequest parse)
 			std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
 			++it;
  		}
+		// std::cout << "-----------------body----------------------\n";
+		// // std::cout <<  parse._body << std::endl;
+		// std::cout << "-----------------body----------------------\n";
 }
 
 void	parseRequest::check_request(Server &server,Client &iter) {
-		
 	if (this->_data["method"] == "POST") {
 		if (this->_data["Content-Length"].length() == 1){
 			printf("here\n");
 			server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+			return ;
 		}
 	}
 	else if (check_url(this->_data["path"])) {
 		server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+		return;
 	}
 	else if (check_url_size(this->_data["path"])) {
 		server.write_in_socket_client("HTTP/1.1 414 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","414error.html", iter);
+		return ;
 	}
 		//---------------------------------this part need confg file------------------------------------>
 	// request body larger then client max body size in config file

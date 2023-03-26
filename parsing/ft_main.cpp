@@ -60,34 +60,35 @@ int parsing(int argc, char **argv)
 				return (1);
 			Pserver s[s1.get_nserv()];
 			std::map<std::string, std::string>::iterator it;
-			// std::cout << ">>>>>>>>>location 1 <<<<<<<<<" << std::endl;
 			s[0].l[0].set_host(rf, argv[1]);
+			s[0].l[0].set_method(rf);
 			s[0].l[0].set_config_items();
 			config = s[0].l[0].get_config_item();
 			it = config.begin();
 			while (it != config.end())
 			{
-				//std::cout << it->first << ","<< it->second << std::endl;
+				std::cout << it->first << ","<< it->second << std::endl;
 				++it;
 			}
-			//std::cout << ">>>>>>>>location 2<<<<<<<<<<<" << std::endl;
-			s[0].l[1].set_host(rf, argv[1]);
+			std::cout << ">>>>>>>>location 2<<<<<<<<<<<" << std::endl;
+			s[0].l[1].set_method(rf);
 			s[0].l[1].set_config_items();
 			config = s[0].l[1].get_config_item();
 			it = config.begin();
 			while (it != config.end())
 			{
-				//std::cout << it->first << ","<< it->second << std::endl;
+				std::cout << it->first << ","<< it->second << std::endl;
 				++it;
 			}
-			//std::cout << ">>>>>>>>>>>>>>server 1<<<<<<<<<<<" << std::endl;
+			std::cout << ">>>>>>>>>>>>>>server 1<<<<<<<<<<<" << std::endl;
 			s[1].l[0].set_host(rf, argv[1]);
+			s[1].l[0].set_method(rf);
 			s[1].l[0].set_config_items();
 			config = s[1].l[0].get_config_item();
 			it = config.begin();
 			while (it != config.end())
 			{
-				// std::cout << it->first << ","<< it->second << std::endl;
+				 std::cout << it->first << ","<< it->second << std::endl;
 				++it;
 			}
 			rf.close();

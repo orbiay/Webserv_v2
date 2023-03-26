@@ -1,16 +1,29 @@
 #include <iostream>
 #include <string>
-#include <filesystem>
-int main(int ac, char **av)
-{
-    std::filesystem::path path = "/Users/orbiay/Desktop/Webserv_v2";
-    if (std::filesystem::is_directory(path)) {
+#include <sys/stat.h>
+
+int main() {
+    const char* path = "./server.hpp";
+    struct stat file_stat;
+
+    // Get information about the file or directory
+    if (stat(path, &file_stat) != 0) {
+        std::cerr <t< "Error getting file/directory informaion\n";
+        return 1;
+    }
+
+    // Check if it's a directory
+    if (S_ISDIR(file_stat.st_mode)) {
         std::cout << path << " is a directory\n";
     }
-    else if (std::filesystem::is_regular_file(path)) {
-        std::cout << path << " is a file\n";
+    // Check if it's a regular file
+    else if (S_ISREG(file_stat.st_mode)) {
+        std::cout << path << " is a regular file\n";
     }
+    // Something else
     else {
-        std::cout << path << " is neither a directory nor a file\n";
+        std::cout << path << " is not a directory or regular file\n";
     }
+
+    return 0;
 }
