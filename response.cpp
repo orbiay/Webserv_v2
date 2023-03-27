@@ -35,7 +35,7 @@ int is_directory_or_file(std::string path)
 std::string Response::getContentType(Server &server) {
 
 	(void)server;
-	std::string str(client->parse._data["path"]);
+	std::string str(client.parse._data["path"]);
     size_t pos = str.find(".");
 	if (pos == std::string::npos)
 		return "application/octet-stream";
@@ -62,22 +62,21 @@ std::string Response::getContentType(Server &server) {
 }
 
 
-Response::Response(Client *client) 
+Response::Response(Client &client):client(client)
 {
 	this->readed = 0;
-	this->content_length = std::atoi(client->parse._data["Content-Length"].c_str());
+	this->content_length = std::atoi(client.parse._data["Content-Length"].c_str());
 	this->is_done = false;
-	path = "/Users/orbiay/Desktop/Webserv_v2/fouad.html";
+	path = "/Users/orbiay/Desktop/Webserv_v2/body2";
 	result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
 	is_exist.open(path);
-	outfile.open(path);
-	if (!outfile.is_open()) {
-		perror("error");
-	}
-	this->client = client;
+	//outfile.open(path);
+	//if (!outfile.is_open()) {
+	//	perror("error");
+	//}
 }
 
-Response::Response(const Response &r) {
+Response::Response(const Response &r) :client(r.client) {
 	*this = r;
 }
 
@@ -88,7 +87,7 @@ Response Response::operator=(const Response &r) {
 
 void Response::Get(Server &server) {
 	// (void)server;
-	std::string root = "." + client->parse._data["path"];
+	std::string root = "." + client.parse._data["path"];
     std::string content_type = getContentType(server);
 	std::ifstream infile(root.c_str());
 	std::string header;
@@ -96,68 +95,59 @@ void Response::Get(Server &server) {
 	if (!infile.good())
 	{
 		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213\r\n\r\n";
-		server.write_in_socket_client(header,"404error.html", *client);
+		server.write_in_socket_client(header,"404error.html", client);
 	}
 	else
 	{
 		infile.close();
 		header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length: 587\r\nConnection: closed\r\n\r\n";
-		server.write_in_socket_client(header,root,*client);
+		server.write_in_socket_client(header,root,client);
 	}
 }
 
 
+int Response::read_and_write(Client &client)
+{
+	int i = 0;
+	while (client.position  + i  < content_length)
+	{
+		write(client.fd_file, &client.body[client.position + i],1);
+		//std::cout<<client.position<<std::endl;
+		if (i == 1024)
+		{
+			client.position += i;
+			return (i);
+		}
+		i++;
+	}
+	 std::cout<<"i = "<<content_length<<std::endl;
+	client.position += i;
+	return(i);
+}
+
 void Response::Post(Server &server) {
-			printf("aaaaaaaaaaaaaaa\n");
+	(void)server;
+			printf("\e[44m aaaaaaaaaaaaaaa\n");
 	// std::string path = "/Users/fbouanan/Desktop/Webserv_v2/fouad.html";
 	// int result;
 	// result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
 	// client.parse._data["path"];
 	// int content_length = std::stoi(client.parse._data["Content-Length"]);
 	int upload = 1;
+	//printf("str = %s\n",client->body.c_str());
+	if (!client.enter)
+	{
+		client.fd_file = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC);
+		client.enter = true;
+		std::cout<<"1"<<std::endl;
+		//std::cout<<client.fd_file<<std::endl;
+	}
+	//std::cout<<"2"<<std::endl;
+	std::cout<<"outfile = "<<client.fd_file<<std::endl;
 	if (upload) {
-		// if (is_directory(path)) {
-
-		// }
-		// std::ifstream is_exist(path);
-		// if (!is_exist.is_open() || this->is_done) {
-			// std::ofstream outfile;
-			// outfile.open(path);
-			// if (!outfile.is_open()) {
-			// 	perror("error");
-			// }
-			if (content_length <= 1024) {
-				printf("here 1\n");
-				outfile << client->body.substr(this->readed, content_length);
-				outfile.close();
-				Http::finish = true;
-				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html", *client);
-			}
-			else if (content_length > 1024) {
-				printf("here 2\n");
-				std::cout << this->readed << std::endl;
-				outfile << client->body.substr(this->readed, 1024);
-				this->is_done = true;
-				content_length -= 1024;
-				this->readed += 1024;
-			}
-			if (this->readed == content_length) {
-				printf("here 3\n");
-				outfile.close();
-				this->is_done = false;
-				Http::finish = true;
-				std::cout << Http::finish << std::endl;
-				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html", *client);
-			}
-		// }
-		// if (is_exist.is_open()) {
-		// 	printf("here 4\n");
-		// 	server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 186\r\n\r\n","200exists.html", client);
-		// }
-		// std::cout << "--------___--------------body--------------------\n";
-		// std::cout << client.body << std::endl;
-		// std::cout << "--------------------------------------------\n";
-		
+		if (read_and_write(client) < 1024)
+			client.is_finish = true;
+		std::cout<<	client.position<<std::endl;
 	}
 	// else if (cgi) {
 

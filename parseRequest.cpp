@@ -166,7 +166,7 @@ int	matched_location(std::string url)
 		//--------------------------------checking methods-------------------------------------------
 void	check_methods(Server &server, Client &client)
 {
-	Response res(&client);
+	Response res(client);
 	//res.client = &client;
 	// res.client = client.parse;
 	if (client.parse._data["method"] == "GET") {

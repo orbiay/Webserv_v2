@@ -85,8 +85,9 @@ void	Client::split_request(std::string request) {
 		request.erase(0, pos + f.length());
 	}
 	this->body = request;
+	std::ofstream out("body");
 	std::cout << "------------------b---------------------------\n";
-	std::cout << "body = " << request << std::endl;
+	out  << request << std::endl;
 	std::cout << "------------------b---------------------------\n";
 }
 
@@ -141,7 +142,7 @@ void run_server(std::vector<Server> &server_list)
 					client.parse.check_request(server, client);
 					 //server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
 					// if (Http::finish) {
-					if (client.is_delete == true)
+					if (client.is_delete == true || client.is_finish == true)
 					{
 						close(client.fd_client);
 						FD_CLR(client.fd_client,&server.current);

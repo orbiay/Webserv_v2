@@ -11,6 +11,9 @@ class Client{
         start_writting = 1;
         fd_file = -1;
         is_delete = false;
+        is_finish = false;
+        enter = false;
+        position = 0;
     };
     ~Client(){};
     int fd_client;
@@ -24,6 +27,8 @@ class Client{
     int start_writting;
     int fd_file;
     bool is_delete;
+    bool is_finish;
+    bool enter;
     
     socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;
