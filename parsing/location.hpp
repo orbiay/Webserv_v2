@@ -15,6 +15,7 @@
 # include<iostream>
 # include<fstream>
 # include<exception>
+# include<vector>
 # include<algorithm>
 # include<map>
 # include<stdlib.h>
@@ -30,7 +31,6 @@ class Location
 		std::string	host;
 		std::string	port;
 		std::string	upload_val;
-		std::string methods[3];
 		std::map<std::string, std::string> config_items;
 	public : 
 		Location();
@@ -86,13 +86,6 @@ class Location
 
 		std::string	set_values(std::string line);
 		void	set_config_items(void);
-
-		void	set_method(std::ifstream &rf);
-
-		void	set_host(std::ifstream &rf, char *str);
-		std::string	get_host(void) const;
-
-		std::string	get_port(void) const; 
 
 		std::map<std::string, std::string>	get_config_item(void) const;
 		virtual ~Location();

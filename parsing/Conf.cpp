@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Conf.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/26 00:44:53 by aomman            #+#    #+#             */
+/*   Updated: 2023/03/26 00:44:54 by aomman           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include"config.hpp"
 
 Config::Config()
@@ -32,6 +44,7 @@ void	Config::set_loc_conf(char **argv)
 	std::string	line;
 	int			n_servr;
 	std::ifstream rf(argv[1], std::ios::in);
+	std::ifstream f(argv[1]);
 	if (rf.is_open() == false)
 	{
 		rf.close();
@@ -44,8 +57,14 @@ void	Config::set_loc_conf(char **argv)
 		return ;
 	Pserver s[s1.get_nserv()];
 	std::map<std::string, std::string>::iterator it;
-	s[0].l[0].set_host(rf, argv[1]);
-	s[0].l[0].set_method(rf);
+	s[0].set_host(rf);
+	s[0].set_nLocation(f);
+	std::cout << s[0].get_host() << std::endl;
+	std::cout << s[0].get_port() << std::endl;
+	std::cout << s[0].methods[0] << std::endl;
+	std::cout << s[0].methods[1] << std::endl;
+	std::cout << s[0].methods[2] << std::endl;
+	s[0].l[0].set_location(rf);
 	s[0].l[0].set_config_items();
 	config = s[0].l[0].get_config_item();
 	it = config.begin();
@@ -55,7 +74,7 @@ void	Config::set_loc_conf(char **argv)
 		++it;
 	}
 	std::cout << ">>>>>>>>location 2<<<<<<<<<<<" << std::endl;
-	s[0].l[1].set_method(rf);
+	s[0].l[1].set_location(rf);
 	s[0].l[1].set_config_items();
 	config = s[0].l[1].get_config_item();
 	it = config.begin();
@@ -65,8 +84,14 @@ void	Config::set_loc_conf(char **argv)
 		++it;
 	}
 	std::cout << ">>>>>>>>>>>>>>server 1<<<<<<<<<<<" << std::endl;
-	s[1].l[0].set_host(rf, argv[1]);
-	s[1].l[0].set_method(rf);
+	s[1].set_host(rf);
+	s[1].set_nLocation(f);
+	std::cout << s[1].get_host() << std::endl;
+	std::cout << s[1].get_port() << std::endl;
+	std::cout << s[1].methods[0] << std::endl;
+	std::cout << s[1].methods[1] << std::endl;
+	std::cout << s[1].methods[2] << std::endl;
+	s[1].l[0].set_location(rf);
 	s[1].l[0].set_config_items();
 	config = s[1].l[0].get_config_item();
 	it = config.begin();

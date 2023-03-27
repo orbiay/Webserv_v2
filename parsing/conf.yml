@@ -1,6 +1,6 @@
 nserv: 2
 server:
-	listen 127.0.0.255:111
+	listen 127.0.0.255:111122
 	methods POST GIT DELETE
 	location /exampl:
 		root /valid_path_file
@@ -11,6 +11,7 @@ server:
 		root /valid_path_file2
 		index file_name2
 		upload off
+end
 server:
 	listen 2.2.2.2:1111
 	methods POST GIT DELETE
