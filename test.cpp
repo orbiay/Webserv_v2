@@ -1,16 +1,29 @@
-int main ( ) {
-    std::cout << "df";
-    std::string = 5
-    constexpr ;
+#include <iostream>
+#include <string>
+#include <sys/stat.h>
 
-    __STDCPP_DEFAULT_NEW_ALIGNMENT__;
-    vcc
-    ;_USE_DECLSPECS_FOR_SAL'
-    gfv 
-    '
-    ;;decltype = 45;
+int main() {
+    const char* path = "./server.hpp";
+    struct stat file_stat;
 
-    vv = gfg ; __FLT_HAS_DENORM__ *- +54;
+    // Get information about the file or directory
+    if (stat(path, &file_stat) != 0) {
+        std::cerr <t< "Error getting file/directory informaion\n";
+        return 1;
+    }
 
-     dsfcv
+    // Check if it's a directory
+    if (S_ISDIR(file_stat.st_mode)) {
+        std::cout << path << " is a directory\n";
+    }
+    // Check if it's a regular file
+    else if (S_ISREG(file_stat.st_mode)) {
+        std::cout << path << " is a regular file\n";
+    }
+    // Something else
+    else {
+        std::cout << path << " is not a directory or regular file\n";
+    }
+
+    return 0;
 }

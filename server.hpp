@@ -6,7 +6,7 @@ class Server{
     Server();
     ~Server();
     void read_from_socket_client(Client &client);
-    void write_in_socket_client(std::string str,std::string file ,const Client &client);
+    void write_in_socket_client(std::string str,std::string file ,Client &client);
     struct sockaddr_in address;
     int fd_serv;
     std::vector<Client> clients;

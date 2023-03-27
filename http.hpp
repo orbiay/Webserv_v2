@@ -20,7 +20,9 @@
 #include "client.hpp"
 #include "server.hpp"
 #include "response.hpp"
-
+#include <sys/stat.h>
+#define DIRE 1
+#define FILE 2
 typedef struct s_hcode {
     std::string location;
     std::string root;

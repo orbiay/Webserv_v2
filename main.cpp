@@ -6,6 +6,8 @@
 #define num_of_servers 5
 #define PORT 8015
 
+
+
 bool Http::finish = false;
 
 int	parsing(int argc, char **argv);
@@ -83,15 +85,15 @@ void	Client::split_request(std::string request) {
 		request.erase(0, pos + f.length());
 	}
 	this->body = request;
+	std::ofstream out("body");
 	std::cout << "------------------b---------------------------\n";
-	std::cout << "body = " << request << std::endl;
+	out  << request << std::endl;
 	std::cout << "------------------b---------------------------\n";
 }
 
-void run_server(std::list<Server> &server_list)
+void run_server(std::vector<Server> &server_list)
 {
    
-	std::list<Client>::iterator iter;
 	int ret = 0;
 	while (1)
 	{
@@ -104,25 +106,28 @@ void run_server(std::list<Server> &server_list)
 		}
 		if (!ret)
 			continue;
-		std::list<Server>::iterator server_iter = server_list.begin();
-		while (server_iter != server_list.end())
+		for (int  j = 0; j < (int)server_list.size(); j++)
 		{
+			Server &server = server_list[j];
+		// }
+		// while (server_iter != server_list.end())
+		// {
 			// If Statement for new connection.
-			if (FD_ISSET(server_iter->fd_serv, &readable))
+			if (FD_ISSET(server.fd_serv, &readable))
 			{
 				std::cout<<"Statement for new connection\n";
-				std::cout<< "server Fd = " << server_iter->fd_serv <<"\n\n"<<std::endl;
-				server_iter->clients.push_back(accept_new_connection(*server_iter));
-				std::cout<<"The server number "<< server_iter->fd_serv << " accept new connection seccesfully\n\n"<<std::endl;
+				std::cout<< "server Fd = " << server.fd_serv <<"\n\n"<<std::endl;
+				server.clients.push_back(accept_new_connection(server));
+				std::cout<<"The server number "<< server.fd_serv << " accept new connection seccesfully\n\n"<<std::endl;
 			}
-			for (int i = 0; i < (int)server_iter->clients.size(); i++)
+			for (int i = 0; i < (int)server.clients.size(); i++)
 			{
-				Client &client = server_iter->clients[i];
+				Client &client = server.clients[i];
 				// IF statement for Request.
 				if (FD_ISSET(client.fd_client, &readable))
 				{
 					std::cout<<"statement for Request.\n";
-					server_iter->read_from_socket_client(client);
+					server.read_from_socket_client(client);
 					if (client.ready)
 					{
 						client.split_request(client.request);
@@ -131,20 +136,23 @@ void run_server(std::list<Server> &server_list)
 					}
 				}
 				// IF statement for Response.
-				else if(i >= 0 &&  FD_ISSET(client.fd_client, &writable))
+				else if(i >= 0 && client.ready  && FD_ISSET(client.fd_client, &writable))
 				{
 					std::cout<<"statement for Response.\n";
-					client.parse.check_request(*server_iter, client);
-					 //server_iter->write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
+					client.parse.check_request(server, client);
+					 //server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
 					// if (Http::finish) {
+					if (client.is_delete == true || client.is_finish == true)
+					{
 						close(client.fd_client);
-						FD_CLR(client.fd_client,&server_iter->current);
-						server_iter->clients.erase(std::next(server_iter->clients.begin(), i));
+						FD_CLR(client.fd_client,&server.current);
+						server.clients.erase(std::next(server.clients.begin(), i));
+						std::cout << "The client droped secsusfully \n";
+						i--;
+					}
 					// }
-					i--;
 				}
 			}
-			server_iter++;
 		}
 	}
 }
@@ -179,8 +187,8 @@ int main (int ac, char **av)
   
 
 
-	std::list<Server> server_list;
-	std::list<Server>::iterator iter = server_list.begin();
+	std::vector<Server> server_list;
+	std::vector<Server>::iterator iter = server_list.begin();
 	while (i < 5)
 	{
 		server_list.push_back(init_server(id_servers[i],sed_struct[i]));

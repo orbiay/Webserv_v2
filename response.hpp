@@ -19,17 +19,18 @@
 class Client;
 
 class Response{
+		Response();
 	public:
-		Client			client;
+		Client			&client;
 		int				readed;
 		int				content_length;
 		bool			is_done;
 		std::string		path;
 		int				result;
 		std::ifstream	is_exist;
-		std::ofstream	outfile;
+		int	outfile;
 		
-		Response();
+		Response(Client &client);
 		Response(const Response &r);
 		Response operator = (const Response &r);
 		//Response(Client &_client);
@@ -37,7 +38,9 @@ class Response{
 
 		void Get(Server &server);
 		void Post(Server &server);
-		void Delete(Server &server);	
+		void Delete(Server &server);
+		std::string getContentType(Server &server);
+		int read_and_write(Client &client);
 };
 
 #endif

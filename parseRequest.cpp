@@ -166,14 +166,12 @@ int	matched_location(std::string url)
 		//--------------------------------checking methods-------------------------------------------
 void	check_methods(Server &server, Client &client)
 {
-	Response res;
-	res.client = client;
+	Response res(client);
+	//res.client = &client;
 	// res.client = client.parse;
 	if (client.parse._data["method"] == "GET") {
-		// GET();
-		// std::cout << "----------------RAHA KHEDAMA A Z---------------------" << std::endl;
-		// std::cout << res.client.parse._data["method"] << std::endl;
-		// std::cout << "----------------RAHA  MaKHEDAMA A Z---------------------" << std::endl;
+		res.Get(server);
+		//server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
 	}
 	else if (client.parse._data["method"] == "POST") {
 		res.Post(server);
