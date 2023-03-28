@@ -1,7 +1,11 @@
 nserv: 2
 server:
+<<<<<<< HEAD
+	listen 127.0.0.255:111122
+=======
 	
 	listen 127.0.0.255:111
+>>>>>>> 805b9658b3f773f5d337e99f1bf6c442e370f275
 	methods POST GIT DELETE
 	location /exampl:
 		root /valid_path_file
@@ -12,6 +16,9 @@ server:
 		root /valid_path_file2
 		index file_name2
 		upload off
+<<<<<<< HEAD
+end
+=======
 <<<<<<< HEAD
 		method POST GET DELETE
 server:
@@ -34,6 +41,7 @@ server:
 		method DELETE
 =======
 >>>>>>> 2445c488c94fa77f5cfeb71f78ee16ff34ec27be
+>>>>>>> 805b9658b3f773f5d337e99f1bf6c442e370f275
 server:
 	listen 2.2.2.2:1111
 	methods POST GIT DELETE

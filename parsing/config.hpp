@@ -25,6 +25,7 @@ class Config
 		std::string	index;
 		std::string	location;
 	public : 
+		std::vector<Pserver> Conf;
 		static int nserv;
 		Location l;
 		Config();
