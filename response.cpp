@@ -130,26 +130,33 @@ void Response::Get(Server &server) {
 int Response::read_and_write(Client &client)
 {
 	int i = 0;
-	std::cout<<client.body<<std::endl;
+	
 	while (client.position  + i  < content_length)
 	{
 		write(client.fd_file, &client.body[client.position + i],1);
+		// printf("\n*");
+		// write(1,&client.body[client.position + i],1);
+		// printf("*\n");
+		printf("\n|%c|\n", client.body[29384]);
 		//std::cout<<client.position<<std::endl;
 		if (i == 1024)
 		{
+			//i++;
 			client.position += i;
+			client.position++;
+			std::cout<<"i1 = "<<i<<std::endl;
 			return (i);
 		}
 		i++;
 	}
-	 std::cout<<"i = "<<content_length<<std::endl;
+	std::cout<<"i2 = "<<i<<std::endl;
 	client.position += i;
+	std::cout<<	"position = "<<client.position <<" content length =  "<<content_length <<std::endl;
 	return(i);
 }
 
 void Response::Post(Server &server) {
-	(void)server;
-			printf("\e[44m aaaaaaaaaaaaaaa\n");
+	// (void)server;
 	// std::string path = "/Users/fbouanan/Desktop/Webserv_v2/fouad.html";
 	// int result;
 	// result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
@@ -163,10 +170,16 @@ void Response::Post(Server &server) {
 		client.enter = true;
 	}
 	if (upload) {
-		if (read_and_write(client) < 1024)
+		int f = read_and_write(client);
+		if (f < 1024) {
 			client.is_finish = true;
-			
-		std::cout<<	client.position<<std::endl;
+			std::cout<<"f1 = "<<f<<std::endl;
+			//std::cout<<"*************HOLA************"<<std::endl;
+			//exit(1);
+			server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
+		}
+		else 
+			std::cout<<"f2 = "<<f<<std::endl;
 	}
 	// else if (cgi) {
 

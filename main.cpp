@@ -4,7 +4,7 @@
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8020
+#define PORT 8015
 
 
 
@@ -140,10 +140,10 @@ void run_server(std::vector<Server> &server_list)
 				{
 					std::cout<<"statement for Response.\n";
 					client.parse.check_request(server, client);
-					 //server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html",client);
 					// if (Http::finish) {
 					if (client.is_delete == true || client.is_finish == true)
 					{
+						//server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 						close(client.fd_client);
 						FD_CLR(client.fd_client,&server.current);
 						server.clients.erase(std::next(server.clients.begin(), i));
