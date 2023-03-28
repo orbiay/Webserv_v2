@@ -94,14 +94,35 @@ void Response::Get(Server &server) {
 	std::cout<<root<<std::endl;
 	if (!infile.good())
 	{
-		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213\r\n\r\n";
+		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213r\r\nConnection: closed\r\n\r\n";
 		server.write_in_socket_client(header,"404error.html", client);
 	}
 	else
 	{
 		infile.close();
-		header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length: 587\r\nConnection: closed\r\n\r\n";
-		server.write_in_socket_client(header,root,client);
+		if (is_directory_or_file(root) == FILE)
+		{
+			header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length: 392\r\nConnection: closed\r\n\r\n";
+			server.write_in_socket_client(header,root,client);
+		}
+		else if (is_directory_or_file(root) == DIRE)
+		{
+			//check is auto index on
+			server.default_index = "index.html";
+			if (is_directory_or_file(root + server.default_index) != FILE)
+			{
+				
+				std::cout<<"AAAAAAAAAAAAAAAA"<<std::endl;
+				header = "HTTP/1.1 404 not found\nContent-Type:text/html\nContent-Length: 213\r\nConnection: closed\r\n\r\n";
+				server.write_in_socket_client(header,"404error.html", client);
+			}
+			else
+			{
+				std::cout<<"IM HERE"<<std::endl;
+				header = "HTTP/1.1 200 OK\nContent-Type:  text/html\nContent-Length: 506\r\nConnection: closed\r\n\r\n";
+				server.write_in_socket_client(header,root + server.default_index,client);
+			}
+		}
 	}
 }
 
@@ -109,6 +130,7 @@ void Response::Get(Server &server) {
 int Response::read_and_write(Client &client)
 {
 	int i = 0;
+	std::cout<<client.body<<std::endl;
 	while (client.position  + i  < content_length)
 	{
 		write(client.fd_file, &client.body[client.position + i],1);
@@ -139,14 +161,11 @@ void Response::Post(Server &server) {
 	{
 		client.fd_file = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC);
 		client.enter = true;
-		std::cout<<"1"<<std::endl;
-		//std::cout<<client.fd_file<<std::endl;
 	}
-	//std::cout<<"2"<<std::endl;
-	std::cout<<"outfile = "<<client.fd_file<<std::endl;
 	if (upload) {
 		if (read_and_write(client) < 1024)
 			client.is_finish = true;
+			
 		std::cout<<	client.position<<std::endl;
 	}
 	// else if (cgi) {
