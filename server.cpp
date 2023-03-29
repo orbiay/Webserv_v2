@@ -24,7 +24,8 @@ void Server::read_from_socket_client(Client &client)
     if (i != 1024)
         client.ready = true;
      std::cout<<client.ready <<std::endl;
-     //std::cout<<"\n\n"<<client.request<<"\n\n"<<std::endl;
+    //std::cout<<"\n\n"<<client.request<<"\n\n"<<std::endl;
+    //exit(1);
 }
 
 // char *read_from_file(std::string file, Client &client)
@@ -50,6 +51,11 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     if (client.start_writting == 1)
     {
 	    client.fd_file = open (file.c_str(),O_RDONLY);
+        if (client.fd_file == -1)
+        {
+            perror("Error ");
+            exit(0);
+        }
         client.start_writting = 0;
     }
     else

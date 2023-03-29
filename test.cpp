@@ -8,7 +8,7 @@ int main() {
 
     // Get information about the file or directory
     if (stat(path, &file_stat) != 0) {
-        std::cerr <t< "Error getting file/directory informaion\n";
+        std::cerr << "Error getting file/directory informaion\n";
         return 1;
     }
 
@@ -27,3 +27,4 @@ int main() {
 
     return 0;
 }
+
