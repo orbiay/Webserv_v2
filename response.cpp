@@ -92,6 +92,7 @@ void Response::Get(Server &server) {
 	std::ifstream infile(root.c_str());
 	std::string header;
 	std::cout<<root<<std::endl;
+	std::string auto_index = "on";
 	if (!infile.good())
 	{
 		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213r\r\nConnection: closed\r\n\r\n";
@@ -107,20 +108,27 @@ void Response::Get(Server &server) {
 		}
 		else if (is_directory_or_file(root) == DIRE)
 		{
-			//check is auto index on
-			server.default_index = "index.html";
-			if (is_directory_or_file(root + server.default_index) != FILE)
+			if (auto_index == "on")
 			{
-				
-				std::cout<<"AAAAAAAAAAAAAAAA"<<std::endl;
-				header = "HTTP/1.1 404 not found\nContent-Type:text/html\nContent-Length: 213\r\nConnection: closed\r\n\r\n";
-				server.write_in_socket_client(header,"404error.html", client);
+				server.default_index = "index.html";
+				if (is_directory_or_file(root + server.default_index) != FILE)
+				{
+
+					std::cout<<"AAAAAAAAAAAAAAAA"<<std::endl;
+					header = "HTTP/1.1 404 not found\nContent-Type:text/html\nContent-Length: 	213\r\nConnection: closed\r\n\r\n";
+					server.write_in_socket_client(header,"404error.html", client);
+				}
+				else
+				{
+					std::cout<<"IM HERE"<<std::endl;
+					header = "HTTP/1.1 200 OK\nContent-Type:  text/html\nContent-Length: 506\r\nConnection: 	closed\r\n\r\n";
+					server.write_in_socket_client(header,root + server.default_index,client);
+				}
 			}
 			else
 			{
-				std::cout<<"IM HERE"<<std::endl;
-				header = "HTTP/1.1 200 OK\nContent-Type:  text/html\nContent-Length: 506\r\nConnection: closed\r\n\r\n";
-				server.write_in_socket_client(header,root + server.default_index,client);
+				header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length: 	169\r\nConnection: closed\r\n\r\n";
+				server.write_in_socket_client(header,"403error.html", client);
 			}
 		}
 	}
@@ -172,18 +180,15 @@ void Response::Post(Server &server) {
 	if (upload) {
 		int f = read_and_write(client);
 		if (f < 1024) {
-			client.is_finish = true;
+			//client.is_finish = true;
 			std::cout<<"f1 = "<<f<<std::endl;
 			//std::cout<<"*************HOLA************"<<std::endl;
 			//exit(1);
-			server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
+			server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 2800\r\n\r\n","201success.html",client);
 		}
 		else 
 			std::cout<<"f2 = "<<f<<std::endl;
 	}
-	// else if (cgi) {
-
-	// }
 }
 
 void Response::Delete(Server &server) {

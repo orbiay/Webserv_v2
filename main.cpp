@@ -141,7 +141,7 @@ void run_server(std::vector<Server> &server_list)
 					std::cout<<"statement for Response.\n";
 					client.parse.check_request(server, client);
 					// if (Http::finish) {
-					if (client.is_delete == true || client.is_finish == true)
+					if (client.is_delete == true)
 					{
 						//server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 						close(client.fd_client);

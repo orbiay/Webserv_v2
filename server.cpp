@@ -58,17 +58,11 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
         }
         client.start_writting = 0;
     }
-    else
+    else if (client.start_writting == 0)
     {
         i = read(client.fd_file,s,1023);
-        std::cout<<"HI"<<std::endl;
-        printf("%s\n",s);
-        std::cout<<i<<std::endl;
-        std::string body = s;
-        str = body;
+        str = s;
     }
-   printf("size readed = %d  body ==== %s\n",i, str.c_str());
-
     if (write(client.fd_client,str.c_str(),i) < 1)
     {
         client.is_delete = true;
@@ -77,7 +71,6 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     }
     if (i <= 0)
     {
-        std::cout << "here11\n";
         client.is_delete = true;
         return;
     }

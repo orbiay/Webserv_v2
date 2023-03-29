@@ -1,30 +1,14 @@
 #include <iostream>
-#include <string>
-#include <sys/stat.h>
+#include <fstream>
 
 int main() {
-    const char* path = "./server.hpp";
-    struct stat file_stat;
-
-    // Get information about the file or directory
-    if (stat(path, &file_stat) != 0) {
-        std::cerr << "Error getting file/directory informaion\n";
-        return 1;
+    std::ifstream file("403error.html", std::ifstream::ate | std::ifstream::binary);
+    if (file.is_open()) {
+        std::streamsize size = file.tellg();
+        std::cout << "File size is: " << size << " bytes." << std::endl;
     }
-
-    // Check if it's a directory
-    if (S_ISDIR(file_stat.st_mode)) {
-        std::cout << path << " is a directory\n";
-    }
-    // Check if it's a regular file
-    else if (S_ISREG(file_stat.st_mode)) {
-        std::cout << path << " is a regular file\n";
-    }
-    // Something else
     else {
-        std::cout << path << " is not a directory or regular file\n";
+        std::cout << "Unable to open file." << std::endl;
     }
-
     return 0;
 }
-
