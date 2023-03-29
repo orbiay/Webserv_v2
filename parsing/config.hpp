@@ -28,7 +28,6 @@ class Config
 		std::string	location;
 		std::vector<Pserver> Conf;
 		static int nserv;
-		Location l;
 		Config(char **argv);
 		void	set_loc_conf(char **argv);
 
