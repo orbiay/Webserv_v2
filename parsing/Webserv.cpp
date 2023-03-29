@@ -30,7 +30,9 @@ void	Pserver::set_nLocation(std::ifstream &f)
 			if (line == "end")
 				return ;
 			if (line.compare(0, 9, "\tlocation") == 0)
+			{
 				this->nloc++;
+			}
 		}
 	}
 }

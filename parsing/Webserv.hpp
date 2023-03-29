@@ -25,7 +25,9 @@ class Pserver
 		int			port;
 		int			nloc;
 		std::string methods[3];
-		Location l[100]; //i had to put it in vector
+
+
+		std::vector<Location> L; //i had to put it in vector
 		Pserver();
 
 		class SyntaxError : public std::exception

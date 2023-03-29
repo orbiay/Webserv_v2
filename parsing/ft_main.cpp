@@ -22,9 +22,10 @@ int parsing(int argc, char **argv)
 		{
 			Config c(argv);
 
-			std::cout<<c.Conf[0].l[0].get_location() << std::endl;
-			std::cout<<c.Conf[0].l[1].get_location() << std::endl;
-			std::cout<<c.Conf[1].l[0].get_location() << std::endl;
+			std::cout<<c.s[0].L[0].get_location() << std::endl;
+			std::cout<<c.s[0].L[1].get_location() << std::endl;
+			std::cout<<c.s[0].L[2].get_index() << std::endl;
+			std::cout<<c.s[1].L[0].get_location() << std::endl;
 		}
 		catch(std::exception &e)
 		{

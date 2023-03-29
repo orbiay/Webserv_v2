@@ -9,6 +9,10 @@ server:
 		upload on
 		return 
 	location /exampl1:
+		root /valid_path_file1
+		index file_name1
+		upload off
+	location /exampl2:
 		root /valid_path_file2
 		index file_name2
 		upload off
@@ -16,7 +20,7 @@ end
 server:
 	listen 2.2.2.2:1111
 	methods POST GIT DELETE
-	location /exampl2:
+	location /exampls1l2:
 		root /valid_path_files2
 		index file_names2
 		upload on

@@ -60,19 +60,25 @@ void	Config::set_loc_conf(char **argv)
 	if (s1.get_nserv() != n_servr)
 		return ;
 	Pserver s[s1.get_nserv()];
-	s[0].set_host(rf);
-	s[0].set_nLocation(f);
-	s[0].l[0].set_location(rf);
-	s[0].l[0].set_config_items();
-	s[0].l[1].set_location(rf);
-	s[0].l[1].set_config_items();
-	s[1].set_host(rf);
-	s[1].set_nLocation(f);
-	s[1].l[0].set_location(rf);
-	s[1].l[0].set_config_items();
-	//std::vector<Pserver>::iterator	it;
-	this->Conf.push_back(s[0]);
-	this->Conf.push_back(s[1]);
+	int	i;
+	int	j;
+
+	i = 0;
+	Location l;
+	while (i < s1.get_nserv())
+	{
+		j = 0;
+		s[i].set_host(rf);
+		s[i].set_nLocation(f);
+		while (j < s[i].nloc)
+		{
+			l.set_location(rf);
+			s[i].L.push_back(l);
+			j++;
+		}
+		this->s.push_back(s[i]);
+		i++;
+	}
 	rf.close();
 }
 
