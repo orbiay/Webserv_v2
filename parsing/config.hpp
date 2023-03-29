@@ -18,17 +18,17 @@
 class Config
 {
 	private :
+		Config();
+	public : 
 		int	host;
 		int	port;
 		bool upload;
 		std::string	root;
 		std::string	index;
 		std::string	location;
-	public : 
 		std::vector<Pserver> Conf;
 		static int nserv;
-		Location l;
-		Config();
+		Config(char **argv);
 		void	set_loc_conf(char **argv);
 
 		int	get_host() const;

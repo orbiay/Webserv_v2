@@ -21,11 +21,11 @@ class Pserver
 		std::string	server;
 		int			nserv;
 		std::string	host;
-		int			port;
 	public :
-		static int	nloc;
+		int			port;
+		int			nloc;
 		std::string methods[3];
-		Location l[100];
+		Location l[100]; //i had to put it in vector
 		Pserver();
 
 		class SyntaxError : public std::exception

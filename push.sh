@@ -7,12 +7,6 @@ git add .
 echo "git commit -m (date)"
 git commit -m "${date}"
 
-echo "git satus"
-git status
-
-echo "pull"
-git pull
-
 echo "push"
 git push git@github.com:orbiay/Webserv_v2.git master
 

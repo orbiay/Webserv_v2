@@ -20,9 +20,11 @@ int parsing(int argc, char **argv)
 		(void)argv;
 		try
 		{
-			Config c;
+			Config c(argv);
 
-			c.set_loc_conf(argv);
+			std::cout<<c.Conf[0].l[0].get_location() << std::endl;
+			std::cout<<c.Conf[0].l[1].get_location() << std::endl;
+			std::cout<<c.Conf[1].l[0].get_location() << std::endl;
 		}
 		catch(std::exception &e)
 		{
