@@ -14,7 +14,11 @@
 
 Config::Config()
 {
-	this->upload = false;
+}
+
+Config::Config(char **argv)
+{
+	this->set_loc_conf(argv);
 }
 
 int	count_servers(char **argv)
@@ -56,50 +60,19 @@ void	Config::set_loc_conf(char **argv)
 	if (s1.get_nserv() != n_servr)
 		return ;
 	Pserver s[s1.get_nserv()];
-	std::map<std::string, std::string>::iterator it;
 	s[0].set_host(rf);
 	s[0].set_nLocation(f);
-	std::cout << s[0].get_host() << std::endl;
-	std::cout << s[0].get_port() << std::endl;
-	std::cout << s[0].methods[0] << std::endl;
-	std::cout << s[0].methods[1] << std::endl;
-	std::cout << s[0].methods[2] << std::endl;
 	s[0].l[0].set_location(rf);
 	s[0].l[0].set_config_items();
-	config = s[0].l[0].get_config_item();
-	it = config.begin();
-	while (it != config.end())
-	{
-		std::cout << it->first << ","<< it->second << std::endl;
-		++it;
-	}
-	std::cout << ">>>>>>>>location 2<<<<<<<<<<<" << std::endl;
 	s[0].l[1].set_location(rf);
 	s[0].l[1].set_config_items();
-	config = s[0].l[1].get_config_item();
-	it = config.begin();
-	while (it != config.end())
-	{
-		std::cout << it->first << ","<< it->second << std::endl;
-		++it;
-	}
-	std::cout << ">>>>>>>>>>>>>>server 1<<<<<<<<<<<" << std::endl;
 	s[1].set_host(rf);
 	s[1].set_nLocation(f);
-	std::cout << s[1].get_host() << std::endl;
-	std::cout << s[1].get_port() << std::endl;
-	std::cout << s[1].methods[0] << std::endl;
-	std::cout << s[1].methods[1] << std::endl;
-	std::cout << s[1].methods[2] << std::endl;
 	s[1].l[0].set_location(rf);
 	s[1].l[0].set_config_items();
-	config = s[1].l[0].get_config_item();
-	it = config.begin();
-	while (it != config.end())
-	{
-		 std::cout << it->first << ","<< it->second << std::endl;
-		++it;
-	}
+	//std::vector<Pserver>::iterator	it;
+	this->Conf.push_back(s[0]);
+	this->Conf.push_back(s[1]);
 	rf.close();
 }
 
@@ -132,5 +105,6 @@ std::string	Config::get_location() const
 {
 	return (this->location);
 }
+
 
 Config::~Config(){}

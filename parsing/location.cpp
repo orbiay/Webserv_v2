@@ -16,19 +16,6 @@ Location::Location()
 {
 }
 
-Location::Location(const Location &ws)
-{
-	*this = ws;
-	std::cout << "Location copy constructor called" << std::endl;
-}
-
-Location	Location::operator = (const Location &ws)
-{
-	this->file_name = ws.file_name;
-	std::cout << "Location copy assignement constructor called" << std::endl;
-	return (*this);
-}
-
 const char	*Location::NotOpen::what() const throw()
 {
 	return ("file not found");

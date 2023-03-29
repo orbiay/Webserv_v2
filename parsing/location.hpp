@@ -26,16 +26,12 @@ class Location
 		std::string file_name;
 		std::string	root_val;
 		std::string line_val;
-		std::string	index_val;
-		std::string	location_val;
-		std::string	host;
-		std::string	port;
-		std::string	upload_val;
 		std::map<std::string, std::string> config_items;
 	public : 
+		std::string	index_val;
+		std::string	location_val;
+		std::string	upload_val;
 		Location();
-		Location(const Location &ws);
-		Location operator = (const Location &ws);
 		void	setNginixFile(std::ifstream &rf, char *str);
 		std::string		getData(void) const;
 		class	NotOpen : public std::exception

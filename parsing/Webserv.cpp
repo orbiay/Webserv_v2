@@ -12,9 +12,7 @@
 
 #include"Webserv.hpp"
 
-Pserver::Pserver()
-{
-}
+Pserver::Pserver(){}
 
 const char *Pserver::SyntaxError::what() const throw()
 {
@@ -32,9 +30,7 @@ void	Pserver::set_nLocation(std::ifstream &f)
 			if (line == "end")
 				return ;
 			if (line.compare(0, 9, "\tlocation") == 0)
-			{
-				std::cout << "OK" << std::endl;
-			}
+				this->nloc++;
 		}
 	}
 }
