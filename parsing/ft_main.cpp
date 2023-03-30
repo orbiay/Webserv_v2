@@ -22,10 +22,10 @@ int parsing(int argc, char **argv)
 		{
 			Config c(argv);
 
-			std::cout<<c.s[0].L[0].get_autoindex() << std::endl;
+			std::cout<<c.s[0].L[0].get_body_size() << std::endl;
 			std::cout<<c.s[0].L[1].get_autoindex() << std::endl;
 			std::cout<<c.s[0].L[2].get_autoindex() << std::endl;
-			std::cout<<c.s[1].L[0].get_autoindex() << std::endl;
+			std::cout<<c.s[1].L[0].get_body_size() << std::endl;
 		}
 		catch(std::exception &e)
 		{

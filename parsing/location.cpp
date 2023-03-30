@@ -57,6 +57,28 @@ std::map<std::string, std::string>	Location::get_config_item(void) const
 	return (this->config_items);
 }
 
+void	Location::set_body_size(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 11, "\t\tbody_size") == 0)
+		{
+			i = line.find(" ");
+			this->body_size = line.substr(i + 1, line.length());
+			return ;
+		}
+	}
+}
+
+std::string	Location::get_body_size(void) const
+{
+	return (this->body_size);
+}
+
 void	Location::set_upload(std::ifstream &rf)
 {
 	std::string line;
@@ -69,6 +91,7 @@ void	Location::set_upload(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			this->upload_val = line.substr(i + 1, line.length());
+			this->set_body_size(rf);
 			return ;
 		}
 	}

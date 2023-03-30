@@ -7,21 +7,21 @@ server:
 		index file_name
 		autoindex off
 		upload on
-		body size 1Mb
+		body_size 1Mb
 		return
 	location /exampl1:
 		root /valid_path_file1
 		index file_name1
 		autoindex on
 		upload off
-		body size 1Mb
+		body_size 1Mb
 		return
 	location /exampl2:
 		root /valid_path_file2
 		index file_name2
 		autoindex off
 		upload off
-		body size 1Mb
+		body_size 1Mb
 		return
 end
 server:
@@ -32,4 +32,7 @@ server:
 		index file_names2
 		autoindex on
 		upload on
+		body_size 1Mb
+		return
+		
 end
