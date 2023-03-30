@@ -31,7 +31,9 @@ class Location
 		std::string	index_val;
 		std::string	location_val;
 		std::string	upload_val;
+		bool upload;
 		std::string	autoindex_val;
+		bool	autoindex;
 		std::string	body_size;
 		Location();
 		std::string		getData(void) const;

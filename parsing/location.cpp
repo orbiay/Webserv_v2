@@ -14,6 +14,8 @@
 
 Location::Location()
 {
+	this->upload = false;
+	this->autoindex = false;
 }
 
 const char *Location::PathError::what() const throw()
@@ -91,6 +93,8 @@ void	Location::set_upload(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			this->upload_val = line.substr(i + 1, line.length());
+			if (this->upload_val == "on")
+				this->upload = true;
 			this->set_body_size(rf);
 			return ;
 		}
@@ -114,6 +118,8 @@ void	Location::set_autoindex(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			this->autoindex_val = line.substr(i + 1, line.length());
+			if (this->autoindex_val == "on")
+				this->autoindex = true;
 			this->set_upload(rf);
 			return ;
 		}
