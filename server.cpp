@@ -53,8 +53,8 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 	    client.fd_file = open (file.c_str(),O_RDONLY);
         if (client.fd_file == -1)
         {
-            perror("Error ");
-            exit(0);
+            client.is_delete = true;
+           // exit(0);
         }
         client.start_writting = 0;
     }

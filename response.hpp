@@ -41,6 +41,7 @@ class Response{
 		void Delete(Server &server);
 		std::string getContentType(Server &server);
 		int read_and_write(Client &client);
+		void size_file(std::string file_name);
 };
 
 #endif

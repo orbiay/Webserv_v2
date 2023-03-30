@@ -2,7 +2,7 @@
 #include <fstream>
 
 int main() {
-    std::ifstream file("403error.html", std::ifstream::ate | std::ifstream::binary);
+    std::ifstream file("test.cpp", std::ifstream::ate | std::ifstream::binary);
     if (file.is_open()) {
         std::streamsize size = file.tellg();
         std::cout << "File size is: " << size << " bytes." << std::endl;

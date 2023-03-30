@@ -14,6 +14,17 @@
 
 #include <string>
 
+void Response::size_file(std::string file_name)
+{
+	std::ifstream file(file_name, std::ifstream::ate | std::ifstream::binary);
+    if (file.is_open())
+        client.sizefile = to_string(file.tellg());
+    else {
+        client.is_delete = true; 
+		//exit(0);
+    }
+}
+
 int is_directory_or_file(std::string path)
 {
 	struct stat status;
@@ -93,6 +104,7 @@ void Response::Get(Server &server) {
 	std::string header;
 	std::cout<<root<<std::endl;
 	std::string auto_index = "on";
+	std::string default_index = "web_page.html";
 	if (!infile.good())
 	{
 		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213r\r\nConnection: closed\r\n\r\n";
@@ -108,22 +120,29 @@ void Response::Get(Server &server) {
 		}
 		else if (is_directory_or_file(root) == DIRE)
 		{
-			if (auto_index == "on")
-			{
-				server.default_index = "index.html";
-				if (is_directory_or_file(root + server.default_index) != FILE)
-				{
 
-					std::cout<<"AAAAAAAAAAAAAAAA"<<std::endl;
-					header = "HTTP/1.1 404 not found\nContent-Type:text/html\nContent-Length: 	213\r\nConnection: closed\r\n\r\n";
-					server.write_in_socket_client(header,"404error.html", client);
-				}
-				else
-				{
-					std::cout<<"IM HERE"<<std::endl;
-					header = "HTTP/1.1 200 OK\nContent-Type:  text/html\nContent-Length: 506\r\nConnection: 	closed\r\n\r\n";
-					server.write_in_socket_client(header,root + server.default_index,client);
-				}
+				std::cout<<"Hola "<<std::endl;
+			if (auto_index == "on" && default_index.empty())
+			{
+				//if (is_directory_or_file(root + server.default_index) != FILE)
+				//{
+//
+				//	std::cout<<"AAAAAAAAAAAAAAAA"<<std::endl;
+				//	header = "HTTP/1.1 404 not found\nContent-Type:text/html\nContent-Length: 	213\r\nConnection: closed\r\n\r\n";
+				//	server.write_in_socket_client(header,"404error.html", client);
+				//}
+				//else
+				//{
+				//	std::cout<<"IM HERE"<<std::endl;
+				//	header = "HTTP/1.1 200 OK\nContent-Type:  text/html\nContent-Length: 506\r\nConnection: 	closed\r\n\r\n";
+				//	server.write_in_socket_client(header,root ,client);
+				//}
+			}
+			else if (!default_index.empty())
+			{
+				size_file(root + default_index);
+				header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
+				server.write_in_socket_client(header,root + default_index , client);
 			}
 			else
 			{
