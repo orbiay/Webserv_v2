@@ -116,6 +116,7 @@ void	Config::set_loc_conf(char **argv)
 		while (j < s[i].nloc)
 		{
 			l.set_location(rf);
+			l.check_errors();
 			s[i].L.push_back(l);
 			j++;
 		}

@@ -26,17 +26,18 @@ class Location
 		std::string file_name;
 		std::string	root_val;
 		std::string line_val;
-		std::map<std::string, std::string> config_items;
-	public : 
 		std::string	index_val;
 		std::string	location_val;
 		std::string	upload_val;
-		bool upload;
+		std::string	status_str;
+		int			status;
+		std::string	redirec;
+		bool		upload;
 		std::string	autoindex_val;
-		bool	autoindex;
+		bool		autoindex;
 		std::string	body_size;
+	public : 
 		Location();
-		std::string		getData(void) const;
 	
 		class	PathError : public std::exception
 		{
@@ -62,15 +63,20 @@ class Location
 		std::string	get_autoindex(void) const;
 
 		void	set_upload(std::ifstream &rf);
-		std::string	get_upload(void) const;
+		bool	get_upload(void) const;
 
 		void	set_body_size(std::ifstream &rf);
 		std::string	get_body_size(void) const;
 
+		void	set_redirection(std::ifstream &rf);
+		std::string get_redirection(void) const;
+		int	get_status(void) const;
+
 		std::string	set_values(std::string line);
 		void	set_config_items(void);
 
-		std::map<std::string, std::string>	get_config_item(void) const;
+		void	check_errors(void) const;
+
 		virtual ~Location();
 };
 #endif

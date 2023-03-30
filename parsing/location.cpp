@@ -28,6 +28,14 @@ const char *Location::SyntaxError::what() const throw()
 	return ("Syntax Error");
 }
 
+void	Location::check_errors(void) const
+{
+	if (this->root_val == "" || this->index_val == "" || this->location_val == ""
+		|| this->upload_val == "" || this->status_str == "" || this->body_size != "1Mb"
+		|| this->redirec == "" || this->autoindex_val == "")
+		throw (SyntaxError());
+}
+
 std::string	Location::set_values(std::string line)
 {
 	size_t	start;
@@ -38,25 +46,35 @@ std::string	Location::set_values(std::string line)
 	return (this->line_val);
 }
 
-void	Location::set_config_items()
+void	Location::set_redirection(std::ifstream &rf)
 {
-	if (this->location_val == "")
-		throw (SyntaxError());
-	if (this->root_val == "")
-		throw (SyntaxError());
-	if (this->index_val == "")
-		throw (SyntaxError());
-	if (this->upload_val == "" || (this->upload_val != "on" && this->upload_val != "off"))
-		throw (SyntaxError());
-	this->config_items.insert(std::make_pair("location", this->location_val));
-	this->config_items.insert(std::make_pair("root", this->root_val));
-	this->config_items.insert(std::make_pair("index", this->index_val));
-	this->config_items.insert(std::make_pair("upload", this->upload_val));
+	std::string	line;
+	size_t	i;
+	size_t	j;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 8, "\t\treturn") == 0)
+		{
+			i = line.find(" ");
+			this->status_str = line.substr(i + 1, 3);
+			this->status = std::atoi(this->status_str.c_str());
+			j = line.find("/");
+			this->redirec = line.substr(j, line.length());
+			return ;
+		}
+	}
 }
 
-std::map<std::string, std::string>	Location::get_config_item(void) const
+std::string	Location::get_redirection(void) const
 {
-	return (this->config_items);
+	return (this->redirec);
+}
+
+int	Location::get_status(void) const
+{
+	return (this->status);
 }
 
 void	Location::set_body_size(std::ifstream &rf)
@@ -71,6 +89,7 @@ void	Location::set_body_size(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			this->body_size = line.substr(i + 1, line.length());
+			this->set_redirection(rf);
 			return ;
 		}
 	}
@@ -101,9 +120,9 @@ void	Location::set_upload(std::ifstream &rf)
 	}
 }
 
-std::string	Location::get_upload(void) const
+bool	Location::get_upload(void) const
 {
-	return (this->upload_val);
+	return (this->upload);
 }
 
 void	Location::set_autoindex(std::ifstream &rf)
@@ -194,11 +213,6 @@ void	Location::set_location(std::ifstream &rf)
 std::string	Location::get_location(void)const
 {
 	return (this->location_val);
-}
-
-std::string		Location::getData(void) const
-{
-	return (this->file_name);
 }
 
 Location::~Location(){}
