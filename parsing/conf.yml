@@ -5,17 +5,24 @@ server:
 	location /exampl:
 		root /valid_path_file
 		index file_name
-		autoindex on or off
+		autoindex off
 		upload on
-		return 
+		body size 1Mb
+		return
 	location /exampl1:
 		root /valid_path_file1
 		index file_name1
+		autoindex on
 		upload off
+		body size 1Mb
+		return
 	location /exampl2:
 		root /valid_path_file2
 		index file_name2
+		autoindex off
 		upload off
+		body size 1Mb
+		return
 end
 server:
 	listen 2.2.2.2:1111
@@ -23,5 +30,6 @@ server:
 	location /exampls1l2:
 		root /valid_path_files2
 		index file_names2
+		autoindex on
 		upload on
 end

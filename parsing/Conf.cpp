@@ -19,6 +19,40 @@ Config::Config()
 Config::Config(char **argv)
 {
 	this->set_loc_conf(argv);
+	this->check_yml(argv[1]);
+}
+
+const char	*Config::Nofile::what() const throw()
+{
+	return ("no server reached");
+}
+
+const char	*Config::NotOpen::what() const throw()
+{
+	return ("file not found");
+}
+
+const char	*Config::YmlFileError::what() const throw()
+{
+	return ("configuration file must be .yml");
+}
+
+void	Config::check_yml(char *str)
+{
+	size_t	i;
+
+	std::string s(str);
+	i = s.find(".yml");
+	if (i == std::string::npos)
+		throw (YmlFileError());
+	std::ifstream f(str);
+	int	len;
+
+	f.seekg(0, f.end);
+	len = f.tellg();
+	if (len == 0)
+		throw (Nofile());
+	return ;
 }
 
 int	count_servers(char **argv)
@@ -29,7 +63,7 @@ int	count_servers(char **argv)
 	if (file.is_open() == false)
 	{
 		file.close();
-		throw ("not opened");
+		throw ("Error");
 	}
 	n_servr = 0;
 	while (!file.eof())
@@ -52,7 +86,7 @@ void	Config::set_loc_conf(char **argv)
 	if (rf.is_open() == false)
 	{
 		rf.close();
-		throw ("not opened");
+		throw (NotOpen());
 	}
 	n_servr = count_servers(argv);
 	Pserver s1;

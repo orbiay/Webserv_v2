@@ -16,26 +16,6 @@ Location::Location()
 {
 }
 
-const char	*Location::NotOpen::what() const throw()
-{
-	return ("file not found");
-}
-
-const char	*Location::EndNotReached::what() const throw()
-{
-	return ("you must set end of confige file");
-}
-
-const char	*Location::Nofile::what() const throw()
-{
-	return ("server rquire config file");
-}
-
-const char	*Location::YmlFileError::what() const throw()
-{
-	return ("configuration file must be .yml");
-}
-
 const char *Location::PathError::what() const throw()
 {
 	return ("invalid path");
@@ -99,6 +79,29 @@ std::string	Location::get_upload(void) const
 	return (this->upload_val);
 }
 
+void	Location::set_autoindex(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 11, "\t\tautoindex") == 0)
+		{
+			i = line.find(" ");
+			this->autoindex_val = line.substr(i + 1, line.length());
+			this->set_upload(rf);
+			return ;
+		}
+	}
+}
+
+std::string	Location::get_autoindex(void) const
+{
+	return (this->autoindex_val);
+}
+
 void	Location::set_index(std::ifstream &rf)
 {
 	std::string	line;
@@ -110,7 +113,7 @@ void	Location::set_index(std::ifstream &rf)
 		{
 			start = line.find(" ");
 			this->index_val = line.substr(start + 1, line.length());
-			this->set_upload(rf);
+			this->set_autoindex(rf);
 			return ;
 		}
 	}
@@ -162,29 +165,6 @@ void	Location::set_location(std::ifstream &rf)
 std::string	Location::get_location(void)const
 {
 	return (this->location_val);
-}
-
-void	Location::check_serverfile(std::ifstream &rf)
-{
-	std::string line;
-	
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "server:")
-			this->set_location(rf);
-	}
-}
-
-void	Location::check_yml(char *str)
-{
-	size_t i;
-	this->file_name = (std::string)str;
-	std::string	yml;
-	yml = ".yml";
-	i = this->file_name.find(yml, 0);
-	if (i == std::string::npos)
-		throw(YmlFileError());
 }
 
 std::string		Location::getData(void) const
