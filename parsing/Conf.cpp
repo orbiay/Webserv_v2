@@ -37,6 +37,11 @@ const char	*Config::YmlFileError::what() const throw()
 	return ("configuration file must be .yml");
 }
 
+const char	*Config::SyntaxError::what() const throw()
+{
+	return ("Syntax Error");
+}
+
 void	Config::check_yml(char *str)
 {
 	size_t	i;
@@ -83,7 +88,8 @@ void	Config::set_loc_conf(char **argv)
 	int			n_servr;
 	std::ifstream rf(argv[1], std::ios::in);
 	std::ifstream f(argv[1]);
-	if (rf.is_open() == false)
+	std::ifstream f2(argv[1]);
+	if (rf.is_open() == false || f.is_open() == false || f2.is_open() == false)
 	{
 		rf.close();
 		throw (NotOpen());
@@ -91,8 +97,11 @@ void	Config::set_loc_conf(char **argv)
 	n_servr = count_servers(argv);
 	Pserver s1;
 	s1.set_nserv(rf);
+	s1.set_end(f2);
 	if (s1.get_nserv() != n_servr)
-		return ;
+		throw (SyntaxError());
+	if (s1.end != n_servr)
+		throw (SyntaxError());
 	Pserver s[s1.get_nserv()];
 	int	i;
 	int	j;

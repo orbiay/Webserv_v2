@@ -24,6 +24,7 @@ class Pserver
 	public :
 		int			port;
 		int			nloc;
+		int			end;
 		std::string methods[3];
 
 
@@ -43,6 +44,8 @@ class Pserver
 
 		void	set_nserv(std::ifstream &rf);
 		int		get_nserv(void) const;
+
+		void	set_end(std::ifstream &f2);
 		~Pserver();
 };
 

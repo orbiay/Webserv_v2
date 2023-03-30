@@ -12,11 +12,26 @@
 
 #include"Webserv.hpp"
 
-Pserver::Pserver(){}
+Pserver::Pserver()
+{
+	this->end = 0;
+}
 
 const char *Pserver::SyntaxError::what() const throw()
 {
 	return ("syntax error");
+}
+
+void	Pserver::set_end(std::ifstream &f2)
+{
+	std::string	line;
+
+	while (!f2.eof())
+	{
+		getline(f2, line);
+		if (line == "end")
+			this->end++;
+	}
 }
 
 void	Pserver::set_nLocation(std::ifstream &f)

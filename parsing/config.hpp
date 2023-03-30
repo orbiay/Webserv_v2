@@ -45,6 +45,11 @@ class Config
 			public :
 				virtual const char *what() const throw();
 		};
+		class	SyntaxError : public std::exception
+		{
+			public :
+				virtual const char *what() const throw();
+		};
 		void	set_loc_conf(char **argv);
 		int	get_host() const;
 		int	get_port() const;
