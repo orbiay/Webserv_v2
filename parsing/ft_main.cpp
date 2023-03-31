@@ -22,11 +22,10 @@ int parsing(int argc, char **argv)
 		{
 			Config c(argv);
 
-			if (c.s[0].L[0].upload == true)
-				std::cout << "true" << std::endl;
-			std::cout<<c.s[0].L[0].get_body_size() << std::endl;
-			std::cout<<c.s[0].L[1].get_autoindex() << std::endl;
-			std::cout<<c.s[0].L[2].get_autoindex() << std::endl;
+			std::cout<<c.s[0].L[0].get_index() << std::endl;
+			std::cout<<c.s[0].L[1].get_status() << std::endl;
+			std::cout<<c.s[0].L[2].get_status() << std::endl;
+			std::cout<<c.s[1].L[0].get_status() << std::endl;
 		}
 		catch(std::exception &e)
 		{
