@@ -25,7 +25,7 @@ void Response::size_file(std::string file_name)
     }
 }
 
-int is_directory_or_file(std::string path)
+int Response::is_directory_or_file(std::string path)
 {
 	struct stat status;
 	if (stat(path.c_str(), &status) != 0) {
@@ -46,7 +46,7 @@ int is_directory_or_file(std::string path)
 std::string Response::getContentType(Server &server) {
 
 	(void)server;
-	std::string str(client.parse._data["path"]);
+	std::string str(client.extension);
     size_t pos = str.find(".");
 	if (pos == std::string::npos)
 		return "application/octet-stream";
@@ -96,64 +96,6 @@ Response Response::operator=(const Response &r) {
 	return *this;
 }
 
-void Response::Get(Server &server) {
-	// (void)server;
-	std::string root = "." + client.parse._data["path"];
-    std::string content_type = getContentType(server);
-	std::ifstream infile(root.c_str());
-	std::string header;
-	std::cout<<root<<std::endl;
-	std::string auto_index = "on";
-	std::string default_index = "web_page.html";
-	if (!infile.good())
-	{
-		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213r\r\nConnection: closed\r\n\r\n";
-		server.write_in_socket_client(header,"404error.html", client);
-	}
-	else
-	{
-		infile.close();
-		if (is_directory_or_file(root) == FILE)
-		{
-			header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length: 392\r\nConnection: closed\r\n\r\n";
-			server.write_in_socket_client(header,root,client);
-		}
-		else if (is_directory_or_file(root) == DIRE)
-		{
-
-				std::cout<<"Hola "<<std::endl;
-			if (auto_index == "on" && default_index.empty())
-			{
-				//if (is_directory_or_file(root + server.default_index) != FILE)
-				//{
-//
-				//	std::cout<<"AAAAAAAAAAAAAAAA"<<std::endl;
-				//	header = "HTTP/1.1 404 not found\nContent-Type:text/html\nContent-Length: 	213\r\nConnection: closed\r\n\r\n";
-				//	server.write_in_socket_client(header,"404error.html", client);
-				//}
-				//else
-				//{
-				//	std::cout<<"IM HERE"<<std::endl;
-				//	header = "HTTP/1.1 200 OK\nContent-Type:  text/html\nContent-Length: 506\r\nConnection: 	closed\r\n\r\n";
-				//	server.write_in_socket_client(header,root ,client);
-				//}
-			}
-			else if (!default_index.empty())
-			{
-				size_file(root + default_index);
-				header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
-				server.write_in_socket_client(header,root + default_index , client);
-			}
-			else
-			{
-				header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length: 	169\r\nConnection: closed\r\n\r\n";
-				server.write_in_socket_client(header,"403error.html", client);
-			}
-		}
-	}
-}
-
-
 int Response::read_and_write(Client &client)
 {
 	int i = 0;
@@ -164,7 +106,6 @@ int Response::read_and_write(Client &client)
 		// printf("\n*");
 		// write(1,&client.body[client.position + i],1);
 		// printf("*\n");
-		printf("\n|%c|\n", client.body[29384]);
 		//std::cout<<client.position<<std::endl;
 		if (i == 1024)
 		{

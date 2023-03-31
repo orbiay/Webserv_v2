@@ -42,6 +42,8 @@ class Response{
 		std::string getContentType(Server &server);
 		int read_and_write(Client &client);
 		void size_file(std::string file_name);
+		int is_directory_or_file(std::string path);
+		void autoindex_mode(std::string &auto_index,std::string &default_index,std::string root,Server &server);
 };
 
 #endif

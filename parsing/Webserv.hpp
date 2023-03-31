@@ -24,8 +24,11 @@ class Pserver
 	public :
 		int			port;
 		int			nloc;
+		int			end;
 		std::string methods[3];
-		Location l[100]; //i had to put it in vector
+
+
+		std::vector<Location> L; //i had to put it in vector
 		Pserver();
 
 		class SyntaxError : public std::exception
@@ -41,6 +44,8 @@ class Pserver
 
 		void	set_nserv(std::ifstream &rf);
 		int		get_nserv(void) const;
+
+		void	set_end(std::ifstream &f2);
 		~Pserver();
 };
 

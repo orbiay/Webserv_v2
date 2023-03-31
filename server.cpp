@@ -10,11 +10,15 @@ Server::~Server(){
 }
 void Server::read_from_socket_client(Client &client)
 {
-    char line[1024];
-
+    char *line;
+    line = (char *)malloc(1024 * sizeof(char *));
     memset(line,'\0',1024);
     int i = recv(client.fd_client, line, 1023, 0);
-    line[i] = '\0';
+    if (i > 1023)
+    {
+        std::cout<<"---------> i = "<<i<<std::endl;
+        exit(0);
+    }
     client.request += std::string(line);
     if (!client.request.c_str())
     {
