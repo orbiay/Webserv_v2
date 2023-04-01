@@ -12,6 +12,20 @@
 
 #include"location.hpp"
 
+std::vector<std::string> split(const std::string& str, char delimiter = ' ')
+{
+    std::vector<std::string> parts;
+    std::stringstream stream(str);
+    std::string item;
+    while (std::getline(stream, item, delimiter)) {
+        if (!item.empty())
+            parts.push_back(item);
+    }
+    if (parts.empty())
+        parts.push_back(item);
+    return (parts);
+}
+
 Location::Location()
 {
 	this->upload = false;
@@ -32,8 +46,26 @@ void	Location::check_errors(void) const
 {
 	if (this->root_val == "" || this->index_val == "" || this->location_val == ""
 		|| this->upload_val == "" || this->status_str == "" || this->body_size != "1Mb"
-		|| this->redirec == "" || this->autoindex_val == "")
+		|| this->redirec == "" || this->autoindex_val == "" || this->error_cods.size() == 0
+		|| this->error_path == "")
 		throw (SyntaxError());
+}
+
+void	Location::set_error_path(std::ifstream &rf)
+{
+	std::string	line;
+	size_t		i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 4, "\t\t\t/") == 0)
+		{
+			i = line.find("/");
+			this->error_path = line.substr(i, line.length());
+			return ;
+		}
+	}
 }
 
 std::string	Location::set_values(std::string line)
@@ -44,6 +76,30 @@ std::string	Location::set_values(std::string line)
 		throw(PathError());
 	this->line_val = line.substr(start, line.length());
 	return (this->line_val);
+}
+
+void	Location::set_error_pages(std::ifstream &rf)
+{
+	std::string	line;
+	size_t		i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 14, "\t\terror_pages:") == 0)
+		{
+			i = line.find(" ");
+			line = line.substr(i + 1, line.length());
+			this->error_cods = split(line, ' ');
+			this->set_error_path(rf);
+			return ;
+		}
+	}
+}
+
+std::vector<std::string>	Location::get_error_pages(void) const
+{
+	return (this->error_cods);
 }
 
 void	Location::set_redirection(std::ifstream &rf)
@@ -62,6 +118,7 @@ void	Location::set_redirection(std::ifstream &rf)
 			this->status = std::atoi(this->status_str.c_str());
 			j = line.find("/");
 			this->redirec = line.substr(j, line.length());
+			this->set_error_pages(rf);
 			return ;
 		}
 	}
