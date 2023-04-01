@@ -20,8 +20,7 @@ void addslash(std::string &root)
 }
 std::string link_maker(std::string &root,std::string name)
 {
-    (void)root;
-	std::string link = "      <li><a href=\"" + name + "\">" + name + "</a></li>\n";
+	std::string link = "      <li><a href=\"" + root + name + "\">" + name + "</a></li>\n";
 	return (link);
 }
 void Response::autoindex_mode(std::string &auto_index,std::string &default_index,std::string root,Server &server)
@@ -62,7 +61,7 @@ void Response::Get(Server &server) {
 	std::string default_index;
 	if (!infile.good())
 	{
-		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213r\r\nConnection: closed\r\n\r\n";
+		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: 213\r\nConnection: closed\r\n\r\n";
 		server.write_in_socket_client(header,"404error.html", client);
 	}
 	else

@@ -99,7 +99,6 @@ Response Response::operator=(const Response &r) {
 int Response::read_and_write(Client &client)
 {
 	int i = 0;
-	
 	while (client.position  + i  < content_length)
 	{
 		write(client.fd_file, &client.body[client.position + i],1);
