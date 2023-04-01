@@ -13,7 +13,6 @@ class Server{
     static fd_set current;
     fd_set readable;
     fd_set writable;
-    std::string default_index;
     unsigned int     sizeof_struct;
     static int maxfd;
     static fd_set initializer();

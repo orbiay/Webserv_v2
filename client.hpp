@@ -29,6 +29,8 @@ class Client{
     bool is_delete;
     bool is_finish;
     bool enter;
+    std::string   sizefile;
+    std::string   extension;
     
     socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;

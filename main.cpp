@@ -4,7 +4,7 @@
 #include<list>
 
 #define num_of_servers 5
-#define PORT 8015
+#define PORT 4240
 
 
 
@@ -140,6 +140,7 @@ void run_server(std::vector<Server> &server_list)
 				{
 					std::cout<<"statement for Response.\n";
 					client.parse.check_request(server, client);
+					std::cout<<"********"<<client.fd_client<<std::endl;
 					// if (Http::finish) {
 					if (client.is_delete == true)
 					{
@@ -147,7 +148,7 @@ void run_server(std::vector<Server> &server_list)
 						close(client.fd_client);
 						FD_CLR(client.fd_client,&server.current);
 						server.clients.erase(std::next(server.clients.begin(), i));
-						std::cout << "The client droped secsusfully \n";
+						std::cout << "The client dropped successfully \n";
 						i--;
 					}
 					// }
