@@ -7,6 +7,8 @@ server:
 		index file_name
 		autoindex off
 		upload on
+		error_pages: 122 223 112 203
+			/path
 		body_size 1Mb
 		return 200 /test0
 	location /exampl1:

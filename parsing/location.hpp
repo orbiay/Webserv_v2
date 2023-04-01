@@ -22,7 +22,7 @@
 
 class Location
 {
-	private : 
+	public : 
 		std::string file_name;
 		std::string	root_val;
 		std::string line_val;
@@ -36,7 +36,6 @@ class Location
 		std::string	autoindex_val;
 		bool		autoindex;
 		std::string	body_size;
-	public : 
 		Location();
 	
 		class	PathError : public std::exception

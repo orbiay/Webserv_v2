@@ -22,7 +22,7 @@ int parsing(int argc, char **argv)
 		{
 			Config c(argv);
 
-			std::cout<<c.s[0].L[0].get_index() << std::endl;
+			std::cout<<c.s[0].L[1].get_index() << std::endl;
 			std::cout<<c.s[0].L[1].get_status() << std::endl;
 			std::cout<<c.s[0].L[2].get_status() << std::endl;
 			std::cout<<c.s[1].L[0].get_status() << std::endl;
