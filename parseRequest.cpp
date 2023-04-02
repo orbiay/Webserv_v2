@@ -104,12 +104,11 @@ void    parseRequest::parse_request(std::string request)
 	while (std::getline(ss, token, '\n')){
 		output.push_back(token);
 	}
-
-	parse_url(output[0]);
-	std::vector<std::string>::iterator it;
-	for (it = output.begin() + 1; it != output.end(); it++){
-		parse_infos(*it);
-	}
+		parse_url(output[0]);
+		std::vector<std::string>::iterator it;
+		for (it = output.begin() + 1; it != output.end(); it++){
+			parse_infos(*it);
+		}
 
 	std::cout << "----------------------------------------------------" << std::endl;
 }
