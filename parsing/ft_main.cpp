@@ -13,14 +13,13 @@
 #include"config.hpp"
 #include"Webserv.hpp"
 
-int parsing(int argc, char **argv)
+Config parsing(int argc, char **argv)
 {
 	if (argc == 2)
 	{
-		(void)argv;
+		Config c(argv);
 		try
 		{
-			Config c(argv);
 
 			std::cout<<c.s[0].L[0].get_error_pages()[0] << std::endl;
 			std::cout<<c.s[0].L[1].get_error_pages()[0] << std::endl;
@@ -31,6 +30,7 @@ int parsing(int argc, char **argv)
 		{
 			std::cout << "Error : " << e.what() << std::endl;
 		}
+		return (c);
 	}
-	return (0);
+	exit(1);
 }

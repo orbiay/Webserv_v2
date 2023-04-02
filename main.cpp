@@ -2,6 +2,8 @@
 #include <iostream>
 #include<array>
 #include<list>
+#include"./parsing/config.hpp"
+#include"./parsing/Webserv.hpp"
 
 #define num_of_servers 5
 #define PORT 4245
@@ -10,7 +12,7 @@
 
 bool Http::finish = false;
 
-int	parsing(int argc, char **argv);
+Config parsing(int argc, char **argv);
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
 {
@@ -191,7 +193,8 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av)
 {
-	parsing(ac, av);
+	const Config &conf  = parsing(ac, av);
+	std::cout<<conf.s[0].nserv<<std::endl;
 	int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
