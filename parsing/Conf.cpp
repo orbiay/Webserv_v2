@@ -81,6 +81,11 @@ int	count_servers(char **argv)
 	return (n_servr);
 }
 
+void	Config::set_conf_nserv()
+{
+	this->nserv = s.size();
+}
+
 void	Config::set_loc_conf(char **argv)
 {
 	std::map<std::string, std::string> config;
@@ -123,6 +128,7 @@ void	Config::set_loc_conf(char **argv)
 		this->s.push_back(s[i]);
 		i++;
 	}
+	this->set_conf_nserv();
 	rf.close();
 }
 

@@ -27,7 +27,7 @@ class Config
 		std::string	index;
 		std::string	location;
 		std::vector<Pserver> s;
-		static int nserv;
+		int nserv;
 		Config(char **argv);
 
 		class	Nofile : public std::exception
@@ -51,6 +51,8 @@ class Config
 				virtual const char *what() const throw();
 		};
 		void	set_loc_conf(char **argv);
+
+		void	set_conf_nserv();
 		int	get_host() const;
 		int	get_port() const;
 		bool	get_upload() const;
