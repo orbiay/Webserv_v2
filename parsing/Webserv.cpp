@@ -15,6 +15,7 @@
 Pserver::Pserver()
 {
 	this->end = 0;
+	this->nloc = 0;
 }
 
 const char *Pserver::SyntaxError::what() const throw()
@@ -107,6 +108,7 @@ void	Pserver::set_nserv(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			line = line.substr(i + 1, line.length());
+			std::cout << line << std::endl;
 			this->nserv = std::atoi(line.c_str());
 			return ;
 		}

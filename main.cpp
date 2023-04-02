@@ -12,7 +12,7 @@
 
 bool Http::finish = false;
 
-Config parsing(int argc, char **argv);
+int	parsing(int argc, char **argv);
 
 int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
 {
@@ -193,8 +193,9 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av)
 {
-	const Config &conf  = parsing(ac, av);
-	std::cout<<conf.s[0].nserv<<std::endl;
+	Config conf(av);
+	(void)ac;
+	std::cout<<"nserv = "<<conf.s[0].nserv<<std::endl;
 	int i = 0;
 	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
 
