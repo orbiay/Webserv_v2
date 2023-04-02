@@ -18,11 +18,14 @@
 # include<vector>
 # include<algorithm>
 # include<map>
-# include<stdlib.h>
+# include<sstream>
 
 class Location
 {
-	private : 
+	public : 
+		int			status;
+		bool		upload;
+		bool		autoindex;
 		std::string file_name;
 		std::string	root_val;
 		std::string line_val;
@@ -30,13 +33,11 @@ class Location
 		std::string	location_val;
 		std::string	upload_val;
 		std::string	status_str;
-		int			status;
 		std::string	redirec;
-		bool		upload;
 		std::string	autoindex_val;
-		bool		autoindex;
 		std::string	body_size;
-	public : 
+		std::string	error_path;
+		std::vector<std::string> error_cods;
 		Location();
 	
 		class	PathError : public std::exception
@@ -75,6 +76,11 @@ class Location
 		std::string	set_values(std::string line);
 		void	set_config_items(void);
 
+		void	set_error_pages(std::ifstream &rf);
+		std::vector<std::string>	get_error_pages(void) const;
+
+		void	set_error_path(std::ifstream &rf);
+		std::string	get_error_path(void) const;
 		void	check_errors(void) const;
 
 		virtual ~Location();
