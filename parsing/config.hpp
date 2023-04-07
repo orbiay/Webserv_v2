@@ -14,6 +14,9 @@
 # define CONFIG_HPP
 # include"location.hpp"
 # include"Webserv.hpp"
+# include <unistd.h>
+# include <new>
+# include <string>
 
 class Config
 {

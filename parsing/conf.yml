@@ -12,7 +12,7 @@ server:
 		error_pages: 22
 			/path_for_error_file
 		cgi: off
-			/path
+			/Users/aomman/Desktop/Webserv_v2/cgi.php php
 	location /exampl1:
 		root /valid_path_file1
 		index file_name1
@@ -23,7 +23,7 @@ server:
 		error_pages: 122
 			/path_for_error_file1
 		cgi: on
-			/path
+			/Users/aomman/Desktop/Webserv_v2/cgi.php php
 	location /exampl2:
 		root /valid_path_file2
 		index file_name2
@@ -34,7 +34,7 @@ server:
 		error_pages: 222
 			/path_for_error_file2
 		cgi: off
-			/path
+			/Users/aomman/Desktop/Webserv_v2/cgi.php php
 end
 server:
 	listen 2.2.2.2:1111
@@ -49,5 +49,5 @@ server:
 		error_pages: 322
 			/path_for_error_file13
 		cgi: off
-			/path
+			/Users/aomman/Desktop/Webserv_v2/cgi.php php
 end

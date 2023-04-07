@@ -18,8 +18,8 @@ Config::Config()
 
 Config::Config(char **argv)
 {
-	this->set_loc_conf(argv);
 	this->check_yml(argv[1]);
+	this->set_loc_conf(argv);
 }
 
 const char	*Config::Nofile::what() const throw()
@@ -51,11 +51,7 @@ void	Config::check_yml(char *str)
 	if (i == std::string::npos)
 		throw (YmlFileError());
 	std::ifstream f(str);
-	int	len;
-
-	f.seekg(0, f.end);
-	len = f.tellg();
-	if (len == 0)
+	if (f.is_open() == false)
 		throw (Nofile());
 	return ;
 }
