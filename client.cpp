@@ -25,7 +25,7 @@ Client::Client() {
 	hex_len = 0;
 	// memset(_hex, 0, 1024);
 	// file.open("fcc");
-	file = open("fcc", O_CREAT | O_RDWR | O_TRUNC, 0644);
+	file = open("fcc", O_CREAT | O_RDWR | O_APPEND, 0644);
 }
 
 Client::~Client() {

@@ -78,7 +78,6 @@ void	parseRequest::parse_infos(std::string _data)
 
 void	parseRequest::save_body(std::string req) {
 
-			printf("                 herrr\n");
 	std::string token;
 	std::stringstream ss(req);
 	std::vector<std::string> tmp;

@@ -80,8 +80,8 @@ void Response::Get(Server &server) {
 		if (is_directory_or_file(root) == FILE)
 		{
 			size_file(root);
-			std::cout<<"--------->"<<content_type<<std::endl;
-			std::cout<<client.sizefile<<std::endl;
+			// std::cout<<"--------->"<<content_type<<std::endl;
+			// std::cout<<client.sizefile<<std::endl;
 			header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: closed\r\n\r\n";
 			server.write_in_socket_client(header,root,client);
 		}
@@ -96,10 +96,10 @@ void Response::Get(Server &server) {
 			else if (!default_index.empty())
 			{
 				size_file("." + root + default_index);
-				std::cout<<"--------->"<<root<<std::endl;
-				std::cout<<client.sizefile<<std::endl;
+				// std::cout<<"--------->"<<root<<std::endl;
+				// std::cout<<client.sizefile<<std::endl;
 				client.extension = default_index;
-				std::cout<<client.extension<<std::endl;
+				// std::cout<<client.extension<<std::endl;
 				header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
 				server.write_in_socket_client(header,"./" + root + default_index , client);
 			}

@@ -78,7 +78,7 @@ void handel_chunked(Client &client, std::string _bodyy, int i) {
 			}
 			if (!client.hex_ready)
 				break;
-				std::cout << client._hex << std::endl;
+				// std::cout << client._hex << std::endl;
 			client.chunk_size =  std::strtoul(client._hex, nullptr, 16);;
 			client.hex_len = 0;
 			if (!client.chunk_size) {
@@ -94,93 +94,6 @@ void handel_chunked(Client &client, std::string _bodyy, int i) {
 		}
 	}
 	delete(n_hex);
-
-	
-
-	// std::string::iterator it = _body.begin();
-	// size_t i;
-	// size_t j;
-	// if (i = _body.find("\r\n") && j == )
-	// if (!client.h) {
-	// 	client.crlf_pos = _body.find("\r\n");
-	// 	client._hex = _body.substr(client.hex_pos, client.crlf_pos);
-	// 	// client.h = 1;
-	// }
-	// std::cout << "crlf_pos = " << client.crlf_pos << std::endl;
-	// std::cout << "hex_pos = " << client.hex_pos << std::endl;
-	// std::cout << "|"<< client._hex << "|" <<  std::endl;
-	// client.chunk_size = std::stoi(client._hex, nullptr, 16);
-	// // client.content_length = 0;
-	// client.crlf_pos += 2;
-	// if (client.chunk_size > 0) {
-	// 	client.next_crlf_pos = _body.find("\r\n", client.crlf_pos);
-	// 	client.content = _body.substr(client.crlf_pos, client.next_crlf_pos - client.crlf_pos);
-	// 	if (client.flag) {
-	// 		client.hex_pos = _body.find("\r\n", client.next_crlf_pos) + 2;
-	// 		client.crlf_pos = _body.find("\r\n", client.next_crlf_pos + 2);
-	// 		if (client.hex_pos != std::string::npos && client.crlf_pos != std::string::npos) {
-	// 			client._hex = _body.substr(client.hex_pos, client.crlf_pos);
-	// 		}
-	// 		client.content.append(client.tmp);
-	// 		client.flag = false;
-	// 		client.h = 1;
-	// 	}
-	// 	client.content_length = client.content.length();
-	// 	if (client.content_length > 1024) {
-	// 		client.content = client.content.substr(0,1024);
-	// 		client.tmp = client.content.substr(1025);
-	// 		client.chunk_size -= client.content.length();
-	// 		client.flag = true;
-	// 		client.h = 1;
-	// 		client.hex_pos = _body.find("\r\n", client.next_crlf_pos) + 2;
-	// 		client.crlf_pos = _body.find("\r\n", client.next_crlf_pos + 2);
-	// 		if (client.hex_pos != std::string::npos && client.crlf_pos != std::string::npos) {
-	// 			client._hex = _body.substr(client.hex_pos, client.crlf_pos);
-	// 		}
-	// 		return;
-	// 	}
-	// 	else{
-	// 		client.chunk_size -= client.content.length();
-	// 		client.hex_pos = _body.find("\r\n", client.next_crlf_pos) + 2;
-	// 		client.crlf_pos = _body.find("\r\n", client.next_crlf_pos + 2);
-	// 		if (client.hex_pos != std::string::npos && client.crlf_pos != std::string::npos) {
-	// 			client._hex = _body.substr(client.hex_pos, client.crlf_pos);
-	// 		}
-	// 		client.h = 1;
-	// 	}
-	// 	client.body.append(client.content);
-	// 	out << client.body << std::endl;
-	// 	// std::cout << "chunk_size = " << chunk_size << std::endl;
-	// 	// std::cout << "content_length = " << content_length << std::endl;
-	// 	// client.hex_pos +=2;
-	// 	if (client.chunk_size == 0) {
-	// 		// client.chuDone = true;
-	// 		// client.bodyReady = true;
-	// 		return;
-	// 	}
-	// 		// break ;
-	// }
-	// else {
-	// 	client.bodyReady = true;
-	// 	// client.ready = true;
-	// }
-	// std::cout << "------------------------------\n";
-	// // std::cout << "\r\n12\r\n" << std::endl;
-	// std::cout << "1|" << _body << "|2" << std::endl;
-	// std::cout << "------------------------------\n";
-	// out << _body;
-	// std::size_t start_pos = _body.find("\r\n") + 2;
-    // std::size_t end_pos = _body.find("\r\n", start_pos);
-    // std::string chunk_str = _body.substr(start_pos, end_pos - start_pos);
-
-    // out << client.body << std::endl;
-	// exit(0);
-
-
-
-	// if (hex == 0)
-	// 	client.chuDone = true;
-	
 }
 
 
@@ -223,13 +136,16 @@ void Server::read_from_socket_client(Client &client)
 		if (client.j) {
 			std::string holder = _body.substr(client.b_pos, i);
 			write(client.file, holder.c_str(), holder.length());
-			if (getFileSize(client.file) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
+			if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
 				client.bodyReady = true;
 			client.j = 0;
 		}
 		else {
+			printf("kakaka\n");
 			write(client.file, _body.c_str(), _body.length());
-			if (getFileSize(client.file) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
+			std::cout << "file size = " << getFileSize(client.file) << std::endl;
+			std::cout << "Content-Length = " << client.parse._data["Content-Length"] << std::endl;
+			if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
 				client.bodyReady = true;
 		}
 			// client.body += _body;
