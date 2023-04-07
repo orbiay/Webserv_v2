@@ -139,18 +139,26 @@ void Server::read_from_socket_client(Client &client)
 		std::string _body(line);
 		if (client.j) {
 			std::string holder = _body.substr(client.b_pos, i);
-			write(client.file, holder.c_str(), holder.length());
-			if (getFileSize(client.file) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
-				client.bodyReady = true;
+			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+				write(client.file, holder.c_str(), holder.length());
+			}
+			// if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+			// 	close(client.file);
+			// 	client.bodyReady = true;
+			// }
 			client.j = 0;
 		}
 		else {
 			printf("kakaka\n");
-			write(client.file, _body.c_str(), _body.length());
 			std::cout << "file size = " << getFileSize(client.file) << std::endl;
 			std::cout << "Content-Length = " << client.parse._data["Content-Length"] << std::endl;
-			if (getFileSize(client.file) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
-				client.bodyReady = true;
+			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+				write(client.file, _body.c_str(), _body.length());
+			}
+			// if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+			// 	close(client.file);
+			// 	client.bodyReady = true;
+			// }
 		}
 			// client.body += _body;
 	}
@@ -164,13 +172,16 @@ void Server::read_from_socket_client(Client &client)
 		}
 		else
 			handel_chunked(client, _body.c_str(), _body.length());
-		if (client.chunk_size == 0)
+		if (client.chunk_size == 0) {
+			close(client.file);
 			client.bodyReady = true;
+		}
 	} 
 
 	if (i != 1024) {
 		out << client.body;
 		out.close();
+		client.bodyReady = true;
 	    client.ready = true;
 	}
 
