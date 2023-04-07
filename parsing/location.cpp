@@ -28,8 +28,6 @@ std::vector<std::string> split(const std::string& str, char delimiter = ' ')
 
 Location::Location()
 {
-	this->upload = false;
-	this->autoindex = false;
 }
 
 const char *Location::PathError::what() const throw()
@@ -63,6 +61,7 @@ void	Location::set_error_path(std::ifstream &rf)
 		{
 			i = line.find("/");
 			this->error_path = line.substr(i, line.length());
+			this->set_cgi(rf);
 			return ;
 		}
 	}
@@ -76,6 +75,43 @@ std::string	Location::set_values(std::string line)
 		throw(PathError());
 	this->line_val = line.substr(start, line.length());
 	return (this->line_val);
+}
+
+void	Location::set_cgi_path(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 4, "\t\t\t/") == 0)
+		{
+			i = line.find("/");
+			this->cgi_path = line.substr(i, line.length());
+			return ;
+		}
+	}
+}
+
+void	Location::set_cgi(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 6, "\t\tcgi:") == 0)
+		{
+			i = line.find(" ");
+			line = line.substr(i + 1, line.length());
+			if (line == "on")
+				cgi = true;
+			this->set_cgi_path(rf);
+			return ;
+		}
+	}
 }
 
 void	Location::set_error_pages(std::ifstream &rf)
@@ -231,6 +267,9 @@ std::string	Location::get_index(void) const
 
 void	Location::set_root(std::ifstream &rf)
 {
+	this->upload = false;
+	this->autoindex = false;
+	this->cgi = false;
 	std::string line;
 
 	while (!rf.eof())

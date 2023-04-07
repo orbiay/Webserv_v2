@@ -5,9 +5,9 @@ SRCS = ft_main.cpp Webserv.cpp location.cpp Conf.cpp
 
 OBJS = $(addprefix $(SRCS_DIR)/, $(SRCS))
 
-SRC = main.cpp http.cpp server.cpp  parseRequest.cpp response.cpp Get.cpp
+SRC = main.cpp http.cpp server.cpp  parseRequest.cpp response.cpp Get.cpp client.cpp
 
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
+CPPFLAGS = -Wall -Wextra -Werror  #-std=c++98 -fsanitize=address -g
 CC = c++
 NAME = server
 

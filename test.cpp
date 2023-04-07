@@ -1,5 +1,9 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+#include<fcntl.h>
+#include<unistd.h>
+
 
 #include <stdio.h>
 #include <dirent.h>

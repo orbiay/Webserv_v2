@@ -5,7 +5,7 @@
 #include<netinet/in.h>
 #include <string.h>
 #include <unistd.h>
-#include<iostream>
+#include <iostream>
 #include <string>
 #include <stdlib.h>
 #include<fcntl.h>
@@ -22,7 +22,8 @@
 #include "response.hpp"
 #include <dirent.h>
 #include <sys/stat.h>
-
+#include <new>
+#include <cstdlib>
 #define DIRE 1
 #define FILE 2
 typedef struct s_hcode {
