@@ -7,7 +7,7 @@ server:
 		index file_name
 		autoindex on or off
 		upload on
-		return 
+		return 200 /url
 	location /exampl1:
 		root /valid_path_file2
 		index file_name2
