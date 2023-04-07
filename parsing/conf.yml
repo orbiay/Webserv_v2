@@ -1,11 +1,11 @@
 nserv: 2
 server:
-	listen 127.0.0.255:111
+	listen 127.0.0.255:8080
 	methods POST GIT DELETE
 	location /exampl:
-		root /valid_path_file
-		index file_name
-		autoindex off
+		root ./
+		index f.html
+		autoindex on
 		upload on
 		body_size 1Mb
 		return 200 /test0
@@ -31,7 +31,7 @@ server:
 			/path_for_error_file2
 end
 server:
-	listen 2.2.2.2:1111
+	listen 2.2.2.2:9090
 	methods POST GIT DELETE
 	location /exampls1l2:
 		root /valid_path_files2

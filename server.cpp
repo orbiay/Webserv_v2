@@ -65,17 +65,21 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     else if (client.start_writting == 0)
     {
         i = read(client.fd_file,s,1023);
+        std::cout<<"i = "<<i<<std::endl;
         str = s;
     }
+    write(1,"\n",1);
     if (write(client.fd_client,str.c_str(),i) < 1)
     {
         client.is_delete = true;
+        close(client.fd_client);
         free(s);
         return;
     }
     if (i <= 0)
     {
         client.is_delete = true;
+        close(client.fd_client);
         return;
     }
     free(s);

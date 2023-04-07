@@ -22,6 +22,7 @@
 #include "response.hpp"
 #include <dirent.h>
 #include <sys/stat.h>
+
 #define DIRE 1
 #define FILE 2
 typedef struct s_hcode {

@@ -18,9 +18,13 @@ void Response::size_file(std::string file_name)
 {
 	std::ifstream file(file_name, std::ifstream::ate | std::ifstream::binary);
     if (file.is_open())
+	{
         client.sizefile = to_string(file.tellg());
+		file.close();
+	}
     else {
-        client.is_delete = true; 
+        client.is_delete = true;
+		file.close();
 		//exit(0);
     }
 }

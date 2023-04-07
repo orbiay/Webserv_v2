@@ -6,7 +6,7 @@
 #include"./parsing/Webserv.hpp"
 
 #define num_of_servers 5
-#define PORT 4245
+#define PORT 8080
 
 
 
@@ -14,16 +14,17 @@ bool Http::finish = false;
 
 int	parsing(int argc, char **argv);
 
-int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
+int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserver server)
 {
+	(void)i;
 	struct sockaddr_in address;
 
 	bzero(&address, sizeof(address));
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr =  htonl(INADDR_ANY);
-	address.sin_port = htons(PORT + i);
+	address.sin_port = htons(server.port);
 
-	addr = address;
+	addr.push_back(address);
 
 	Http http;
 	http.create_socket();
@@ -33,26 +34,29 @@ int create_socket_and_bind_it(int i,struct sockaddr_in &addr)
 }
 
 
-std::array<int,num_of_servers> create_servers(std::array<struct sockaddr_in,num_of_servers>  &sed_struct)
+std::vector<int> create_servers(std::vector<struct sockaddr_in>  &sed_struct ,std::vector<Pserver> servers)
 {
-	std::array<int,num_of_servers> servers_id;
+	std::vector<int> servers_id;
 	int i = 0;
-	while (i < num_of_servers)
+	std::vector<Pserver>::iterator iter = servers.begin();
+	int num_srver = servers.size();
+	while (i < num_srver)
 	{
-		servers_id[i] = create_socket_and_bind_it(i,sed_struct[i]);
+		servers_id.push_back(create_socket_and_bind_it(i,sed_struct,*iter));
 		i++;
+		iter++;
 	}
 	return (servers_id);
 }
 
-void listen_for_conection(int fd_server)
+void listen_for_conection(Server &server)
 {
-	if (::listen (fd_server,100) < 0)
+	if (::listen (server.fd_serv,100) < 0)
 	{
 		std::cerr<<"fialed listen ."<<std::endl;
 		exit(2);
 	}
-	std::cout<<"the server "<< fd_server << " in listen mode\n\n"<<std::endl;
+	std::cout<<"the server "<< server.fd_serv << " in listen mode "<< "with port "<< server.server_config.port<<std::endl;
 }
 
 Client accept_new_connection(Server &server)
@@ -172,18 +176,17 @@ void run_server(std::vector<Server> &server_list)
 		}
 	}
 }
-Server init_server(int id_servers,struct sockaddr_in addr){
+Server init_server(int id_servers,struct sockaddr_in addr,Pserver &server_config){
 	Server server;
 	server.fd_serv = id_servers;
 	FD_ZERO(&server.readable);
 	FD_ZERO(&server.writable);
-	//std::cout << "socket fd = "  << server.fd_serv << std::endl;
 	FD_SET(server.fd_serv, &Server::current);
 
 	Server::maxfd = std::max(server.fd_serv, Server::maxfd);
 	server.sizeof_struct = sizeof(addr);
-	//std::cout<<server.sizeof_struct<<std::endl;
 	server.address = addr;
+	server.server_config = server_config;
 	return (server);
 }
 
@@ -195,28 +198,30 @@ int main (int ac, char **av)
 {
 	Config conf(av);
 	(void)ac;
-	std::cout<<"nserv = "<<conf.s[0].nserv<<std::endl;
 	int i = 0;
-	std::array<struct sockaddr_in,num_of_servers>  sed_struct;
+	int num_srver = conf.s.size();
+	std::vector<struct sockaddr_in>  sed_struct;
 
-	std::array<int, num_of_servers> id_servers;
+	std::vector<int> id_servers;
 
-	id_servers = create_servers(sed_struct);
+	id_servers = create_servers(sed_struct,conf.s);
   
 
 
 	std::vector<Server> server_list;
-	std::vector<Server>::iterator iter = server_list.begin();
-	while (i < 5)
+	std::vector<Server>::iterator iter;
+	std::vector<Pserver>::iterator iter_conf = conf.s.begin();
+	while (i < num_srver)
 	{
-		server_list.push_back(init_server(id_servers[i],sed_struct[i]));
+		server_list.push_back(init_server(id_servers[i],sed_struct[i],*iter_conf));
 		//std::cout<<id_servers[i]<<std::endl;
 		i++;
+		iter_conf++;
 	}
 	iter = server_list.begin();
 	while(iter != server_list.end())
 	{
-		listen_for_conection(iter->fd_serv);
+		listen_for_conection(*iter);
 		iter++;
 	}
 	run_server(server_list);

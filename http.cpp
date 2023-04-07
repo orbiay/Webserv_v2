@@ -34,6 +34,8 @@ void Http::naming_socket(struct sockaddr_in address )
 
 void Http::bind()
 {
+    int use = 1;
+    setsockopt(fd_server,SOL_SOCKET,SO_REUSEADDR, &use,sizeof(use));
     if (::bind(fd_server,(struct sockaddr *)&def_socket,sizeof(def_socket)) < 0)
     {
         std::cerr<<"can't bind socket with def_socket."<<std::endl;
