@@ -125,7 +125,11 @@ void Server::read_from_socket_client(Client &client)
 		client.ret = is_carriage(std::string(line));
 		client.header = std::string(line).substr(0, client.ret);
 		client.parse.parse_request(client.header);
-		client.b_pos = client.ret + 2;
+		if (!client.isChuncked)
+			client.b_pos = client.ret + 4;
+		if (client.isChuncked)
+			client.b_pos = client.ret + 2;
+			
 		client.isChuncked = checkifchuncked(client.header);
 		client.j = 1;
 		client.alrChecked = true;
@@ -136,7 +140,7 @@ void Server::read_from_socket_client(Client &client)
 		if (client.j) {
 			std::string holder = _body.substr(client.b_pos, i);
 			write(client.file, holder.c_str(), holder.length());
-			if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
+			if (getFileSize(client.file) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
 				client.bodyReady = true;
 			client.j = 0;
 		}
@@ -145,7 +149,7 @@ void Server::read_from_socket_client(Client &client)
 			write(client.file, _body.c_str(), _body.length());
 			std::cout << "file size = " << getFileSize(client.file) << std::endl;
 			std::cout << "Content-Length = " << client.parse._data["Content-Length"] << std::endl;
-			if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
+			if (getFileSize(client.file) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str()))
 				client.bodyReady = true;
 		}
 			// client.body += _body;

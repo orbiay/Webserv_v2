@@ -152,6 +152,13 @@ Response Response::operator=(const Response &r) {
 
 int Response::read_and_write(Client &client)
 {
+
+	// client.file = hna fih lbody li ja mn request;
+	// client.fd_file = hna fin khas ytktb dak l body;
+
+
+
+
 	write(client.fd_file, "fuck", 4);
 	char buffer[1024]; // buffer to hold 1kb of data
     int bytes_read;
