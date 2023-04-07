@@ -188,11 +188,24 @@ void run_server(std::vector<Server> &server_list)
 					// std::cout<<"statement for Request.\n";
 					fcntl(client.fd_client, F_SETFL, O_NONBLOCK);
 					server.read_from_socket_client(client);
-					if (client.ready)
+					std::cout<<"-----------------------"<<std::endl;
+					std::cout<<client.request<<std::endl;
+					std::cout<<"-----------------------"<<std::endl;
+					if (client.ready && (!client.request.empty()))
 					{
 						// client.split_request(client.request);
 						// client.parse.parse_request(client.header);
 						// client.parse.display_request(client.parse);
+					}
+					else if (client.request.empty())
+					{
+						client.is_delete = true;
+						close(client.fd_client);
+						FD_CLR(client.fd_client,&server.current);
+						server.clients.erase(std::next(server.clients.begin(), i));
+						std::cout << "The client dropped successfully \n";
+						i--;
+						break;
 					}
 				}
 				// IF statement for Response.

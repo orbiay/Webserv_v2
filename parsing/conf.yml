@@ -5,19 +5,53 @@ server:
 	location /exampl:
 		root /valid_path_file
 		index file_name
-		autoindex on or off
+		autoindex off
 		upload on
+<<<<<<< HEAD
 		return 200 /url
+=======
+		body_size 1Mb
+		return 200 /test0
+		error_pages: 22
+			/path_for_error_file
+		cgi: off
+			/path
+>>>>>>> a08414207e4d9ecd829d985ed6c41ae4f5077bc3
 	location /exampl1:
+		root /valid_path_file1
+		index file_name1
+		autoindex on
+		upload off
+		body_size 1Mb
+		return 201 /test1
+		error_pages: 122
+			/path_for_error_file1
+		cgi: on
+			/path
+	location /exampl2:
 		root /valid_path_file2
 		index file_name2
+		autoindex off
 		upload off
+		body_size 1Mb
+		return 202 /test2
+		error_pages: 222
+			/path_for_error_file2
+		cgi: off
+			/path
 end
 server:
 	listen 2.2.2.2:1111
 	methods POST GIT DELETE
-	location /exampl2:
+	location /exampls1l2:
 		root /valid_path_files2
 		index file_names2
+		autoindex on
 		upload on
+		body_size 1Mb
+		return 205 /tests0l0
+		error_pages: 322
+			/path_for_error_file13
+		cgi: off
+			/path
 end

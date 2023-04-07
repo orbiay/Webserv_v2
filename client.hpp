@@ -68,6 +68,8 @@ class Client{
 	int h;
 	char hex_c[10];
 	char *_body;
+	std::string   sizefile;
+    std::string   extension;
 
 	bool hex_ready;
 	int file;

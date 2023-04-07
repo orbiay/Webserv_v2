@@ -20,6 +20,7 @@
 #include "client.hpp"
 #include "server.hpp"
 #include "response.hpp"
+#include <dirent.h>
 #include <sys/stat.h>
 #include <new>
 #include <cstdlib>

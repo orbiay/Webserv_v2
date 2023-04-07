@@ -18,42 +18,30 @@
 # include<vector>
 # include<algorithm>
 # include<map>
-# include<stdlib.h>
+# include<sstream>
 
 class Location
 {
-	private : 
+	public : 
+		int			status;
+		bool		upload;
+		bool		autoindex;
+		bool		cgi;
 		std::string file_name;
 		std::string	root_val;
 		std::string line_val;
-		std::map<std::string, std::string> config_items;
-	public : 
 		std::string	index_val;
 		std::string	location_val;
 		std::string	upload_val;
+		std::string	status_str;
+		std::string	redirec;
+		std::string	autoindex_val;
+		std::string	body_size;
+		std::string	error_path;
+		std::string	cgi_path;
+		std::vector<std::string> error_cods;
 		Location();
-		void	setNginixFile(std::ifstream &rf, char *str);
-		std::string		getData(void) const;
-		class	NotOpen : public std::exception
-		{
-			public :
-				virtual const char *what() const throw();
-		};
-		class	EndNotReached : public std::exception
-		{
-			public :
-				virtual const char *what() const throw();
-		};
-		class	Nofile : public std::exception
-		{
-			public :
-				virtual const char *what() const throw();
-		};
-		class	YmlFileError : public std::exception
-		{
-			public :
-				virtual const char *what() const throw();
-		};
+	
 		class	PathError : public std::exception
 		{
 			public :
@@ -64,9 +52,9 @@ class Location
 			public :
 				virtual const char *what() const throw();
 		};
-		void	check_yml(char *str);
-		void	check_serverfile(std::ifstream &rf);
-		void	ft_getserver(std::ifstream &rf);
+
+		void	set_location(std::ifstream &rf);
+		std::string	get_location(void) const;
 
 		void	set_root(std::ifstream &rf);
 		std::string	get_root(void) const;
@@ -74,16 +62,32 @@ class Location
 		void	set_index(std::ifstream &rf);
 		std::string	get_index(void) const;
 
-		void	set_upload(std::ifstream &rf);
-		std::string	get_upload(void) const;
+		void	set_autoindex(std::ifstream &rf);
+		std::string	get_autoindex(void) const;
 
-		void	set_location(std::ifstream &rf);
-		std::string	get_location(void) const;
+		void	set_upload(std::ifstream &rf);
+		bool	get_upload(void) const;
+
+		void	set_body_size(std::ifstream &rf);
+		std::string	get_body_size(void) const;
+
+		void	set_redirection(std::ifstream &rf);
+		std::string get_redirection(void) const;
+		int	get_status(void) const;
 
 		std::string	set_values(std::string line);
 		void	set_config_items(void);
 
-		std::map<std::string, std::string>	get_config_item(void) const;
+		void	set_error_pages(std::ifstream &rf);
+		std::vector<std::string>	get_error_pages(void) const;
+
+		void	set_error_path(std::ifstream &rf);
+		std::string	get_error_path(void) const;
+
+		void	set_cgi(std::ifstream &rf);
+		void	set_cgi_path(std::ifstream &rf);
+		void	check_errors(void) const;
+
 		virtual ~Location();
 };
 #endif

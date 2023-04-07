@@ -19,6 +19,45 @@ Config::Config()
 Config::Config(char **argv)
 {
 	this->set_loc_conf(argv);
+	this->check_yml(argv[1]);
+}
+
+const char	*Config::Nofile::what() const throw()
+{
+	return ("no server reached");
+}
+
+const char	*Config::NotOpen::what() const throw()
+{
+	return ("file not found");
+}
+
+const char	*Config::YmlFileError::what() const throw()
+{
+	return ("configuration file must be .yml");
+}
+
+const char	*Config::SyntaxError::what() const throw()
+{
+	return ("Syntax Error");
+}
+
+void	Config::check_yml(char *str)
+{
+	size_t	i;
+
+	std::string s(str);
+	i = s.find(".yml");
+	if (i == std::string::npos)
+		throw (YmlFileError());
+	std::ifstream f(str);
+	int	len;
+
+	f.seekg(0, f.end);
+	len = f.tellg();
+	if (len == 0)
+		throw (Nofile());
+	return ;
 }
 
 int	count_servers(char **argv)
@@ -29,7 +68,7 @@ int	count_servers(char **argv)
 	if (file.is_open() == false)
 	{
 		file.close();
-		throw ("not opened");
+		throw ("Error");
 	}
 	n_servr = 0;
 	while (!file.eof())
@@ -42,6 +81,11 @@ int	count_servers(char **argv)
 	return (n_servr);
 }
 
+void	Config::set_conf_nserv()
+{
+	this->nserv = s.size();
+}
+
 void	Config::set_loc_conf(char **argv)
 {
 	std::map<std::string, std::string> config;
@@ -49,30 +93,42 @@ void	Config::set_loc_conf(char **argv)
 	int			n_servr;
 	std::ifstream rf(argv[1], std::ios::in);
 	std::ifstream f(argv[1]);
-	if (rf.is_open() == false)
+	std::ifstream f2(argv[1]);
+	if (rf.is_open() == false || f.is_open() == false || f2.is_open() == false)
 	{
 		rf.close();
-		throw ("not opened");
+		throw (NotOpen());
 	}
 	n_servr = count_servers(argv);
 	Pserver s1;
 	s1.set_nserv(rf);
+	s1.set_end(f2);
 	if (s1.get_nserv() != n_servr)
-		return ;
+		throw (SyntaxError());
+	if (s1.end != n_servr)
+		throw (SyntaxError());
 	Pserver s[s1.get_nserv()];
-	s[0].set_host(rf);
-	s[0].set_nLocation(f);
-	s[0].l[0].set_location(rf);
-	s[0].l[0].set_config_items();
-	s[0].l[1].set_location(rf);
-	s[0].l[1].set_config_items();
-	s[1].set_host(rf);
-	s[1].set_nLocation(f);
-	s[1].l[0].set_location(rf);
-	s[1].l[0].set_config_items();
-	//std::vector<Pserver>::iterator	it;
-	this->Conf.push_back(s[0]);
-	this->Conf.push_back(s[1]);
+	int	i;
+	int	j;
+
+	i = 0;
+	Location l;
+	while (i < s1.get_nserv())
+	{
+		j = 0;
+		s[i].set_host(rf);
+		s[i].set_nLocation(f);
+		while (j < s[i].nloc)
+		{
+			l.set_location(rf);
+			l.check_errors();
+			s[i].L.push_back(l);
+			j++;
+		}
+		this->s.push_back(s[i]);
+		i++;
+	}
+	this->set_conf_nserv();
 	rf.close();
 }
 
