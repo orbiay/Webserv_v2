@@ -19,9 +19,9 @@ class Pserver
 {
 	private :
 		std::string	server;
-		int			nserv;
 		std::string	host;
 	public :
+		int			nserv;
 		int			port;
 		int			nloc;
 		int			end;

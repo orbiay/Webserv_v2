@@ -1,5 +1,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
+#include"./parsing/location.hpp"
+#include"./parsing/Webserv.hpp"
 #include"http.hpp"
 class Server{
     public:
@@ -15,6 +17,7 @@ class Server{
     fd_set writable;
     unsigned int     sizeof_struct;
     static int maxfd;
+    Pserver server_config;
     static fd_set initializer();
 };
 

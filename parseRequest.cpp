@@ -71,11 +71,13 @@ void	parseRequest::parse_infos(std::string _data)
 	else if (output[0] == "Content-Length:") {
 		this->_data.insert(std::make_pair("Content-Length", output[1]));
 	}
+	else if (output[0] == "Transfer-Encoding:") {
+		this->_data.insert(std::make_pair("Transfer-Encoding", output[1]));
+	}
 }
 
 void	parseRequest::save_body(std::string req) {
 
-			printf("                 herrr\n");
 	std::string token;
 	std::stringstream ss(req);
 	std::vector<std::string> tmp;
@@ -97,7 +99,7 @@ void	parseRequest::save_body(std::string req) {
 
 void    parseRequest::parse_request(std::string request)
 {
-	std::cout << "----------------------------------------------------" << std::endl;
+	// std::cout << "----------------------------------------------------" << std::endl;
 	std::vector<std::string> output;
 	std::string token;
 	std::stringstream ss(request);
@@ -110,7 +112,7 @@ void    parseRequest::parse_request(std::string request)
 			parse_infos(*it);
 		}
 
-	std::cout << "----------------------------------------------------" << std::endl;
+	// std::cout << "----------------------------------------------------" << std::endl;
 }
 		//--------------------------------checking request-------------------------------------------
 int	check_url(std::string url)
@@ -149,7 +151,7 @@ int	matched_location(std::string url)
 		}
 		else
 			return 0;
-		std::cout << "root = " << g_v.root << std::endl;
+		// std::cout << "root = " << g_v.root << std::endl;
 		
 	}
 	
@@ -161,7 +163,20 @@ int	matched_location(std::string url)
 }
 		//-------------------------------------------------------------------------------------------
 
-
+int	is_file(Client &client) {
+	std::string file = client.parse._data["path"];
+	for (size_t i = 0; i < file.length(); i++) {
+        if (file[i] == '.') {
+            if (i+1 < file.length() && isalnum(file[i+1])) {
+				return (1);
+            } else {
+                std::cout << "Dot is not followed by a character." << std::endl;
+				return (0);
+            }
+        }
+    }
+	return (0);
+}
 		//--------------------------------checking methods-------------------------------------------
 void	check_methods(Server &server, Client &client)
 {
@@ -173,7 +188,12 @@ void	check_methods(Server &server, Client &client)
 		//server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
 	}
 	else if (client.parse._data["method"] == "POST") {
-		res.Post(server);
+		if (is_file(client)) {
+			res.Post(server, FILE);
+			// res.Post(server);
+		}
+		else
+			res.Post(server, DIRE);
 	}
 
 	else if (client.parse._data["method"] == "DELETE") {

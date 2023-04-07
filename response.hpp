@@ -37,7 +37,7 @@ class Response{
 		~Response();
 
 		void Get(Server &server);
-		void Post(Server &server);
+		void Post(Server &server, int flag);
 		void Delete(Server &server);
 		std::string getContentType(Server &server);
 		int read_and_write(Client &client);
