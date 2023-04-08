@@ -121,6 +121,7 @@ void Server::read_from_socket_client(Client &client)
 	//     std::cerr<<"Dosen't found any request to work on it";
 	//     exit(1);
 	// }
+	// if rtequest doesn't exist chenge is_delete variable to true for drop it.
 	if (!client.alrChecked) {
 		client.ret = is_carriage(std::string(line));
 		client.header = std::string(line).substr(0, client.ret);
