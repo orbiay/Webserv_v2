@@ -126,10 +126,10 @@ void Server::read_from_socket_client(Client &client)
 		client.ret = is_carriage(std::string(line));
 		client.header = std::string(line).substr(0, client.ret);
 		client.parse.parse_request(client.header);
-		if (!client.isChuncked)
-			client.b_pos = client.ret + 4;
-		if (client.isChuncked)
-			client.b_pos = client.ret + 2;
+		// if (!client.isChuncked)
+		client.b_pos = client.ret + 4;
+		// else if (client.isChuncked)
+		// 	client.b_pos = client.ret + 2;
 			
 		client.isChuncked = checkifchuncked(client.header);
 		client.j = 1;
@@ -159,6 +159,7 @@ void Server::read_from_socket_client(Client &client)
 		std::string _body(line);
 		std::string tmp;
 		if (client.j) {
+			client.b_pos -=2;
 			std::string s =  _body.substr(client.b_pos, i);
 			handel_chunked(client, s, s.length());
 			client.j = 0;

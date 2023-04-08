@@ -82,7 +82,7 @@ Response::Response(Client &client):client(client)
 	this->readed = 0;
 	this->content_length = std::atoi(client.parse._data["Content-Length"].c_str());
 	this->is_done = false;
-	path = "/Users/fbouanan/Desktop/Webserv_v2/body2";
+	path = "/Users/orbiay/Desktop/Webserv_v2/body2";
 	result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
 	is_exist.open(path);
 	//outfile.open(path);
@@ -156,11 +156,19 @@ int Response::read_and_write(Client &client)
 	// client.file = hna fih lbody li ja mn request;
 	// client.fd_file = hna fin khas ytktb dak l body;
 	char* buffer = new char[1024];
+	//close(client.file);
+	//close(client.fd_file);
+	//client.fd_file = open ("body2",O_CREAT | O_RDWR | O_APPEND);
+	//client.file = open (client.file_name.c_str(),O_CREAT | O_RDWR | O_APPEND);
 	int i = 1;
     //while (i)
     //{
 		printf("here\n");
 		i = read(client.file, buffer, 1024);
+		if (i < 0)
+			exit(0);
+		std::cout<<"file  = "<<client.file<< " fd_file = " << client.fd_file<<std::endl;
+		std::cout<<buffer<<std::endl;
 		write(client.fd_file,buffer,i);
     //}
 	return (i);
@@ -217,7 +225,8 @@ void Response::Post(Server &server, int flag) {
 		if (flag == FILE) {
 			if (!client.enter)
 			{
-				client.fd_file = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC | O_EXCL, 0644);
+				client.fd_file = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+					std::cout<<"file_fd fd = "<<client.fd_file<<std::endl;
 				if (client.fd_file == -1) {
 					std::cout << "File Alredy Exists" << std::endl;
 					server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 549\r\n\r\n","200exists.html",client);

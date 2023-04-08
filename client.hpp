@@ -38,6 +38,7 @@ class Client{
 	size_t chunk_size;
 	size_t content_length;
 	std::string content;
+	std::string file_name;
 	int h;
 	char hex_c[10];
 	char *_body;
