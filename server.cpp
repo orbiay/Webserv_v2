@@ -142,10 +142,6 @@ void Server::read_from_socket_client(Client &client)
 			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, holder.c_str(), holder.length());
 			}
-			// if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
-			// 	close(client.file);
-			// 	client.bodyReady = true;
-			// }
 			client.j = 0;
 		}
 		else {
@@ -155,10 +151,6 @@ void Server::read_from_socket_client(Client &client)
 			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, _body.c_str(), _body.length());
 			}
-			// if (getFileSize(client.file) >= (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
-			// 	close(client.file);
-			// 	client.bodyReady = true;
-			// }
 		}
 			// client.body += _body;
 	}
@@ -184,25 +176,7 @@ void Server::read_from_socket_client(Client &client)
 		client.bodyReady = true;
 	    client.ready = true;
 	}
-
-	//  std::cout<<client.ready <<std::endl;
-	// std::cout<<"******************"<<client.request<<"\n\n"<<std::endl;
-	//exit(1);
 }
-
-// char *read_from_file(std::string file, Client &client)
-// {
-// 	char *str;
-// 	str = (char *)malloc(sizeof(char) * 1024);
-//     memset(str, 0, 1024);
-//     if (client.start_writting == 1)
-// 	    client.fd_file = open (file.c_str(),O_RDONLY);
-// 	int i = read(client.fd_file,str,1024);
-// 	str[i] = '\0';
-//     if (i < 1024)
-//         client.start_writting = 1;
-// 	return (str);
-// }
 
 void Server::write_in_socket_client(std::string str, std::string file , Client &client)
 {
