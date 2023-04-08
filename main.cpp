@@ -6,7 +6,7 @@
 #include"./parsing/Webserv.hpp"
 
 #define num_of_servers 5
-#define PORT 8090
+
 
 
 
@@ -197,22 +197,22 @@ void run_server(std::vector<Server> &server_list)
 					std::cout<<"-----------------------"<<std::endl;
 					std::cout<<client.request<<std::endl;
 					std::cout<<"-----------------------"<<std::endl;
-					if (client.ready && (!client.request.empty()))
+					if (client.ready )
 					{
 						// client.split_request(client.request);
 						// client.parse.parse_request(client.header);
 						// client.parse.display_request(client.parse);
 					}
-					else if (client.request.empty())
-					{
-						client.is_delete = true;
-						close(client.fd_client);
-						FD_CLR(client.fd_client,&server.current);
-						server.clients.erase(std::next(server.clients.begin(), i));
-						std::cout << "The client dropped successfully \n";
-						i--;
-						break;
-					}
+					// else if (client.request.empty())
+					// {
+					// 	client.is_delete = true;
+					// 	close(client.fd_client);
+					// 	FD_CLR(client.fd_client,&server.current);
+					// 	server.clients.erase(std::next(server.clients.begin(), i));
+					// 	std::cout << "The client dropped successfully \n";
+					// 	i--;
+					// 	break;
+					// }
 				}
 				// IF statement for Response.
 				else if(i >= 0 && client.ready && FD_ISSET(client.fd_client, &writable))

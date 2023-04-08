@@ -7,16 +7,12 @@ server:
 		index f.html
 		autoindex on
 		upload on
-<<<<<<< HEAD
-		return 200 /url
-=======
 		body_size 1Mb
 		return 200 /test0
 		error_pages: 22
 			/path_for_error_file
 		cgi: off
 			/path
->>>>>>> a08414207e4d9ecd829d985ed6c41ae4f5077bc3
 	location /exampl1:
 		root /valid_path_file1
 		index file_name1
