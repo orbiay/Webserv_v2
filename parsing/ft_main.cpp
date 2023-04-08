@@ -13,18 +13,21 @@
 #include"config.hpp"
 #include"Webserv.hpp"
 
+void	cgi(Config c);
+
 int parsing(int argc, char **argv)
 {
 	if (argc == 2)
 	{
-		(void)argv;
+		(void)argc;
 		try
 		{
 			Config c(argv);
-			std::cout << c.s[0].L[0].upload << std::endl;
-			std::cout << c.s[0].L[1].upload << std::endl;
-			std::cout << c.s[0].L[2].upload << std::endl;
-			std::cout << c.s[1].L[0].upload << std::endl;
+			std::cout << c.s[0].L[0].cgi_extention << std::endl;
+			std::cout << c.s[0].L[1].cgi_extention << std::endl;
+			std::cout << c.s[0].L[2].cgi_extention << std::endl;
+			std::cout << c.s[1].L[0].cgi_path << std::endl;
+			cgi(c);
 		}
 		catch(std::exception &e)
 		{

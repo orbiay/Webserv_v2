@@ -6,7 +6,7 @@
 /*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/03/16 17:20:32 by aomman           ###   ########.fr       */
+/*   Updated: 2023/04/06 20:21:02 by aomman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	Location::check_errors(void) const
 	if (this->root_val == "" || this->index_val == "" || this->location_val == ""
 		|| this->upload_val == "" || this->status_str == "" || this->body_size != "1Mb"
 		|| this->redirec == "" || this->autoindex_val == "" || this->error_cods.size() == 0
-		|| this->error_path == "")
+		|| this->error_path == "" || this->cgi_extention != "php")
 		throw (SyntaxError());
 }
 
@@ -81,6 +81,7 @@ void	Location::set_cgi_path(std::ifstream &rf)
 {
 	std::string	line;
 	size_t	i;
+	size_t	j;
 
 	while (!rf.eof())
 	{
@@ -88,7 +89,11 @@ void	Location::set_cgi_path(std::ifstream &rf)
 		if (line.compare(0, 4, "\t\t\t/") == 0)
 		{
 			i = line.find("/");
-			this->cgi_path = line.substr(i, line.length());
+			this->cgi_path = line.substr(i, line.length() - 7);
+			j = line.find(" ");
+			if (j == std::string::npos)
+				return ;
+			this->cgi_extention = line.substr(j + 1);
 			return ;
 		}
 	}
