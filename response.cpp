@@ -152,29 +152,18 @@ Response Response::operator=(const Response &r) {
 
 int Response::read_and_write(Client &client)
 {
-	write(client.fd_file, "fuck", 4);
-	char buffer[1024]; // buffer to hold 1kb of data
-    int bytes_read;
-	std::cout << "Entering loop..." << std::endl;
-	bytes_read = 1;
-    while (bytes_read > 0)
-    {
+
+	// client.file = hna fih lbody li ja mn request;
+	// client.fd_file = hna fin khas ytktb dak l body;
+	char* buffer = new char[1024];
+	int i = 1;
+    //while (i)
+    //{
 		printf("here\n");
-		bytes_read = read(client.file, buffer, sizeof(buffer));
-		std::cout << "buffer = " << buffer << std::endl;
-		std::cout << "file = " << client.file << std::endl;
-		std::cout << "fd_file = " << client.fd_file << std::endl;
-
-        write(client.fd_file, buffer, bytes_read); // write the bytes read to the output file
-        client.position += bytes_read; // update the current position in the input file
-        off_t new_pos = lseek(client.file, client.position, SEEK_SET); // set the file position for the next read
-        if (new_pos == (off_t)-1) {
-            std::cout << "handle error in lseek" << std::endl;
-            return -1;
-        }
-    }
-    return bytes_read;
-
+		i = read(client.file, buffer, 1024);
+		write(client.fd_file,buffer,i);
+    //}
+	return (i);
 	// int i = 0;
 	// while (client.position  + i  < content_length)
 	// {

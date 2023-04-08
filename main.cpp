@@ -194,10 +194,10 @@ void run_server(std::vector<Server> &server_list)
 					// std::cout<<"statement for Request.\n";
 					fcntl(client.fd_client, F_SETFL, O_NONBLOCK);
 					server.read_from_socket_client(client);
-					std::cout<<"-----------------------"<<std::endl;
-					std::cout<<client.request<<std::endl;
-					std::cout<<"-----------------------"<<std::endl;
-					if (client.ready )
+					// std::cout<<"-----------------------"<<std::endl;
+					// std::cout<<client.request<<std::endl;
+					// std::cout<<"-----------------------"<<std::endl;
+					if (client.ready /*&& (!client.request.empty())*/)
 					{
 						// client.split_request(client.request);
 						// client.parse.parse_request(client.header);

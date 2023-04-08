@@ -39,6 +39,7 @@ class Location
 		std::string	body_size;
 		std::string	error_path;
 		std::string	cgi_path;
+		std::string cgi_extention;
 		std::vector<std::string> error_cods;
 		Location();
 	
