@@ -78,7 +78,7 @@ void handel_chunked(Client &client, std::string _bodyy, int i) {
 			}
 			if (!client.hex_ready)
 				break;
-				// std::cout << client._hex << std::endl;
+			// std::cout << "|" << client._hex <<c "|" << std::endl;
 			client.chunk_size =  std::strtoul(client._hex, nullptr, 16);;
 			client.hex_len = 0;
 			if (!client.chunk_size) {
@@ -88,6 +88,7 @@ void handel_chunked(Client &client, std::string _bodyy, int i) {
 			}
 		}
 		while (reades < i && client.chunk_size) {
+			// std::cout << "|" << client._body + reades << "|" << std::endl;
 			write(client.file ,client._body + reades, 1);
 			client.chunk_size--;
 			reades++;
@@ -114,7 +115,6 @@ void Server::read_from_socket_client(Client &client)
 	memset(line,'\0',1024);
 	int i = recv(client.fd_client, line, 1023, 0);
 	line[i] = '\0';
-	std::ofstream out("bood");
 	// client.request += std::string(line);
 	// if (!client.request.c_str())
 	// {
@@ -125,10 +125,10 @@ void Server::read_from_socket_client(Client &client)
 		client.ret = is_carriage(std::string(line));
 		client.header = std::string(line).substr(0, client.ret);
 		client.parse.parse_request(client.header);
-		if (!client.isChuncked)
+		// if (!client.isChuncked)
 			client.b_pos = client.ret + 4;
-		if (client.isChuncked)
-			client.b_pos = client.ret + 2;
+		// if (client.isChuncked)
+		// 	client.b_pos = client.ret + 2;
 			
 		client.isChuncked = checkifchuncked(client.header);
 		client.j = 1;
@@ -145,9 +145,6 @@ void Server::read_from_socket_client(Client &client)
 			client.j = 0;
 		}
 		else {
-			printf("kakaka\n");
-			std::cout << "file size = " << getFileSize(client.file) << std::endl;
-			std::cout << "Content-Length = " << client.parse._data["Content-Length"] << std::endl;
 			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, _body.c_str(), _body.length());
 			}
@@ -158,7 +155,10 @@ void Server::read_from_socket_client(Client &client)
 		std::string _body(line);
 		std::string tmp;
 		if (client.j) {
+			// printf("here\n");
+			client.b_pos -=2;
 			std::string s =  _body.substr(client.b_pos, i);
+			// std::cout << "s = " << s << std::endl;
 			handel_chunked(client, s, s.length());
 			client.j = 0;
 		}
@@ -171,8 +171,6 @@ void Server::read_from_socket_client(Client &client)
 	} 
 
 	if (i != 1024) {
-		out << client.body;
-		out.close();
 		client.bodyReady = true;
 	    client.ready = true;
 	}
@@ -197,7 +195,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     else if (client.start_writting == 0)
     {
         i = read(client.fd_file,s,1023);
-        std::cout<<"i = "<<i<<std::endl;
+        // std::cout<<"i = "<<i<<std::endl;
         str = s;
     }
     write(1,"\n",1);

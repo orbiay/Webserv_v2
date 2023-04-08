@@ -43,6 +43,7 @@ class Client{
 	char *_body;
 	std::string   sizefile;
     std::string   extension;
+	int post_fd;
 
 	bool hex_ready;
 	int file;

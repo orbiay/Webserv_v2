@@ -82,7 +82,7 @@ Response::Response(Client &client):client(client)
 	this->readed = 0;
 	this->content_length = std::atoi(client.parse._data["Content-Length"].c_str());
 	this->is_done = false;
-	path = "/Users/fbouanan/Desktop/Webserv_v2/body2";
+	path = "body2";
 	result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
 	is_exist.open(path);
 	//outfile.open(path);
@@ -157,9 +157,11 @@ int Response::read_and_write(Client &client)
 	// client.fd_file = hna fin khas ytktb dak l body;
 
 
+	std::cout << "file 2 = " << client.file << std::endl;
+	std::cout << "post_fd 2 = " << client.post_fd << std::endl;
 
 
-	write(client.fd_file, "fuck", 4);
+	// write(client.fd_file, "fuck", 4);
 	char buffer[1024]; // buffer to hold 1kb of data
     int bytes_read;
 	std::cout << "Entering loop..." << std::endl;
@@ -169,10 +171,8 @@ int Response::read_and_write(Client &client)
 		printf("here\n");
 		bytes_read = read(client.file, buffer, sizeof(buffer));
 		std::cout << "buffer = " << buffer << std::endl;
-		std::cout << "file = " << client.file << std::endl;
-		std::cout << "fd_file = " << client.fd_file << std::endl;
 
-        write(client.fd_file, buffer, bytes_read); // write the bytes read to the output file
+        write(client.post_fd, buffer, bytes_read); // write the bytes read to the output file
         client.position += bytes_read; // update the current position in the input file
         off_t new_pos = lseek(client.file, client.position, SEEK_SET); // set the file position for the next read
         if (new_pos == (off_t)-1) {
@@ -235,8 +235,9 @@ void Response::Post(Server &server, int flag) {
 		if (flag == FILE) {
 			if (!client.enter)
 			{
-				client.fd_file = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC | O_EXCL, 0644);
-				if (client.fd_file == -1) {
+				client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+				std::cout << "post_fd 1 = " << client.post_fd << std::endl;
+				if (client.post_fd == -1) {
 					std::cout << "File Alredy Exists" << std::endl;
 					server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 549\r\n\r\n","200exists.html",client);
 				}
@@ -252,7 +253,7 @@ void Response::Post(Server &server, int flag) {
 			if (is_index) {
 				if (!client.enter)
 				{
-					client.fd_file = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+					client.post_fd = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
 					client.enter = true;
 				}
 				int f = read_and_write(client);

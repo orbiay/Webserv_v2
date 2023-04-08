@@ -133,33 +133,42 @@ int check_url_size (std::string url) {
 	return (0);
 }
 
-int	matched_location(std::string url)
+int	matched_location(Server &server ,std::string url)
 {
-	t_hcode g_v;
-	g_v.location = "/example";
-	g_v.root = "/var/www/html";
-
-
-	// std::cout << "pos = " << url.find(g_v.location) << std::endl;
-	std::size_t pos = url.find(g_v.location);
-
-	if (pos == 0) {
-		std::string tmp = url.substr(g_v.location.length(), url.length());
-		g_v.root.insert(g_v.root.length(), tmp);
-		if (access(g_v.root.c_str(), R_OK) == -1) {
-			return (1);
-		}
-		else
-			return 0;
-		// std::cout << "root = " << g_v.root << std::endl;
-		
+	(void)url;
+	// std::cout << "url = " << url << std::endl;
+	std::vector<Location>::iterator it = server.server_config.L.begin();
+	while (it != server.server_config.L.end()) {
+		// std::cout << "location = " << it->location_val <<std::endl;
+		it++;
 	}
+
+
+
+
+
+
+	// t_hcode g_v;
+	// g_v.location = "/example";
+	// g_v.root = "/var/www/html";
+
+	// std::size_t pos = url.find(g_v.location);
+
+	// if (pos == 0) {
+	// 	std::string tmp = url.substr(g_v.location.length(), url.length());
+	// 	g_v.root.insert(g_v.root.length(), tmp);
+	// 	if (access(g_v.root.c_str(), R_OK) == -1) {
+	// 		return (1);
+	// 	}
+	// 	else
+	// 		return 0;
+	// }
 	
 	// if (pos == std::string::npos) {
 	// 	std::cout << "invalid url" << std::endl;
 	// 	return (1);
 	// }
-	return (1);
+	return (0);
 }
 		//-------------------------------------------------------------------------------------------
 
@@ -238,9 +247,10 @@ void	parseRequest::check_request(Server &server,Client &iter) {
 	}
 		//---------------------------------this part need confg file------------------------------------>
 	// request body larger then client max body size in config file
-	// else if (matched_location(this->_data["path"])) {
-    // 	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
-	// }
+	// if (server.server_config.L[0].body_size)
+	else if (matched_location(server ,this->_data["path"])) {
+    	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
+	}
 		//---------------------------------------------------------------------------------------------->
 	check_methods(server, iter);
 }

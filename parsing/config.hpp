@@ -25,6 +25,7 @@ class Config
 	public : 
 		int	host;
 		int	port;
+		
 		bool upload;
 		std::string	root;
 		std::string	index;

@@ -22,6 +22,7 @@ Client::Client() {
 	ready = false;
 	start_writting = 1;
 	fd_file = -1;
+	// post_fd = -1;
 	is_delete = false;
 	is_finish = false;
 	enter = false;
@@ -46,6 +47,7 @@ Client::Client() {
 	std::string file_name = m.append(generateRandomString(6));
 	std::cout << "fle_name = " << file_name << std::endl;
 	file = open(file_name.c_str(), O_CREAT | O_RDWR | O_APPEND, 0644);
+	std::cout << "file 1 = " << file << std::endl;
 }
 
 Client::~Client() {
