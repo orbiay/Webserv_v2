@@ -25,6 +25,7 @@ class Config
 	public : 
 		int	host;
 		int	port;
+		
 		bool upload;
 		size_t		body_size;
 		std::string	root;

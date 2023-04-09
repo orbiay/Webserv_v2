@@ -20,6 +20,9 @@
 #include "client.hpp"
 #include "server.hpp"
 #include "response.hpp"
+#include "parsing/location.hpp"
+#include "parsing/Webserv.hpp"
+#include "parsing/config.hpp"
 #include <dirent.h>
 #include <sys/stat.h>
 #include <new>

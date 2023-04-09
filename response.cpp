@@ -82,7 +82,7 @@ Response::Response(Client &client):client(client)
 	this->readed = 0;
 	this->content_length = std::atoi(client.parse._data["Content-Length"].c_str());
 	this->is_done = false;
-	path = "/Users/fbouanan/Desktop/Webserv_v2/body2";
+	path = "body2";
 	result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
 	is_exist.open(path);
 	//outfile.open(path);
@@ -155,33 +155,23 @@ int Response::read_and_write(Client &client)
 
 	// client.file = hna fih lbody li ja mn request;
 	// client.fd_file = hna fin khas ytktb dak l body;
-
-
-
-
-	write(client.fd_file, "fuck", 4);
-	char buffer[1024]; // buffer to hold 1kb of data
-    int bytes_read;
-	std::cout << "Entering loop..." << std::endl;
-	bytes_read = 1;
-    while (bytes_read > 0)
-    {
+	char* buffer = new char[1024];
+	//close(client.file);
+	//close(client.fd_file);
+	//client.fd_file = open ("body2",O_CREAT | O_RDWR | O_APPEND);
+	//client.file = open (client.file_name.c_str(),O_CREAT | O_RDWR | O_APPEND);
+	int i = 1;
+    //while (i)
+    //{
 		printf("here\n");
-		bytes_read = read(client.file, buffer, sizeof(buffer));
-		std::cout << "buffer = " << buffer << std::endl;
-		std::cout << "file = " << client.file << std::endl;
-		std::cout << "fd_file = " << client.fd_file << std::endl;
-
-        write(client.fd_file, buffer, bytes_read); // write the bytes read to the output file
-        client.position += bytes_read; // update the current position in the input file
-        off_t new_pos = lseek(client.file, client.position, SEEK_SET); // set the file position for the next read
-        if (new_pos == (off_t)-1) {
-            std::cout << "handle error in lseek" << std::endl;
-            return -1;
-        }
-    }
-    return bytes_read;
-
+		i = read(client.file, buffer, 1024);
+		if (i < 0)
+			exit(0);
+		std::cout<<"file  = "<<client.file<< " fd_file = " << client.fd_file<<std::endl;
+		std::cout<<buffer<<std::endl;
+		write(client.post_fd,buffer,i);
+    //}
+	return (i);
 	// int i = 0;
 	// while (client.position  + i  < content_length)
 	// {
@@ -235,8 +225,9 @@ void Response::Post(Server &server, int flag) {
 		if (flag == FILE) {
 			if (!client.enter)
 			{
-				client.fd_file = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC | O_EXCL, 0644);
-				if (client.fd_file == -1) {
+				client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+				std::cout << "post_fd 1 = " << client.post_fd << std::endl;
+				if (client.post_fd == -1) {
 					std::cout << "File Alredy Exists" << std::endl;
 					server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 549\r\n\r\n","200exists.html",client);
 				}
@@ -252,7 +243,7 @@ void Response::Post(Server &server, int flag) {
 			if (is_index) {
 				if (!client.enter)
 				{
-					client.fd_file = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+					client.post_fd = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
 					client.enter = true;
 				}
 				int f = read_and_write(client);

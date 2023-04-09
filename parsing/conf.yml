@@ -6,13 +6,13 @@ server:
 	location /exampl:
 		root /test
 		index f.html
-		autoindex on
+		autoindex off
 		upload on
 		return 200 /test0
 		error_pages: 22
 			/path_for_error_file
 		cgi: off
-			/Users/aomman/Desktop/Webserv_v2/cgi.php php
+			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
 	location /exampl1:
 		root /valid_path_file1
 		index file_name1
@@ -23,7 +23,7 @@ server:
 			/path_for_error_file1
 		cgi: on
 			/Users/aomman/Desktop/Webserv_v2/cgi.php php
-	location /exampl2:
+	location /var/www/html:
 		root /valid_path_file2
 		index file_name2
 		autoindex off
