@@ -11,13 +11,14 @@
 /* ************************************************************************** */
 
 #include"parsing/config.hpp"
+#include"parsing/Webserv.hpp"
 
-void	cgi(Config c)
+void	cgi(Pserver s)
 {
 	int	fd[2];
 	char	*argc_s[3];
 	argc_s[0] = (char *)"/usr/bin/php";
-	argc_s[1] = (char *)c.s[1].L[0].cgi_path.c_str();
+	argc_s[1] = (char *)s.cgi_path.c_str();
 	argc_s[2] = NULL;
 	pipe(fd);
 	if (fork() == 0)

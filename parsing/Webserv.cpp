@@ -72,8 +72,51 @@ void	Pserver::set_host(std::ifstream &rf)
 	}
 }
 
+void	Pserver::set_cgi_path(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+	size_t	j;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 4, "\t\t\t/") == 0)
+		{
+			i = line.find("/");
+			this->cgi_path = line.substr(i, line.length() - 7);
+			j = line.find(" ");
+			if (j == std::string::npos)
+				return ;
+			this->cgi_extention = line.substr(j + 1);
+			return ;
+		}
+	}
+}
+
+void	Pserver::set_cgi(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 5, "\tcgi:") == 0)
+		{
+			i = line.find(" ");
+			line = line.substr(i + 1, line.length());
+			if (line == "on")
+				cgi = true;
+			this->set_cgi_path(rf);
+			return ;
+		}
+	}
+}
+
 void	Pserver::set_method(std::ifstream &rf)
 {
+	this->cgi = false;
 	std::string	line;
 	size_t	GIT;
 	size_t	DELETE;
@@ -89,6 +132,7 @@ void	Pserver::set_method(std::ifstream &rf)
 			this->methods[0] = line.substr(GIT, 3);
 			this->methods[1] = line.substr(POST, 4);
 			this->methods[2] = line.substr(DELETE, 6);
+			this->set_cgi (rf);
 			return ;
 		}
 	}

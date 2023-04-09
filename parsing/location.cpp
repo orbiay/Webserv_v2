@@ -45,7 +45,7 @@ void	Location::check_errors(void) const
 	if (this->root_val == "" || this->index_val == "" || this->location_val == ""
 		|| this->upload_val == "" || this->status_str == "" || this->redirec == "" 
 		|| this->autoindex_val == "" || this->error_cods.size() == 0
-		|| this->error_path == "" || this->cgi_extention != "php")
+		|| this->error_path == "")
 		throw (SyntaxError());
 }
 
@@ -61,7 +61,6 @@ void	Location::set_error_path(std::ifstream &rf)
 		{
 			i = line.find("/");
 			this->error_path = line.substr(i, line.length());
-			this->set_cgi(rf);
 			return ;
 		}
 	}
@@ -75,48 +74,6 @@ std::string	Location::set_values(std::string line)
 		throw(PathError());
 	this->line_val = line.substr(start, line.length());
 	return (this->line_val);
-}
-
-void	Location::set_cgi_path(std::ifstream &rf)
-{
-	std::string	line;
-	size_t	i;
-	size_t	j;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line.compare(0, 4, "\t\t\t/") == 0)
-		{
-			i = line.find("/");
-			this->cgi_path = line.substr(i, line.length() - 7);
-			j = line.find(" ");
-			if (j == std::string::npos)
-				return ;
-			this->cgi_extention = line.substr(j + 1);
-			return ;
-		}
-	}
-}
-
-void	Location::set_cgi(std::ifstream &rf)
-{
-	std::string	line;
-	size_t	i;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line.compare(0, 6, "\t\tcgi:") == 0)
-		{
-			i = line.find(" ");
-			line = line.substr(i + 1, line.length());
-			if (line == "on")
-				cgi = true;
-			this->set_cgi_path(rf);
-			return ;
-		}
-	}
 }
 
 void	Location::set_error_pages(std::ifstream &rf)
@@ -256,7 +213,6 @@ void	Location::set_root(std::ifstream &rf)
 {
 	this->upload = false;
 	this->autoindex = false;
-	this->cgi = false;
 	std::string line;
 
 	while (!rf.eof())
