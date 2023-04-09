@@ -23,10 +23,8 @@ int parsing(int argc, char **argv)
 		try
 		{
 			Config c(argv);
-			std::cout << c.s[0].L[0].cgi_extention << std::endl;
-			std::cout << c.s[0].L[1].cgi_extention << std::endl;
-			std::cout << c.s[0].L[2].cgi_extention << std::endl;
-			std::cout << c.s[1].L[0].cgi_path << std::endl;
+			std::cout << c.body_size << std::endl;
+			std::cout << (char *)c.s[1].L[0].cgi_path.c_str() << std::endl;
 			cgi(c);
 		}
 		catch(std::exception &e)

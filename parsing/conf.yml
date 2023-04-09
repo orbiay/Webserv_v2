@@ -1,16 +1,13 @@
 nserv: 2
+body_size 1000000
 server:
 	listen 127.0.0.255:8080
 	methods POST GIT DELETE
 	location /exampl:
-		root ./
+		root /test
 		index f.html
 		autoindex on
 		upload on
-<<<<<<< HEAD
-		return 200 /url
-=======
-		body_size 1Mb
 		return 200 /test0
 		error_pages: 22
 			/path_for_error_file
@@ -21,7 +18,6 @@ server:
 		index file_name1
 		autoindex on
 		upload off
-		body_size 1Mb
 		return 201 /test1
 		error_pages: 122
 			/path_for_error_file1
@@ -32,7 +28,6 @@ server:
 		index file_name2
 		autoindex off
 		upload off
-		body_size 1Mb
 		return 202 /test2
 		error_pages: 222
 			/path_for_error_file2
@@ -47,7 +42,6 @@ server:
 		index file_names2
 		autoindex on
 		upload on
-		body_size 1Mb
 		return 205 /tests0l0
 		error_pages: 322
 			/path_for_error_file13

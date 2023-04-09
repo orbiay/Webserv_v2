@@ -26,6 +26,7 @@ class Config
 		int	host;
 		int	port;
 		bool upload;
+		size_t		body_size;
 		std::string	root;
 		std::string	index;
 		std::string	location;
@@ -63,6 +64,7 @@ class Config
 		std::string	get_index() const;
 		std::string	get_location() const;
 		void	check_yml(char *str);
+		void	set_body_size(std::ifstream &rf);
 		~Config();
 };
 #endif

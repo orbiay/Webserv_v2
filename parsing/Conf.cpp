@@ -56,6 +56,24 @@ void	Config::check_yml(char *str)
 	return ;
 }
 
+void	Config::set_body_size(std::ifstream &rf)
+{
+	std::string	line;
+	size_t	i;
+
+	while (!rf.eof())
+	{
+		getline(rf, line);
+		if (line.compare(0, 9, "body_size") == 0)
+		{
+			i = line.find(" ");
+			line = line.substr(i + 1, line.length());
+			this->body_size = std::atoi(line.c_str());
+			return ;
+		}
+	}
+}
+
 int	count_servers(char **argv)
 {
 	std::string	server;
@@ -93,10 +111,13 @@ void	Config::set_loc_conf(char **argv)
 	if (rf.is_open() == false || f.is_open() == false || f2.is_open() == false)
 	{
 		rf.close();
+		f.close();
+		f2.close();
 		throw (NotOpen());
 	}
 	n_servr = count_servers(argv);
 	Pserver s1;
+	this->set_body_size(f2);
 	s1.set_nserv(rf);
 	s1.set_end(f2);
 	if (s1.get_nserv() != n_servr)
@@ -126,6 +147,8 @@ void	Config::set_loc_conf(char **argv)
 	}
 	this->set_conf_nserv();
 	rf.close();
+	f.close();
+	f2.close();
 }
 
 int	Config::get_host() const

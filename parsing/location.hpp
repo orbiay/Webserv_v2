@@ -69,7 +69,7 @@ class Location
 		void	set_upload(std::ifstream &rf);
 		bool	get_upload(void) const;
 
-		void	set_body_size(std::ifstream &rf);
+		
 		std::string	get_body_size(void) const;
 
 		void	set_redirection(std::ifstream &rf);

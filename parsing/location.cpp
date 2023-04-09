@@ -43,8 +43,8 @@ const char *Location::SyntaxError::what() const throw()
 void	Location::check_errors(void) const
 {
 	if (this->root_val == "" || this->index_val == "" || this->location_val == ""
-		|| this->upload_val == "" || this->status_str == "" || this->body_size != "1Mb"
-		|| this->redirec == "" || this->autoindex_val == "" || this->error_cods.size() == 0
+		|| this->upload_val == "" || this->status_str == "" || this->redirec == "" 
+		|| this->autoindex_val == "" || this->error_cods.size() == 0
 		|| this->error_path == "" || this->cgi_extention != "php")
 		throw (SyntaxError());
 }
@@ -175,24 +175,6 @@ int	Location::get_status(void) const
 	return (this->status);
 }
 
-void	Location::set_body_size(std::ifstream &rf)
-{
-	std::string	line;
-	size_t	i;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line.compare(0, 11, "\t\tbody_size") == 0)
-		{
-			i = line.find(" ");
-			this->body_size = line.substr(i + 1, line.length());
-			this->set_redirection(rf);
-			return ;
-		}
-	}
-}
-
 std::string	Location::get_body_size(void) const
 {
 	return (this->body_size);
@@ -212,7 +194,7 @@ void	Location::set_upload(std::ifstream &rf)
 			this->upload_val = line.substr(i + 1, line.length());
 			if (this->upload_val == "on")
 				this->upload = true;
-			this->set_body_size(rf);
+			this->set_redirection(rf);
 			return ;
 		}
 	}

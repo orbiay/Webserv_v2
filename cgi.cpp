@@ -15,8 +15,7 @@
 void	cgi(Config c)
 {
 	int	fd[2];
-	char	**argc_s = (char **)malloc(sizeof(char) * 3);
-
+	char	*argc_s[3];
 	argc_s[0] = (char *)"/usr/bin/php";
 	argc_s[1] = (char *)c.s[1].L[0].cgi_path.c_str();
 	argc_s[2] = NULL;
@@ -30,7 +29,10 @@ void	cgi(Config c)
 		dup2 (fd[1], STDOUT_FILENO);
 		write (fd[1], &a, sizeof (int));
 		if (execve(argc_s[0], argc_s, NULL) == -1)
-			perror("execve");
+		{
+			std::cout << "execve : error" << std::endl;
+			exit (1);
+		}
 		close (fd[1]);
 	}
 	int	b;

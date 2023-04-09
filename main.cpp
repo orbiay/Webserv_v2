@@ -256,7 +256,7 @@ int Server::maxfd = 0;
 int main (int ac, char **av)
 {
 	Config conf(av);
-	(void)ac;
+	parsing (ac, av);
 	int i = 0;
 	int num_srver = conf.s.size();
 	std::vector<struct sockaddr_in>  sed_struct;
