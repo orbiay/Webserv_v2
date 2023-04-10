@@ -9,13 +9,15 @@ Server::~Server(){
 
 }
 
-size_t is_carriage(std::string line) {
+size_t is_carriage(std::string line, Client &client) {
 	
 	size_t pos = line.find("\r\n\r\n");
 	if (pos == std::string::npos)
 		return 0;
-	else 
+	else {
+		client.readyToParse = true;
 		return pos;
+	}
 }
 
 bool	checkifchuncked(std::string request) {
@@ -62,16 +64,15 @@ bool findHex(Client &client) {
 	return (true);
 }
 
-void handel_chunked(Client &client, std::string _bodyy, int i) {
+void handel_chunked(Client &client, char *_body, int i) {
 	int reades = 0;;
-	client._body = (char *)_bodyy.c_str();
+	client._body = _body;
 	std::string *n_hex = new std::string();
 	client._hex = (char *)n_hex->c_str();
 	client.hex_ready = false;
 	while (reades < i) {
 		if (!client.chunk_size) {
 			while (reades < i) {
-				// printf("here\n");
 				client._hex[client.hex_len++] = client._body[reades++];
 				if (findHex(client))
 					break;
@@ -98,15 +99,41 @@ void handel_chunked(Client &client, std::string _bodyy, int i) {
 }
 
 
-size_t getFileSize(int fd) {
-    long size;
-    if (lseek(fd, 0, SEEK_END) != -1) { // move file pointer to the end of file
-        size = lseek(fd, 0, SEEK_CUR); // get current file pointer position, which is the size of the file
-        lseek(fd, 0, SEEK_SET); // move file pointer back to the beginning of the file
-        return static_cast<size_t>(size); // convert size to size_t and return
+// size_t getFileSize(int fd) {
+//     long size;
+//     if (lseek(fd, 0, SEEK_END) != -1) { // move file pointer to the end of file
+//         size = lseek(fd, 0, SEEK_CUR); // get current file pointer position, which is the size of the file
+//         lseek(fd, 0, SEEK_SET); // move file pointer back to the beginning of the file
+//         return static_cast<size_t>(size); // convert size to size_t and return
+//     }
+//     // return 0 if lseek failed
+// }
+
+size_t	getFileSize(const std::string& name)
+{
+	struct stat	fileStat;
+	lstat(name.c_str(), &fileStat);
+	return fileStat.st_size;
+}
+
+char* substr_no_null(const char* str, int start, int length, int str_len) {
+     if (start >= str_len) {
+        return NULL;
     }
-    // return 0 if lseek failed
-    return 0;
+    if (start + length > str_len) {
+        length = str_len - start;
+    }
+    char* substr = new char[length + 1];
+    if (substr == NULL) {
+        return NULL;
+    }
+    const char* src = str + start;
+    char* dest = substr;
+    while (length-- > 0) {
+        *dest++ = *src++;
+    }
+    *dest = '\0';
+    return substr;
 }
 
 void Server::read_from_socket_client(Client &client)
@@ -123,48 +150,56 @@ void Server::read_from_socket_client(Client &client)
 	// }
 	// if rtequest doesn't exist chenge is_delete variable to true for drop it.
 	if (!client.alrChecked) {
-		client.ret = is_carriage(std::string(line));
-		client.header = std::string(line).substr(0, client.ret);
-		client.parse.parse_request(client.header);
-		// if (!client.isChuncked)
+		client.ret = is_carriage(std::string(line), client);
+		if (client.readyToParse) {
+			client.header = std::string(line).substr(0, client.ret);
+			client.parse.parse_request(client.header);
 			client.b_pos = client.ret + 4;
+			client.isChuncked = checkifchuncked(client.header);
+			client.j = 1;
+			client.alrChecked = true;
+		}
+		else
+			return;
+		// if (!client.isChuncked)
 		// if (client.isChuncked)
 		// 	client.b_pos = client.ret + 2;
 			
-		client.isChuncked = checkifchuncked(client.header);
-		client.j = 1;
-		client.alrChecked = true;
 	}
 
 	if (!client.isChuncked) {
-		std::string _body(line);
+		// std::string _body(line);
 		if (client.j) {
-			std::string holder = _body.substr(client.b_pos, i);
-			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
-				write(client.file, holder.c_str(), holder.length());
+			// std::string holder = _body.substr(client.b_pos, i);
+			char *holder;
+			holder = substr_no_null(line, client.b_pos, i, i);
+			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+				write(client.file, holder, i - client.b_pos);
 			}
 			client.j = 0;
 		}
 		else {
-			if (getFileSize(client.file) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
-				write(client.file, _body.c_str(), _body.length());
+			// std::cout << "file_size = " << getFileSize(client.file_name) << std::endl;
+			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+				write(client.file, line, i);
 			}
 		}
 			// client.body += _body;
 	}
 	else if (client.isChuncked) {
-		std::string _body(line);
-		std::string tmp;
+		// std::string _body(line);
 		if (client.j) {
 			// printf("here\n");
 			client.b_pos -=2;
-			std::string s =  _body.substr(client.b_pos, i);
+			char *holder;
+			holder = substr_no_null(line, client.b_pos, i, i);
+			// std::string s =  _body.substr(client.b_pos, i);
 			// std::cout << "s = " << s << std::endl;
-			handel_chunked(client, s, s.length());
+			handel_chunked(client, holder, i - client.b_pos);
 			client.j = 0;
 		}
 		else
-			handel_chunked(client, _body.c_str(), _body.length());
+			handel_chunked(client, line, i);
 		if (client.chunk_size == 0) {
 			close(client.file);
 			client.bodyReady = true;

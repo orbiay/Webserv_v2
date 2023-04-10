@@ -13,7 +13,7 @@
 #include"config.hpp"
 #include"Webserv.hpp"
 
-void	cgi(Pserver s);
+// void	cgi(Pserver s);
 
 int parsing(int argc, char **argv)
 {
@@ -26,7 +26,7 @@ int parsing(int argc, char **argv)
 			std::cout << c.body_size << std::endl;
 			std::cout << (char *)c.s[0].cgi_path.c_str() << std::endl;
 			std::cout << c.s[0].L[1].error_cods[0] << std::endl;
-			cgi(c.s[0]);
+			// cgi(c.s[0]);
 			//multiple_cgi(c.s[0]);
 		}
 		catch(std::exception &e)

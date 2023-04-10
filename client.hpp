@@ -45,6 +45,7 @@ class Client{
 	std::string   sizefile;
     std::string   extension;
 	int post_fd;
+	bool readyToParse;
 
 	bool hex_ready;
 	int file;
