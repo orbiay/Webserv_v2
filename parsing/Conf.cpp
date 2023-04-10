@@ -129,22 +129,25 @@ void	Config::set_loc_conf(char **argv)
 	int	j;
 
 	i = 0;
-	Location l;
+	Location *l = new Location();
 	while (i < s1.get_nserv())
 	{
 		j = 0;
 		s[i].set_host(rf);
 		s[i].set_nLocation(f);
+		if (s[i].nloc != s[i].lend)
+			throw (SyntaxError());
 		while (j < s[i].nloc)
 		{
-			l.set_location(rf);
-			l.check_errors();
-			s[i].L.push_back(l);
+			l->set_location(rf);
+			l->check_errors();
+			s[i].L.push_back(l[0]);
 			j++;
 		}
 		this->s.push_back(s[i]);
 		i++;
 	}
+	delete l;
 	this->set_conf_nserv();
 	rf.close();
 	f.close();

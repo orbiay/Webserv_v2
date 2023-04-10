@@ -7,6 +7,7 @@ server:
 			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
 	location /exampl:
 		root ./test
+		index ok
 		autoindex off
 		upload on
 		return 200 /test0

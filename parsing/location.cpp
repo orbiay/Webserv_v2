@@ -28,6 +28,14 @@ std::vector<std::string> split(const std::string& str, char delimiter = ' ')
 
 Location::Location()
 {
+	this->location_val = "";
+	this->root_val = "";
+	this->index_val = "";
+	this->autoindex_val = "";
+	this->upload_val = "";
+	this->status_str = "";
+	this->redirec = "";
+	this->error_path = "";
 }
 
 const char *Location::PathError::what() const throw()

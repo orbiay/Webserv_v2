@@ -4,6 +4,7 @@
         "iosfwd": "cpp",
         "vector": "cpp",
         "locale": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "fstream": "cpp"
     }
 }
