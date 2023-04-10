@@ -25,6 +25,9 @@ class Pserver
 		int			port;
 		int			nloc;
 		int			end;
+		bool		cgi;
+		std::string	cgi_path;
+		std::string cgi_extention;
 		std::string methods[3];
 
 
@@ -44,6 +47,9 @@ class Pserver
 
 		void	set_nserv(std::ifstream &rf);
 		int		get_nserv(void) const;
+
+		void	set_cgi(std::ifstream &rf);
+		void	set_cgi_path(std::ifstream &rf);
 
 		void	set_end(std::ifstream &f2);
 		~Pserver();

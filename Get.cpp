@@ -23,11 +23,11 @@ std::string link_maker(std::string &root,std::string name)
 	std::string link = "      <li><a href=\"" + root + name + "\">" + name + "</a></li>\n";
 	return (link);
 }
-void Response::autoindex_mode(std::string &auto_index,std::string &default_index,std::string root,Server &server)
+void Response::autoindex_mode(bool &auto_index,std::string &default_index,std::string root,Server &server)
 {
 	(void)server;
 	std::string links;
-	if (auto_index == "on" && default_index.empty())
+	if (auto_index == true && default_index.empty())
 	{
 		DIR *Directory;
 		Directory = opendir(root.c_str());
@@ -49,17 +49,17 @@ void Response::autoindex_mode(std::string &auto_index,std::string &default_index
 		}
 	}
 }
-void init_vars(std::string &root,std::string &auto_index,std::string &default_index,Server &server)
+void init_vars(std::string &root,bool &auto_index,std::string &default_index,Server &server)
 {
+	(void)default_index;
 	root = server.server_config.L[0].root_val;
 	auto_index = server.server_config.L[0].autoindex;
-	default_index = server.server_config.L[0].index_val;
+	//default_index = server.server_config.L[0].index_val;
 }
 void Response::Get(Server &server) {
 	// (void)server;
-	std::cout<<"---------------------->Hola"<<std::endl;
 	std::string root;
-	std::string auto_index;
+	bool auto_index;
 	std::string default_index;
 	init_vars(root,auto_index,default_index,server);
 	client.extension = client.parse._data["path"];
@@ -90,12 +90,15 @@ void Response::Get(Server &server) {
 		{
 			addslash(root);
 			//std::cout<<root<<std::endl;
-			if (auto_index == "on" && default_index.empty())
+			if (auto_index == true && default_index.empty())
 			{
+				std::cout<<"root = "<<root + client.parse._data["path"]<<std::endl;
+				std::cout<<"autoindex mode active2"<<std::endl;
 				autoindex_mode(auto_index,default_index,root,server);
 			}
 			else if (!default_index.empty())
 			{
+				std::cout<<"DEFAULT INDEX = "<< default_index <<std::endl;
 				size_file(root + default_index);
 				// std::cout<<"--------->"<<root<<std::endl;
 				// std::cout<<client.sizefile<<std::endl;
@@ -104,7 +107,7 @@ void Response::Get(Server &server) {
 				header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
 				server.write_in_socket_client(header,root + default_index , client);
 			}
-			else if (auto_index.empty() || auto_index == "off")
+			else if (auto_index == false)
 			{
 				header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length: 	169\r\nConnection: closed\r\n\r\n";
 				server.write_in_socket_client(header,"403error.html", client);
