@@ -13,7 +13,7 @@
 #include"config.hpp"
 #include"Webserv.hpp"
 
-void	cgi(Pserver s);
+ void	cgi(Pserver s);
 
 int parsing(int argc, char **argv)
 {
