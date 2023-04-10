@@ -72,7 +72,7 @@ std::string	Location::set_values(std::string line)
 	start = line.find("/");
 	if (start == std::string::npos)
 		throw(PathError());
-	this->line_val = line.substr(start, line.length());
+	this->line_val = line.substr(start+1, line.length());
 	return (this->line_val);
 }
 

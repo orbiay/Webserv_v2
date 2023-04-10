@@ -6,7 +6,7 @@ server:
 	cgi: off
 			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
 	location /exampl:
-		root /test
+		root ./test
 		index f.html
 		autoindex off
 		upload on
