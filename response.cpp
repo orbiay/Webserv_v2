@@ -152,15 +152,63 @@ Response Response::operator=(const Response &r) {
 
 int Response::read_and_write(Client &client)
 {
-	char* buffer = new char[1024];
-	int i = 1;
-	i = read(client.file, buffer, 1024);
-	if (i < 0)
-		exit(0);
-	std::cout<<"file  = "<<i<< " fd post = " << client.post_fd<<std::endl;
-	std::cout<<buffer<<std::endl;
-	write(client.post_fd,buffer,i);
-	return (i);
+	std::cout <<client.request;
+	// client.file = hna fih lbody li ja mn request;
+	// client.fd_file = hna fin khas ytktb dak l body;
+	// char* buffer = new char[1024];
+	//close(client.file);
+	//close(client.fd_file);
+	//client.fd_file = open ("body2",O_CREAT | O_RDWR | O_APPEND);
+	//client.file = open (client.file_name.c_str(),O_CREAT | O_RDWR | O_APPEND);
+	// int i = 1;
+    //while (i)
+    //{
+		// printf("here\n");
+		// i = read(client.file, buffer, 1024);
+		// if (i < 0)
+		// 	exit(0);
+		// std::cout<<"file  = "<<client.file<< " fd_file = " << client.fd_file<<std::endl;
+		// std::cout<<buffer<<std::endl;
+		// write(client.post_fd,buffer,i);
+    //}
+	return (0);
+	// int i = 0;
+	// while (client.position  + i  < content_length)
+	// {
+	// 	write(client.fd_file, &client.body[client.position + i],1);
+	// 	// printf("\n*");
+	// 	// write(1,&client.body[client.position + i],1);
+	// 	// printf("*\n");
+	// 	//std::cout<<client.position<<std::endl;
+	// 	if (i == 1024)
+	// 	{
+	// 		//i++;
+	// 		client.position += i;
+	// 		client.position++;
+	// 		std::cout<<"i1 = "<<i<<std::endl;
+	// 		return (i);
+	// 	}
+	// 	i++;
+	// }
+	// std::cout<<"i2 = "<<i<<std::endl;
+	// client.position += i;
+	// std::cout<<	"position = "<<client.position <<" content length =  "<<content_length <<std::endl;
+	// return(i);
+	// int i = 1;
+	
+	// while (i)
+	// {
+	// 	char c;
+	// 	i += read(client.file, &c,1);
+	// 	std::cout<<"c =  "<<c<<std::endl;
+	// 	write(1, &c,1);
+	// 	if (i == 10)
+	// 		exit(0);
+	// 		// std::cout<<"i1 = "<<i<<std::endl;
+	// }
+	// // std::cout<<"i2 = "<<i<<std::endl;
+	// // std::cout<<	"position = "<<client.position <<" content length =  "<<content_length <<std::endl;
+	// return(i);
 }
 
 // int	is_file(Client &client) {
@@ -172,8 +220,8 @@ void Response::Post(Server &server, int flag) {
 	std::string location = "/home";
 	std::string index = "./index.html";
 	int is_index = 1;
-	int upload = 1;
-	if (upload) {
+	// int upload = 1;
+	if (server.server_config.L[0].upload) {
 		if (flag == FILE) {
 			if (!client.enter)
 			{
@@ -186,10 +234,10 @@ void Response::Post(Server &server, int flag) {
 				}
 				client.enter = true;
 			}
-			int f = read_and_write(client);
-			if (f < 1024) {
+			// int f = read_and_write(client);
+			// if (f < 1024) {
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
-			}
+			// }
 		}
 		else if(flag == DIRE) {
 			std::cout << "is a directory\n";
@@ -210,8 +258,8 @@ void Response::Post(Server &server, int flag) {
 		}
 
 	}
-	// else if (cgi) {
-		
+	// else if (server.server_config.cgi) {
+	// 	cgi(server.server_config);
 	// }
 }
 

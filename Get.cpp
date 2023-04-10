@@ -20,7 +20,8 @@ void addslash(std::string &root)
 }
 std::string link_maker(std::string &root,std::string name)
 {
-	std::string link = "      <li><a href=\"" + root + name + "\">" + name + "</a></li>\n";
+	(void)root;
+	std::string link = "      <li><a href=\"/" + name + "\">" + name + "</a></li>\n";
 	return (link);
 }
 void Response::autoindex_mode(bool &auto_index,std::string &default_index,std::string root,Server &server)
@@ -49,68 +50,71 @@ void Response::autoindex_mode(bool &auto_index,std::string &default_index,std::s
 		}
 	}
 }
-void init_vars(std::string &root,bool &auto_index,std::string &default_index,Server &server)
+void init_vars(std::string &root,bool &auto_index,std::string &default_index,Server &server,Client &client)
 {
+	(void)server;
 	(void)default_index;
-	root = server.server_config.L[0].root_val;
-	auto_index = server.server_config.L[0].autoindex;
-	//default_index = server.server_config.L[0].index_val;
+	(void)client;
+	root = "/Users/orbiay/Desktop/Webserv_v2";
+	auto_index = true;
+	// default_index = "login.html";
 }
 void Response::Get(Server &server) {
 	// (void)server;
 	std::string root;
 	bool auto_index;
 	std::string default_index;
-	init_vars(root,auto_index,default_index,server);
+	init_vars(root,auto_index,default_index,server,client);
 	client.extension = client.parse._data["path"];
-    std::string content_type = getContentType(server);
+    client.content_type = getContentType(server);
 	std::ifstream infile(root.c_str() + client.parse._data["path"]);
-	std::string header;
+	//addslash(root);
 	if (!infile.good())
 	{
 		size_file("./404error.html");
 		client.extension = "404error.html";
-		content_type = getContentType(server);
-		std::cout<<content_type<<std::endl;
-		header = "HTTP/1.1 404 not found\nContent-Type: " + content_type + "\nContent-Length: "+ client.sizefile +"\r\nConnection: closed\r\n\r\n";
-		server.write_in_socket_client(header,"404error.html", client);
+		client.content_type = getContentType(server);
+		
+		client.client_header = "HTTP/1.1 404 not found\nContent-Type: " + client.content_type + "\nContent-Length: "+ client.sizefile +"\r\nConnection: closed\r\n\r\n";
+		server.write_in_socket_client(client.client_header,"404error.html", client);
 	}
 	else
 	{
 		infile.close();
-		if (is_directory_or_file(root) == FILE)
+		//if (is_directory_or_file(root + client.parse._data["path"]) == FILE)
+		//{
+		//	size_file(root);
+		//	std::cout<<"root equal this "<<root<<std::endl;
+		//	// std::cout<<"--------->"<<content_type<<std::endl;
+		//	// std::cout<<client.sizefile<<std::endl;
+		//	header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: closed\r\n\r\n";
+		//	server.write_in_socket_client(header,root,client);
+		//}
+		if (is_directory_or_file(client.path) == DIRE)
 		{
-			size_file(root);
-			// std::cout<<"--------->"<<content_type<<std::endl;
-			// std::cout<<client.sizefile<<std::endl;
-			header = "HTTP/1.1 200 OK\nContent-Type: " + content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: closed\r\n\r\n";
-			server.write_in_socket_client(header,root,client);
-		}
-		else if (is_directory_or_file(root) == DIRE)
-		{
-			addslash(root);
-			//std::cout<<root<<std::endl;
+			std::string path = root + client.parse._data["path"];
+			addslash(path);
+			root = path;
 			if (auto_index == true && default_index.empty())
 			{
-				std::cout<<"root = "<<root + client.parse._data["path"]<<std::endl;
-				std::cout<<"autoindex mode active2"<<std::endl;
+				std::cout<<"root ======= "<<root <<std::endl;
 				autoindex_mode(auto_index,default_index,root,server);
 			}
 			else if (!default_index.empty())
 			{
-				std::cout<<"DEFAULT INDEX = "<< default_index <<std::endl;
+				
 				size_file(root + default_index);
 				// std::cout<<"--------->"<<root<<std::endl;
 				// std::cout<<client.sizefile<<std::endl;
 				client.extension = default_index;
 				// std::cout<<client.extension<<std::endl;
-				header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
-				server.write_in_socket_client(header,root + default_index , client);
+				client.client_header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
+				server.write_in_socket_client(client.client_header,root + default_index , client);
 			}
 			else if (auto_index == false)
 			{
-				header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length: 	169\r\nConnection: closed\r\n\r\n";
-				server.write_in_socket_client(header,"403error.html", client);
+				client.client_header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length: 	169\r\nConnection: closed\r\n\r\n";
+				server.write_in_socket_client(client.client_header,"403error.html", client);
 			}
 		}
 	}

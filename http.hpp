@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 #include <new>
 #include <cstdlib>
+
 #define DIRE 1
 #define FILE 2
 typedef struct s_hcode {
@@ -34,6 +35,8 @@ typedef struct s_hcode {
     std::string root;
     // std::string 
 } t_hcode;
+
+// void cgi(Pserver &s);
 
 
 class Http{

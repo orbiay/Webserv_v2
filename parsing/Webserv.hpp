@@ -19,19 +19,20 @@ class Pserver
 {
 	private :
 		std::string	server;
-		std::string	host;
 	public :
+		std::string	host;
 		int			nserv;
 		int			port;
 		int			nloc;
 		int			end;
+		int			lend;
 		bool		cgi;
 		std::string	cgi_path;
 		std::string cgi_extention;
 		std::string methods[3];
 
 
-		std::vector<Location> L; //i had to put it in vector
+		std::vector<Location> L;
 		Pserver();
 
 		class SyntaxError : public std::exception

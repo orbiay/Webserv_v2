@@ -45,11 +45,17 @@ class Client{
 	std::string   sizefile;
     std::string   extension;
 	int post_fd;
+	bool readyToParse;
 
 	bool hex_ready;
 	int file;
 	
-	
+	/*************************/
+    std::string url;
+    std::string client_header;
+    std::string content_type;
+	std::string path;
+    /*************************/
 	socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;
 

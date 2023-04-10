@@ -13,7 +13,7 @@
 #include"parsing/config.hpp"
 #include"parsing/Webserv.hpp"
 
-void	cgi(Pserver s)
+void	cgi(Pserver &s)
 {
 	int	fd[2];
 	char	*argc_s[3];
