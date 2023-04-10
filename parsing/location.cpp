@@ -57,6 +57,8 @@ void	Location::set_error_path(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 4, "\t\t\t/") == 0)
 		{
 			i = line.find("/");
@@ -84,6 +86,8 @@ void	Location::set_error_pages(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 14, "\t\terror_pages:") == 0)
 		{
 			i = line.find(" ");
@@ -109,6 +113,8 @@ void	Location::set_redirection(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 8, "\t\treturn") == 0)
 		{
 			i = line.find(" ");
@@ -145,6 +151,8 @@ void	Location::set_upload(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 8, "\t\tupload") == 0)
 		{
 			i = line.find(" ");
@@ -170,6 +178,8 @@ void	Location::set_autoindex(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 11, "\t\tautoindex") == 0)
 		{
 			i = line.find(" ");
@@ -194,9 +204,13 @@ void	Location::set_index(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 7, "\t\tindex") == 0)
 		{
 			start = line.find(" ");
+			if (start == std::string::npos)
+				throw (SyntaxError());
 			this->index_val = line.substr(start + 1, line.length());
 			this->set_autoindex(rf);
 			return ;
@@ -218,6 +232,8 @@ void	Location::set_root(std::ifstream &rf)
 	while (!rf.eof())
 	{
 		getline(rf, line);
+		if (line == "\tlend")
+			return ;
 		if (line.compare(0, 6, "\t\troot") == 0)
 		{
 			this->root_val = this->set_values(line);

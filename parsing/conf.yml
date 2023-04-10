@@ -7,12 +7,12 @@ server:
 			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
 	location /exampl:
 		root ./test
-		index f.html
 		autoindex off
 		upload on
 		return 200 /test0
 		error_pages: 22
 			/path_for_error_file
+	lend
 	location /exampl1:
 		root /valid_path_file1
 		index file_name1
@@ -21,6 +21,7 @@ server:
 		return 201 /test1
 		error_pages: 122
 			/path_for_error_file1
+	lend
 	location /var/www/html:
 		root /valid_path_file2
 		index file_name2
@@ -29,6 +30,7 @@ server:
 		return 202 /test2
 		error_pages: 222
 			/path_for_error_file2
+	lend
 end
 server:
 	listen 2.2.2.2:9090
@@ -43,4 +45,5 @@ server:
 		return 205 /tests0l0
 		error_pages: 322
 			/path_for_error_file13
+	lend
 end

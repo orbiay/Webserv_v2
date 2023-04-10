@@ -255,33 +255,40 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av)
 {
-	Config conf(av);
-	parsing (ac, av);
-	int i = 0;
-	int num_srver = conf.s.size();
-	std::vector<struct sockaddr_in>  sed_struct;
-
-	std::vector<int> id_servers;
-
-	id_servers = create_servers(sed_struct,conf.s);
-  
-
-
-	std::vector<Server> server_list;
-	std::vector<Server>::iterator iter;
-	std::vector<Pserver>::iterator iter_conf = conf.s.begin();
-	while (i < num_srver)
+	try
 	{
-		server_list.push_back(init_server(id_servers[i],sed_struct[i],*iter_conf));
-		//std::cout<<id_servers[i]<<std::endl;
-		i++;
-		iter_conf++;
+		Config conf(av);
+		parsing (ac, av);
+		int i = 0;
+		int num_srver = conf.s.size();
+		std::vector<struct sockaddr_in>  sed_struct;
+
+		std::vector<int> id_servers;
+
+		id_servers = create_servers(sed_struct,conf.s);
+	  
+
+
+		std::vector<Server> server_list;
+		std::vector<Server>::iterator iter;
+		std::vector<Pserver>::iterator iter_conf = conf.s.begin();
+		while (i < num_srver)
+		{
+			server_list.push_back(init_server(id_servers[i],sed_struct[i],*iter_conf));
+			//std::cout<<id_servers[i]<<std::endl;
+			i++;
+			iter_conf++;
+		}
+		iter = server_list.begin();
+		while(iter != server_list.end())
+		{
+			listen_for_conection(*iter);
+			iter++;
+		}
+		run_server(server_list);
 	}
-	iter = server_list.begin();
-	while(iter != server_list.end())
+	catch(std::exception &e)
 	{
-		listen_for_conection(*iter);
-		iter++;
+		std::cout << "Error : " << e.what() << std::endl;
 	}
-	run_server(server_list);
 }
