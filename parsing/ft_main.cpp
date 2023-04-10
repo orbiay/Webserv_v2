@@ -20,19 +20,11 @@ int parsing(int argc, char **argv)
 	if (argc == 2)
 	{
 		(void)argc;
-		try
-		{
-			Config c(argv);
-			std::cout << c.body_size << std::endl;
-			std::cout << (char *)c.s[0].cgi_path.c_str() << std::endl;
-			std::cout << c.s[0].L[1].error_cods[0] << std::endl;
-			cgi(c.s[0]);
-			//multiple_cgi(c.s[0]);
-		}
-		catch(std::exception &e)
-		{
-			std::cout << "Error : " << e.what() << std::endl;
-		}
+		Config c(argv);
+		std::cout << c.body_size << std::endl;
+		std::cout << c.s[0].L[0].index_val << std::endl;
+		std::cout << c.s[1].L[0].error_cods[0] << std::endl;
+		cgi(c.s[0]);
 	}
 	return (0);
 }
