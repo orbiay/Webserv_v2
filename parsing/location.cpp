@@ -57,23 +57,13 @@ void	Location::check_errors(void) const
 		throw (SyntaxError());
 }
 
-void	Location::set_error_path(std::ifstream &rf)
+void	Location::set_error_path(std::string line)
 {
-	std::string	line;
 	size_t		i;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "\tlend")
-			return ;
-		if (line.compare(0, 4, "\t\t\t/") == 0)
-		{
-			i = line.find("/");
-			this->error_path = line.substr(i, line.length());
-			return ;
-		}
-	}
+	if (line == "\tlend")
+		return ;
+	i = line.find("/");
+	this->error_path = line.substr(i, line.length());
 }
 
 std::string	Location::set_values(std::string line)
@@ -86,25 +76,13 @@ std::string	Location::set_values(std::string line)
 	return (this->line_val);
 }
 
-void	Location::set_error_pages(std::ifstream &rf)
+void	Location::set_error_pages(std::string line)
 {
-	std::string	line;
 	size_t		i;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "\tlend")
-			return ;
-		if (line.compare(0, 14, "\t\terror_pages:") == 0)
-		{
-			i = line.find(" ");
-			line = line.substr(i + 1, line.length());
-			this->error_cods = split(line, ' ');
-			this->set_error_path(rf);
-			return ;
-		}
-	}
+	i = line.find(" ");
+	line = line.substr(i + 1, line.length());
+	this->error_cods = split(line, ' ');
+	//this->set_error_path(rf);
 }
 
 std::vector<std::string>	Location::get_error_pages(void) const
@@ -112,28 +90,16 @@ std::vector<std::string>	Location::get_error_pages(void) const
 	return (this->error_cods);
 }
 
-void	Location::set_redirection(std::ifstream &rf)
+void	Location::set_redirection(std::string line)
 {
-	std::string	line;
 	size_t	i;
 	size_t	j;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "\tlend")
-			return ;
-		if (line.compare(0, 8, "\t\treturn") == 0)
-		{
-			i = line.find(" ");
-			this->status_str = line.substr(i + 1, 3);
-			this->status = std::atoi(this->status_str.c_str());
-			j = line.find("/");
-			this->redirec = line.substr(j, line.length());
-			this->set_error_pages(rf);
-			return ;
-		}
-	}
+	i = line.find(" ");
+	this->status_str = line.substr(i + 1, 3);
+	this->status = std::atoi(this->status_str.c_str());
+	j = line.find("/");
+	this->redirec = line.substr(j, line.length());
+	//this->set_error_pages(rf);
 }
 
 std::string	Location::get_redirection(void) const
@@ -151,26 +117,14 @@ std::string	Location::get_body_size(void) const
 	return (this->body_size);
 }
 
-void	Location::set_upload(std::ifstream &rf)
+void	Location::set_upload(std::string line)
 {
-	std::string line;
 	size_t	i;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "\tlend")
-			return ;
-		if (line.compare(0, 8, "\t\tupload") == 0)
-		{
-			i = line.find(" ");
-			this->upload_val = line.substr(i + 1, line.length());
-			if (this->upload_val == "on")
-				this->upload = true;
-			this->set_redirection(rf);
-			return ;
-		}
-	}
+	i = line.find(" ");
+	this->upload_val = line.substr(i + 1, line.length());
+	if (this->upload_val == "on")
+		this->upload = true;
+	//this->set_redirection(rf);
 }
 
 bool	Location::get_upload(void) const
@@ -178,26 +132,14 @@ bool	Location::get_upload(void) const
 	return (this->upload);
 }
 
-void	Location::set_autoindex(std::ifstream &rf)
+void	Location::set_autoindex(std::string line)
 {
-	std::string	line;
 	size_t	i;
-
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "\tlend")
-			return ;
-		if (line.compare(0, 11, "\t\tautoindex") == 0)
-		{
-			i = line.find(" ");
-			this->autoindex_val = line.substr(i + 1, line.length());
-			if (this->autoindex_val == "on")
-				this->autoindex = true;
-			this->set_upload(rf);
-			return ;
-		}
-	}
+	i = line.find(" ");
+	this->autoindex_val = line.substr(i + 1, line.length());
+	if (this->autoindex_val == "on")
+		this->autoindex = true;
+	//this->set_upload(rf);
 }
 
 std::string	Location::get_autoindex(void) const
@@ -205,25 +147,14 @@ std::string	Location::get_autoindex(void) const
 	return (this->autoindex_val);
 }
 
-void	Location::set_index(std::ifstream &rf)
+void	Location::set_index(std::string line)
 {
-	std::string	line;
 	size_t	start;
-	while (!rf.eof())
-	{
-		getline(rf, line);
-		if (line == "\tlend")
-			return ;
-		if (line.compare(0, 7, "\t\tindex") == 0)
-		{
-			start = line.find(" ");
-			if (start == std::string::npos)
-				throw (SyntaxError());
-			this->index_val = line.substr(start + 1, line.length());
-			this->set_autoindex(rf);
-			return ;
-		}
-	}
+	start = line.find(" ");
+	if (start == std::string::npos)
+		throw (SyntaxError());
+	this->index_val = line.substr(start + 1, line.length());
+	//this->set_autoindex(rf);
 }
 
 std::string	Location::get_index(void) const
@@ -243,11 +174,19 @@ void	Location::set_root(std::ifstream &rf)
 		if (line == "\tlend")
 			return ;
 		if (line.compare(0, 6, "\t\troot") == 0)
-		{
 			this->root_val = this->set_values(line);
-			this->set_index(rf);
-			return ;
-		}
+		if (line.compare(0, 7, "\t\tindex") == 0)
+			this->set_index(line);
+		if (line.compare(0, 11, "\t\tautoindex") == 0)
+			this->set_autoindex(line);
+		if (line.compare(0, 8, "\t\tupload") == 0)
+			this->set_upload(line);
+		if (line.compare(0, 8, "\t\treturn") == 0)
+			this->set_redirection(line);
+		if (line.compare(0, 14, "\t\terror_pages:") == 0)
+			this->set_error_pages (line);
+		if (line.compare(0, 4, "\t\t\t/") == 0)
+			this->set_error_path (line);
 	}
 }
 
