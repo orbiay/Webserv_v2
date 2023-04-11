@@ -50,9 +50,13 @@ const char *Location::SyntaxError::what() const throw()
 
 void	Location::check_errors(void) const
 {
-	if (this->root_val == "" || this->location_val == ""
-		|| this->upload_val == "" || this->status_str == "" || this->redirec == "" 
-		|| this->autoindex_val == "" || this->error_cods.size() == 0
+	if (this->root_val == ""
+		|| this->location_val == ""
+		|| this->upload_val == ""
+		|| this->status_str == ""
+		|| this->redirec == ""
+		|| this->autoindex_val == ""
+		|| this->error_cods.size() == 0
 		|| this->error_path == "")
 		throw (SyntaxError());
 }

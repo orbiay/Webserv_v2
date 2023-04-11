@@ -27,7 +27,7 @@ int parsing(int argc, char **argv)
 		std::cout << c.s[0].L[1].root_val << std::endl;
 		std::cout << c.s[0].L[1].autoindex << std::endl;
 		std::cout << c.s[0].L[1].index_val << std::endl;
-		std::cout << c.s[0].L[2].index_val << std::endl;
+		std::cout << c.s[1].L[0].index_val << std::endl;
 		std::cout << c.s[0].L[2].upload << std::endl;
 		std::cout << c.s[0].port << std::endl;
 		cgi(c.s[0]);
