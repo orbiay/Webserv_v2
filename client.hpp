@@ -7,6 +7,7 @@ class Client{
 	public:
 	Client();
 	~Client();
+	size_t read_size;
 	int fd_client;
 	parseRequest parse;
 	std::string request;
