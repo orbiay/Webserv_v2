@@ -55,6 +55,8 @@ std::string Response::getContentType(Server &server) {
 	if (pos == std::string::npos)
 		return "application/octet-stream";
 	std::string fileExtension = str.substr(pos);
+	if (fileExtension == ".mp4")
+		return "video/mp4";
     if (fileExtension == ".html" || fileExtension == ".htm") {
         return "text/html";
     } else if (fileExtension == ".css") {

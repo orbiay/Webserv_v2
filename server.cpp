@@ -141,7 +141,6 @@ void Server::read_from_socket_client(Client &client)
 	char line[1024];
 	memset(line,'\0',1024);
 	int i = recv(client.fd_client, line, 1023, 0);
-	line[i] = '\0';
 	// client.request += std::string(line);
 	// if (!client.request.c_str())
 	// {
@@ -218,9 +217,11 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 	s = (char *)malloc(sizeof(char) * 1024);
     memset(s, '\0', 1024);
     int i = str.length();
+	int fd  = 0;
 	//s = strdup(str.c_str());
     if (client.start_writting == 1)
     {
+		fd = open("test.txt",O_CREAT | O_RDWR,0700);
 	    client.fd_file = open (file.c_str(),O_RDONLY);
         if (client.fd_file == -1)
         {
@@ -228,17 +229,21 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
            // exit(0);
         }
         client.start_writting = 0;
+		std::cout<<"HIHIHIHIHIHIHIHI"<<std::endl;
 		write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023));
 		return ;
     }
     else if (client.start_writting == 0)
     {
         i = read(client.fd_file,s,1023);
-        // std::cout<<"i = "<<i<<std::endl;
+        std::cout<<"i = "<<i<<std::endl;
+		// write(1,s,strnlen(s,1023));
         //str = s;
     }
-    write(1,"\n",1);
-    if (write(client.fd_client,s,strnlen(s,1023)) < 1)
+    // write(1,"\n",1);
+	int b = send(client.fd_client,s,i,0);
+	std::cout << " b = "<< b << std::endl;
+    if (b < 1)
     {
         client.is_delete = true;
         close(client.fd_client);

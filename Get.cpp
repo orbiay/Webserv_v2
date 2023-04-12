@@ -73,8 +73,8 @@ void Response::file_handler(Server &server)
 	if (is_directory_or_file(client.path) == FILE)
 	{
 		size_file(client.path);
-		std::cout<<"root equal this "<<client.path<<std::endl;
-		std::cout<<"--------->"<<client.content_type<<std::endl;
+		//std::cout<<"root equal this "<<client.path<<std::endl;
+		//std::cout<<"--------->"<<client.content_type<<std::endl;
 		std::cout<<client.sizefile<<std::endl;
 		client.header = "HTTP/1.1 200 OK\nContent-Type: " + client.content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: closed\r\n\r\n";
 		server.write_in_socket_client(client.header,client.path,client);
