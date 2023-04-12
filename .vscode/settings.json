@@ -1,14 +1,7 @@
 {
-    "files.associations": {
-        "ostream": "cpp",
-        "iosfwd": "cpp",
-        "vector": "cpp",
-        "locale": "cpp",
-        "iostream": "cpp",
-        "string": "cpp",
-        "string_view": "cpp",
-        "new": "cpp",
-        "filesystem": "cpp",
-        "stdexcept": "cpp"
-    }
+	"files.associations": {
+		"string": "cpp",
+		"iosfwd": "cpp",
+		"vector": "cpp"
+	}
 }

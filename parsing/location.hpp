@@ -57,29 +57,29 @@ class Location
 		void	set_root(std::ifstream &rf);
 		std::string	get_root(void) const;
 
-		void	set_index(std::ifstream &rf);
+		void	set_index(std::string);
 		std::string	get_index(void) const;
 
-		void	set_autoindex(std::ifstream &rf);
+		void	set_autoindex(std::string);
 		std::string	get_autoindex(void) const;
 
-		void	set_upload(std::ifstream &rf);
+		void	set_upload(std::string);
 		bool	get_upload(void) const;
 
 
 		std::string	get_body_size(void) const;
 
-		void	set_redirection(std::ifstream &rf);
+		void	set_redirection(std::string);
 		std::string get_redirection(void) const;
 		int	get_status(void) const;
 
 		std::string	set_values(std::string line);
 		void	set_config_items(void);
 
-		void	set_error_pages(std::ifstream &rf);
+		void	set_error_pages(std::string);
 		std::vector<std::string>	get_error_pages(void) const;
 
-		void	set_error_path(std::ifstream &rf);
+		void	set_error_path(std::string);
 		std::string	get_error_path(void) const;
 
 		void	check_errors(void) const;

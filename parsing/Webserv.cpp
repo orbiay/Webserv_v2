@@ -16,6 +16,12 @@ Pserver::Pserver()
 {
 	this->end = 0;
 	this->nloc = 0;
+	this->lend = 0;
+	this->host = "";
+	this->port = 0;
+	this->cgi = false;
+	this->cgi_path = "";
+	this->cgi_extention = "";
 }
 
 const char *Pserver::SyntaxError::what() const throw()
@@ -43,6 +49,8 @@ void	Pserver::set_nLocation(std::ifstream &f)
 	{
 		getline(f, line);
 		{
+			if (line == "\tlend")
+				this->lend++;
 			if (line == "end")
 				return ;
 			if (line.compare(0, 9, "\tlocation") == 0)
@@ -116,7 +124,6 @@ void	Pserver::set_cgi(std::ifstream &rf)
 
 void	Pserver::set_method(std::ifstream &rf)
 {
-	this->cgi = false;
 	std::string	line;
 	size_t	GIT;
 	size_t	DELETE;
@@ -129,6 +136,8 @@ void	Pserver::set_method(std::ifstream &rf)
 			GIT = line.find("GIT");
 			DELETE = line.find("DELETE");
 			POST = line.find("POST");
+			if (GIT == std::string::npos || DELETE == std::string::npos || POST == std::string::npos)
+				throw (SyntaxError());
 			this->methods[0] = line.substr(GIT, 3);
 			this->methods[1] = line.substr(POST, 4);
 			this->methods[2] = line.substr(DELETE, 6);
@@ -150,7 +159,6 @@ void	Pserver::set_nserv(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			line = line.substr(i + 1, line.length());
-			std::cout << line << std::endl;
 			this->nserv = std::atoi(line.c_str());
 			return ;
 		}

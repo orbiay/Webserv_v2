@@ -225,7 +225,8 @@ void Response::Post(Server &server, int flag) {
 		if (flag == FILE) {
 			if (!client.enter)
 			{
-				client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+				if (!client.post_fd)
+					client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
 				std::cout << "post_fd 1 = " << client.post_fd << std::endl;
 				if (client.post_fd == -1) {
 					std::cout << "File Alredy Exists" << std::endl;

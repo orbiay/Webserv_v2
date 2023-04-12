@@ -8,7 +8,7 @@ std::string generateRandomString(int length) {
     const int charsetSize = sizeof(charset) - 1;
     std::string randomString(length, ' ');
 
-    std::srand(std::time(0)); // Seed the random number generator
+    std::srand(time(0)); // Seed the random number generator
 
     for (int i = 0; i < length; ++i) {
         randomString[i] = charset[std::rand() % charsetSize];
