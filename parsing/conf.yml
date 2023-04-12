@@ -4,9 +4,9 @@ server:
 	listen 127.0.0.255:8080
 	methods POST GIT DELETE
 	cgi: off
-			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
+			/Users/aomman/Desktop/Webserv_v2/cgi.php php
 	location /exampl:
-		root ./test
+		root ./test/home
 		upload on
 		return 200 /test0
 		index ok

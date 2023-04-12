@@ -12,7 +12,7 @@
 
 bool Http::finish = false;
 
-int	parsing(int argc, char **argv);
+int	parsing(int argc, char **argv, char **env);
 
 int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserver server)
 {
@@ -253,12 +253,13 @@ Server init_server(int id_servers,struct sockaddr_in addr,Pserver &server_config
 fd_set Server::current = Server::initializer();
 int Server::maxfd = 0;
 
-int main (int ac, char **av)
+int main (int ac, char **av, char **env)
 {
 	try
 	{
 		Config conf(av);
-		parsing (ac, av);
+		if (parsing (ac, av, env) == 1)
+			return (1);
 		int i = 0;
 		int num_srver = conf.s.size();
 		std::vector<struct sockaddr_in>  sed_struct;

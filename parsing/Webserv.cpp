@@ -73,7 +73,8 @@ void	Pserver::set_host(std::ifstream &rf)
 			if (i == std::string::npos)
 				throw(SyntaxError());
 			this->host = line.substr(8, i - 8);
-			this->port = std::atoi(line.substr(i + 1, line.length() - i).c_str());
+			this->ports = line.substr(i + 1, line.length() - i);
+			this->port = std::atoi(this->ports.c_str());
 			this->set_method(rf);
 			return ;
 		}
