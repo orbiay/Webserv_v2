@@ -3,8 +3,11 @@
 		"string": "cpp",
 		"iosfwd": "cpp",
 		"vector": "cpp",
+<<<<<<< HEAD
+=======
 		"ostream": "cpp",
 		"iostream": "cpp",
+>>>>>>> d09db8c7ee7f7c64a6336d05217193b23294de66
 		"__bit_reference": "cpp",
 		"__config": "cpp",
 		"__debug": "cpp",
@@ -45,6 +48,10 @@
 		"initializer_list": "cpp",
 		"iomanip": "cpp",
 		"ios": "cpp",
+<<<<<<< HEAD
+		"iostream": "cpp",
+=======
+>>>>>>> d09db8c7ee7f7c64a6336d05217193b23294de66
 		"istream": "cpp",
 		"iterator": "cpp",
 		"limits": "cpp",
@@ -55,6 +62,10 @@
 		"mutex": "cpp",
 		"new": "cpp",
 		"optional": "cpp",
+<<<<<<< HEAD
+		"ostream": "cpp",
+=======
+>>>>>>> d09db8c7ee7f7c64a6336d05217193b23294de66
 		"ratio": "cpp",
 		"sstream": "cpp",
 		"stack": "cpp",

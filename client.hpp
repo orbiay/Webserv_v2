@@ -34,7 +34,7 @@ class Client{
 	bool flag;
 	size_t crlf_pos;
 	size_t next_crlf_pos;
-	char *_hex;
+	char _hex[20];
 	size_t hex_len;
 	size_t chunk_size;
 	size_t content_length;
@@ -42,7 +42,7 @@ class Client{
 	std::string file_name;
 	int h;
 	char hex_c[10];
-	char *_body;
+	// char *_body;
 	std::string   sizefile;
     std::string   extension;
 	int post_fd;
@@ -50,6 +50,7 @@ class Client{
 
 	bool hex_ready;
 	int file;
+	int check;
 	
 	/*************************/
     std::string url;

@@ -198,12 +198,12 @@ void run_server(std::vector<Server> &server_list)
 					// std::cout<<"-----------------------"<<std::endl;
 					// std::cout<<client.request<<std::endl;
 					// std::cout<<"-----------------------"<<std::endl;
-					if (client.ready /*&& (!client.request.empty())*/)
-					{
-						// client.split_request(client.request);
-						// client.parse.parse_request(client.header);
-						// client.parse.display_request(client.parse);
-					}
+					// if (client.ready /*&& (!client.request.empty())*/)
+					// {
+					// 	// client.split_request(client.request);
+					// 	// client.parse.parse_request(client.header);
+					// 	// client.parse.display_request(client.parse);
+					// }
 					// else if (client.request.empty())
 					// {
 					// 	client.is_delete = true;
@@ -218,18 +218,19 @@ void run_server(std::vector<Server> &server_list)
 				// IF statement for Response.
 				else if(i >= 0 && client.ready && FD_ISSET(client.fd_client, &writable))
 				{
+					std::cout << "im here" << std::endl;
 					if (client.bodyReady) {
 						// std::cout << "heeeere\n" << std::endl;
 						client.parse.check_request(server, client);
-					}
-					if (client.is_delete == true)
-					{
-						//server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
-						close(client.fd_client);
-						FD_CLR(client.fd_client,&server.current);
-						server.clients.erase(std::next(server.clients.begin(), i));
-						std::cout << "The client droped secsusfully \n";
-						i--;
+						if (client.is_delete == true)
+						{
+							//server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
+							close(client.fd_client);
+							FD_CLR(client.fd_client,&server.current);
+							server.clients.erase(std::next(server.clients.begin(), i));
+							std::cout << "The client droped secsusfully \n";
+							i--;
+						}
 					}
 				}
 			}
