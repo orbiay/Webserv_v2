@@ -18,6 +18,7 @@ std::string generateRandomString(int length) {
 }
 
 Client::Client() {
+	read_size = 0;
 	address_length = sizeof(addresStorage);
 	ready = false;
 	start_writting = 1;
@@ -44,9 +45,9 @@ Client::Client() {
 	readyToParse = false;
 	// memset(_hex, 0, 1024);
 	// file.open("fcc");
-	std::string m = "";
+	std::string m = "data/";
 	file_name = m.append(generateRandomString(6));
-	file_name.append("");
+	file_name.append(".mp4");
 	std::cout << "fle_name = " << file_name << std::endl;
 	file = open(file_name.c_str(), O_CREAT | O_RDWR | O_APPEND, 0644);
 	std::cout << "file 1 = " << file << std::endl;

@@ -111,9 +111,21 @@ void handel_chunked(Client &client, char *_body, int i) {
 
 size_t	getFileSize(const std::string& name)
 {
-	struct stat	fileStat;
-	lstat(name.c_str(), &fileStat);
-	return fileStat.st_size;
+	// struct stat	fileStat;
+	// lstat(name.c_str(), &fileStat);
+	// return fileStat.st_size;
+	std::ifstream file(name, std::ifstream::ate | std::ifstream::binary);
+	size_t size = 0;
+    if (file.is_open())
+	{
+       	size = file.tellg();
+		file.close();
+	}
+    else {
+		file.close();
+		//exit(0);
+    }
+	return size;
 }
 
 char* substr_no_null(const char* str, int start, int length, int str_len) {
@@ -140,8 +152,10 @@ void Server::read_from_socket_client(Client &client)
 {
 	char line[1024];
 	memset(line,'\0',1024);
-	int i = recv(client.fd_client, line, 1023, 0);
+	int i  = recv(client.fd_client, line, 1023, 0);
+	std::cout << "i = " << i << std::endl;
 	line[i] = '\0';
+	// client.read_size += i;
 	// client.request += std::string(line);
 	// if (!client.request.c_str())
 	// {
@@ -160,7 +174,10 @@ void Server::read_from_socket_client(Client &client)
 			client.alrChecked = true;
 		}
 		else
+		{
+			client.is_delete = true;
 			return;
+		}
 		// if (!client.isChuncked)
 		// if (client.isChuncked)
 		// 	client.b_pos = client.ret + 2;
@@ -176,12 +193,24 @@ void Server::read_from_socket_client(Client &client)
 			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, holder, i - client.b_pos);
 			}
+			else {
+				close(client.file);
+				client.bodyReady = true;
+				client.ready = true;
+			}
 			client.j = 0;
 		}
 		else {
+
 			// std::cout << "file_size = " << getFileSize(client.file_name) << std::endl;
+			// std::cout << "Content-Length = " << client.parse._data["Content-Length"] << std::endl;
 			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, line, i);
+			}
+			else {
+				close(client.file);
+				client.bodyReady = true;
+				client.ready = true;
 			}
 		}
 			// client.body += _body;
@@ -196,6 +225,7 @@ void Server::read_from_socket_client(Client &client)
 			// std::string s =  _body.substr(client.b_pos, i);
 			// std::cout << "s = " << s << std::endl;
 			handel_chunked(client, holder, i - client.b_pos);
+			delete(holder);
 			client.j = 0;
 		}
 		else
@@ -205,8 +235,8 @@ void Server::read_from_socket_client(Client &client)
 			client.bodyReady = true;
 		}
 	} 
-
-	if (i != 1024) {
+	// std::cout << "251045223 = " << std::atoi(client.parse._data["Content-Length"].c_str())<< std::endl;
+	if (i < 1023 ) {
 		client.bodyReady = true;
 	    client.ready = true;
 	}
@@ -215,7 +245,7 @@ void Server::read_from_socket_client(Client &client)
 void Server::write_in_socket_client(std::string str, std::string file , Client &client)
 {
 	char *s;
-	s = (char *)malloc(sizeof(char) * 1024);
+	s = new char[1024];
     memset(s, '\0', 1024);
     int i = str.length();
     if (client.start_writting == 1)
@@ -239,7 +269,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     {
         client.is_delete = true;
         close(client.fd_client);
-        free(s);
+		delete(s);
         return;
     }
     if (i <= 0)
@@ -248,7 +278,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
         close(client.fd_client);
         return;
     }
-    free(s);
+   	delete(s);
 }
 
 
