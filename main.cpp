@@ -259,7 +259,6 @@ int main (int ac, char **av)
 	{
 		Config conf(av);
 		parsing (ac, av);
-		exit(0);
 		int i = 0;
 		int num_srver = conf.s.size();
 		std::vector<struct sockaddr_in>  sed_struct;

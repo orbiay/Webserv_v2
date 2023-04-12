@@ -41,5 +41,4 @@ void	cgi(Pserver &s)
 	dup2 (fd[0], STDIN_FILENO);
 	read (fd[0], &b, sizeof(int));
 	close (fd[0]);
-	std::cout << "--> " << b << std::endl;
 }

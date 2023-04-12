@@ -218,6 +218,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 	s = (char *)malloc(sizeof(char) * 1024);
     memset(s, '\0', 1024);
     int i = str.length();
+	//s = strdup(str.c_str());
     if (client.start_writting == 1)
     {
 	    client.fd_file = open (file.c_str(),O_RDONLY);
@@ -227,15 +228,17 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
            // exit(0);
         }
         client.start_writting = 0;
+		write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023));
+		return ;
     }
     else if (client.start_writting == 0)
     {
         i = read(client.fd_file,s,1023);
         // std::cout<<"i = "<<i<<std::endl;
-        str = s;
+        //str = s;
     }
     write(1,"\n",1);
-    if (write(client.fd_client,str.c_str(),i) < 1)
+    if (write(client.fd_client,s,strnlen(s,1023)) < 1)
     {
         client.is_delete = true;
         close(client.fd_client);

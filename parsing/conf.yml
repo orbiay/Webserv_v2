@@ -3,30 +3,28 @@ body_size 1000000
 server:
 	listen 127.0.0.255:8080
 	methods POST GIT DELETE
-	cgi: off
-			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
+	cgi: on
 	location /exampl:
 		root ./test
-		index f j h
-		index g
-		autoindex off
 		upload on
 		return 200 /test0
+		index ok
+		autoindex off
 		error_pages: 22
 			/path_for_error_file
 	lend
 	location /exampl1:
-		root /valid_path_file1
 		autoindex on
 		upload off
 		return 201 /test1
 		index file_name1
+		root /valid_path_file1
 		error_pages: 122
 			/path_for_error_file1
 	lend
 	location /var/www/html:
-		root /valid_path_file2
 		autoindex off
+		root /valid_path_file2
 		return 202 /test2
 		index file_name2
 		upload off
@@ -40,9 +38,9 @@ server:
 	cgi: off
 			/Users/orbiay/Desktop/Webserv_v2/cgi2.php php
 	location /exampls1l2:
-		root /valid_path_files2
 		index file_names2
 		autoindex on
+		root /valid_path_files2
 		upload on
 		return 205 /tests0l0
 		error_pages: 322

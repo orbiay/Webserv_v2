@@ -8,7 +8,7 @@ std::string generateRandomString(int length) {
     const int charsetSize = sizeof(charset) - 1;
     std::string randomString(length, ' ');
 
-    std::srand(std::time(0)); // Seed the random number generator
+    std::srand(time(0)); // Seed the random number generator
 
     for (int i = 0; i < length; ++i) {
         randomString[i] = charset[std::rand() % charsetSize];
@@ -44,7 +44,7 @@ Client::Client() {
 	readyToParse = false;
 	// memset(_hex, 0, 1024);
 	// file.open("fcc");
-	std::string m = "";
+	std::string m = "data/";
 	file_name = m.append(generateRandomString(6));
 	file_name.append("");
 	std::cout << "fle_name = " << file_name << std::endl;
