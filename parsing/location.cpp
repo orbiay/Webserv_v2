@@ -75,8 +75,8 @@ std::string	Location::set_values(std::string line)
 	size_t	start;
 	start = line.find("/");
 	if (start == std::string::npos)
-		throw(PathError());
-	this->line_val = line.substr(start+1, line.length());
+		throw(SyntaxError());
+	this->line_val = line.substr(start, line.length());
 	return (this->line_val);
 }
 

@@ -14,11 +14,12 @@
 #include"parsing/Webserv.hpp"
 #include"client.hpp"
 
-int	cgi_post(Pserver &s, Client &c, char **envm)
+int	cgi_post(Pserver &s, Client &c, char **envm = NULL)
 {
 	(void)c;
 	std::map<std::string, std::string> env;
 
+	env["HTTP_COOKIE"] = 
 	env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	env["DOCUMENT_ROOT"] = s.L[0].root_val;
 	env["HTTP_HOST"] = s.host;
@@ -74,7 +75,7 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
     while (!found_rn && count < size)
     {
         f.read(buffer + count, 1);
-        if (count > 0 && buffer[count] == '\r' && buffer[count + 1] == '\n')
+        if (count > 0 && buffer[count - 1] == '\r' && buffer[count] == '\n')
         {
             found_rn = true;
             count++;
