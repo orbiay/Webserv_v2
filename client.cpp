@@ -46,7 +46,7 @@ Client::Client() {
 	check = 0;
 	// memset(_hex, 0, 1024);
 	// file.open("fcc");
-	std::string m = "data/";
+	std::string m = "data/.";
 	file_name = m.append(generateRandomString(6));
 	file_name.append(".mp4");
 	std::cout << "fle_name = " << file_name << std::endl;

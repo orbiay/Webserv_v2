@@ -2,17 +2,10 @@ nserv: 2
 body_size 1000000
 server:
 	listen 127.0.0.255:8080
-<<<<<<< HEAD
-	methods POST GIT DELETE
+	methods POST GET DELETE
 	cgi: off
 			/Users/fbouanan/Desktop/lkhra/cgi.php php
 	location /:
-=======
-	methods POST GET DELETE
-	cgi: on
-			/Users/aomman/Desktop/Webserv_v2/php-cgi php
-	location /exampl:
->>>>>>> 0516b2086205c8f4e50abca78f20906538b8b2e0
 		root ./test/home
 		upload on
 		return 200 /test0
@@ -43,11 +36,7 @@ server:
 	listen 2.2.2.2:9090
 	methods POST GET DELETE
 	cgi: off
-<<<<<<< HEAD
 			/Users/fbouanan/Desktop/lkhra/cgi.php php
-=======
-			/Users/aomman/Desktop/Webserv_v2/cgi.php php
->>>>>>> 0516b2086205c8f4e50abca78f20906538b8b2e0
 	location /exampls1l2:
 		index file_names2
 		autoindex on

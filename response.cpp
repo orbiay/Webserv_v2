@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/13 13:46:43 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:33:16 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,34 +227,36 @@ void Response::Post(Server &server, int flag) {
 	if (server.server_config.L[0].upload) {
 		// std::cout << "upload" << std::endl;
 		if (flag == FILE) {
-			if (!client.enter)
-			{
-				if (!client.post_fd)
-					client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
-				// std::cout << "post_fd 1 = " << client.post_fd << std::endl;
-				if (client.post_fd == -1) {
-					std::cout << "File Alredy Exists" << std::endl;
-					server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 549\r\n\r\n","200exists.html",client);
-				}
-				client.enter = true;
-			}
+			rename(client.file_name.c_str(), "data/FILE_video.mp4");
+			// if (!client.enter)
+			// {
+				// if (!client.post_fd)
+				// 	client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+				// // std::cout << "post_fd 1 = " << client.post_fd << std::endl;
+				// if (client.post_fd == -1) {
+				// 	std::cout << "File Alredy Exists" << std::endl;
+				// 	server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 549\r\n\r\n","200exists.html",client);
+				// }
+				// client.enter = true;
+			// }
 			// int f = read_and_write(client);
 			// if (f < 1024) {
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 			// }
 		}
 		else if(flag == DIRE) {
-			std::cout << "is a directory\n";
 			if (is_index) {
-				if (!client.enter)
-				{
-					client.post_fd = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
-					client.enter = true;
-				}
-				int f = read_and_write(client);
-				if (f < 1024) {
-					server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
-				}
+				rename(client.file_name.c_str(), "data/DIR_video.mp4");
+				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
+				
+				// if (!client.enter)
+				// {
+				// 	client.post_fd = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
+				// 	client.enter = true;
+				// }
+				// int f = read_and_write(client);
+				// if (f < 1024) {
+				// }
 			}
 			else {
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
