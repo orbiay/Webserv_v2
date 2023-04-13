@@ -44,6 +44,7 @@ Client::Client() {
 	hex_len = 0;
 	readyToParse = false;
 	check = 0;
+	checker = false;
 	// memset(_hex, 0, 1024);
 	// file.open("fcc");
 	std::string m = "data/";

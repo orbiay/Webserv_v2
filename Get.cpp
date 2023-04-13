@@ -62,10 +62,11 @@ void init_vars(std::string &root,bool &auto_index,std::string &default_index,Ser
 	(void)server;
 	(void)default_index;
 	(void)client;
-	root = "/Users/orbiay/Desktop/Webserv_v2";
+	root = client.location.root_val;
+	addslash(root);
 	auto_index = true;
-	client.path = root + client.parse._data["path"];
-	// default_index = "login.html";
+	client.path = root + client.location.location_val;
+	default_index = client.location.index_val;
 }
 
 void Response::file_handler(Server &server)
@@ -120,9 +121,10 @@ void Response::directory_handler(Server &server)
 
 void Response::Get(Server &server) {
 
-	std::string root = "/Users/orbiay/Desktop/Webserv_v2";
-	client.path = root + client.parse._data["path"];
-	client.extension = client.parse._data["path"];
+	std::string root = client.location.root_val;
+	addslash(root);
+	client.path = root + client.location.location_val;
+	client.extension = client.location.location_val;
     client.content_type = getContentType(server);
 	std::ifstream infile(client.path);
 	//addslash(root);

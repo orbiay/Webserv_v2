@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgi_post.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 17:34:45 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/11 17:34:46 by aomman           ###   ########.fr       */
+/*   Updated: 2023/04/13 16:36:19 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 
 int	cgi_post(Pserver &s, Client &c, char **envm)
 {
-	(void)c;
 	std::map<std::string, std::string> env;
-
+	env["HTTP_ACCEPT"] = c.parse._data["Accept"];
+	env["HTTP_ACCEPT_ENCODING"] = c.parse._data["Accept-Encoding"];
+	env["HTTP_HOST"] = c.parse._data["Host"];
 	env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	env["DOCUMENT_ROOT"] = s.L[0].root_val;
-	env["HTTP_HOST"] = s.host;
 	env["REQUEST_METHOD"] = "POST";
 	env["REQUEST_URI"] = s.cgi_path;
 	env["SCRIPT_FILENAME"] = s.cgi_path;
@@ -29,7 +29,7 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
 	env["SERVER_PORT"] = s.ports;
 	env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	std::map<std::string, std::string>::iterator it;
-	std::string	envp[10];
+	std::string	envp[12];
 	it = env.begin();
 	int	i;
 	int	j = 0;
@@ -44,24 +44,27 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
 	}
 	i = 0;
 	j--;
-	while (i <= j)
+	while (i <= j && envm != NULL)
 	{
 		envm[i] = (char *)envp[i].c_str();
-		std::cout << envm[i] << std::endl;
+		// std::cout << envm[i] << std::endl;
 		i++;
 	}
 	std::string	line;
 	std::ifstream f (s.cgi_path);
 	if (!f.is_open())
+	{
+		std::cout << "Unable to open file\n";		
 		return (1);
+	}
 	std::ofstream body("rendom.txt", std::ios::out);
 	struct stat buff;
 	int	st = stat (s.cgi_path.c_str(), &buff);
-	//std::cout << "------------>" << buff.st_size << std::endl;
+	// std::cout << "------------>" << buff.st_size << std::endl;
 	(void)st;
     if (!f.is_open())
     {
-        std::cout << "Unable to open file\n";
+        std::cout << "Unable to open file" << std::endl;
         return 1;
     }
     f.seekg(0, std::ios::end);
@@ -74,7 +77,7 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
     while (!found_rn && count < size)
     {
         f.read(buffer + count, 1);
-        if (count > 0 && buffer[count] == '\r' && buffer[count + 1] == '\n')
+        if (count > 0 && buffer[count - 1] == '\r' && buffer[count] == '\n')
         {
             found_rn = true;
             count++;
@@ -82,21 +85,29 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
 		else
 			count++;
     }
-	std::string output;
 	if (found_rn == 1)
 	{
 		std::streamsize remains = size - count;
 		char *ramain_buff = new char[remains];
 		f.read(ramain_buff, remains);
 		std::string remaining_content(ramain_buff, remains);
-		output = remaining_content;
-		//std::cout << remaining_content << std::endl;
+		body << remaining_content;
 		delete []ramain_buff;
 	}
-    std::cout.write (buffer, count);
+    //std::cout.write (buffer, count);
 	int	fd[2];
 	char	*argc_s[3];
-	argc_s[0] = (char *)"/usr/bin/php";
+	std::cout << s.cgi_extention << std::endl;
+	if (s.cgi_extention == "php")
+		argc_s[0] = (char *)"/usr/bin/php";
+	if (s.cgi_extention == "cpp")
+		argc_s[0] = (char *)"/usr/bin/c++";
+	if (s.cgi_extention == "js")
+		argc_s[0] = (char *)"/usr/bin/node";
+	if (s.cgi_extention == "py")
+		argc_s[0] = (char *)"/usr/bin/python";
+	if (s.cgi_extention == "c")
+		argc_s[0] = (char *)"/usr/bin/gcc";
 	argc_s[1] = (char *)s.cgi_path.c_str();
 	argc_s[2] = NULL;
 	if (access(argc_s[1], F_OK) == 0)
@@ -126,4 +137,5 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
 	return (0);
 	delete[] buffer;
     f.close();
+	body.close();
 }

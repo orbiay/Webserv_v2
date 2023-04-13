@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+ /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parseRequest.cpp                                   :+:      :+:    :+:   */
@@ -74,6 +74,17 @@ void	parseRequest::parse_infos(std::string _data)
 	else if (output[0] == "Transfer-Encoding:") {
 		this->_data.insert(std::make_pair("Transfer-Encoding", output[1]));
 	}
+	else if (output[0] == "Accept:") {
+		this->_data.insert(std::make_pair("Accept", output[1]));
+	}
+	else if (output[0] == "Accept-Encoding:")
+	{
+		this->_data.insert(std::make_pair("Accept-Encoding", output[0]));
+	}
+	else if (output[0] == "Host:")
+	{
+		this->_data.insert(std::make_pair("Host", output[1]));
+	}
 }
 
 void	parseRequest::save_body(std::string req) {
@@ -133,14 +144,24 @@ int check_url_size (std::string url) {
 	return (0);
 }
 
-int	matched_location(Server &server ,std::string url)
+std::string get_pure_one(std::string &location_val,std::string url)
 {
-	(void)url;
+	std::string::iterator c = url.begin() + location_val.length();
+	c++;
+	std::string str;
+	std::cout<<"c = "<<*c<<std::endl;
+	for(;c != url.end();c++)
+		str.push_back(*c);
+	return str;
+}
+
+int	matched_location(Server &server ,std::string url,Client &client)
+{
 	std::cout << "url = " << url << std::endl;
 	int i = 0;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
 	std::vector<size_t> vec;
-	Location &save = *it;
+	Location save;
 	bool flag = false;
 	while (it != server.server_config.L.end()) {
 		i = 0;
@@ -153,14 +174,19 @@ int	matched_location(Server &server ,std::string url)
 				save = loc;
 				flag = true;
 			}
-			if (loc.location_val.length() > save.location_val.length())
+			if (loc.location_val.length() >= save.location_val.length())
+			{
 				save = loc;
+			}
 		}
 		it++;
 	}
-	std::cout<<"max value=======>"<<save.location_val<<std::endl;
-	exit(0);
-	return (flag);
+	client.location = save;
+	client.location.location_val = get_pure_one(client.location.location_val,url);
+	std::cout<<"locval =======>"<<client.location.location_val<<std::endl;
+	if (save.location_val.empty())
+		return (-1);
+	return (0);
 }
 		//-------------------------------------------------------------------------------------------
 
@@ -222,28 +248,31 @@ void parseRequest::display_request(parseRequest parse)
 }
 
 void	parseRequest::check_request(Server &server,Client &iter) {
-	if (this->_data["method"] == "POST") {
-		if (this->_data["Content-Length"].length() == 1){
-			printf("here\n");
+	if (!iter.checker) {
+		if (this->_data["method"] == "POST") {
+			if (this->_data["Content-Length"].length() == 1){
+				printf("here\n");
+				server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+				return ;
+			}
+		}
+		else if (check_url(this->_data["path"])) {
 			server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+			return;
+		}
+		else if (check_url_size(this->_data["path"])) {
+			server.write_in_socket_client("HTTP/1.1 414 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","414error.html", iter);
 			return ;
 		}
-	}
-	else if (check_url(this->_data["path"])) {
-		server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
-		return;
-	}
-	else if (check_url_size(this->_data["path"])) {
-		server.write_in_socket_client("HTTP/1.1 414 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","414error.html", iter);
-		return ;
-	}
-		//---------------------------------this part need confg file------------------------------------>
-	// request body larger then client max body size in config file
-	// if (server.server_config.L[0].body_size)
-	else if (matched_location(server ,this->_data["path"])) {
-    	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
-	}
+			//---------------------------------this part need confg file------------------------------------>
+		// request body larger then client max body size in config file
+		// if (server.server_config.L[0].body_size)
+		else if (matched_location(server ,this->_data["path"],iter)) {
+    		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
+		}
 		//---------------------------------------------------------------------------------------------->
+		iter.checker = true;
+	}	
 	check_methods(server, iter);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 14:40:01 by aomman            #+#    #+#             */
-/*   Updated: 2023/03/19 14:10:00 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/13 13:41:41 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int parsing(int argc, char **argv, char **env)
 		(void)env;
 		(void)argc;
 		Config c(argv);
+		std::cout << c.s[0].methods[0] << std::endl;
 		if (cgi_post(c.s[0], c_c, env) == 1)
 			return (1);
 		return (0);

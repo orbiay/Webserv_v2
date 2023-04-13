@@ -6,7 +6,7 @@ server:
 	cgi: off
 			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
 	location /var:
-		root ./test/home
+		root /Users/orbiay/Desktop
 		upload on
 		return 200 /test0
 		index ok
@@ -19,13 +19,13 @@ server:
 		upload off
 		return 201 /test1
 		index file_name1
-		root /valid_path_file1
+		root /Users/orbiay/Desktop
 		error_pages: 122
 			/path_for_error_file1
 	lend
 	location /var/www/html:
 		autoindex off
-		root /valid_path_file2
+		root /Users/orbiay/Desktop
 		return 202 /test2
 		index file_name2
 		upload off

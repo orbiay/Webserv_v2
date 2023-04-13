@@ -6,13 +6,8 @@
 #include"./parsing/Webserv.hpp"
 
 #define num_of_servers 5
-
-
-
-
+int parsing(int argc, char **argv, char **env);
 bool Http::finish = false;
-
-int	parsing(int argc, char **argv, char **env);
 
 int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserver server)
 {
@@ -218,7 +213,6 @@ void run_server(std::vector<Server> &server_list)
 				// IF statement for Response.
 				else if(i >= 0 && client.ready && FD_ISSET(client.fd_client, &writable))
 				{
-					std::cout << "im here" << std::endl;
 					if (client.bodyReady) {
 						// std::cout << "heeeere\n" << std::endl;
 						client.parse.check_request(server, client);

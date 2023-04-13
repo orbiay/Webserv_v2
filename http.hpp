@@ -29,6 +29,9 @@
 #include <cerrno>
 #include <cstdlib>
 #include <signal.h>
+#include "parsing/location.hpp"
+int	cgi_post(Pserver &s, Client &c, char **envm = NULL);
+
 #define DIRE 1
 #define FILE 2
 typedef struct s_hcode {

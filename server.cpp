@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:12:46 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/12 07:56:12 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:33:09 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,6 @@ void handel_chunked(Client &client, char *_body, int i) {
 			client.hex_len = 0;
 			memset(client._hex, 0, 20);
 			if (!client.chunk_size) {
-				printf("here\n");
-				std::cout << client.check <<std::endl;
 				close(client.file);
 				client.bodyReady = true;
 				client.ready = true;
@@ -169,8 +167,15 @@ void Server::read_from_socket_client(Client &client)
 	char line[10240];
 	memset(line,'\0', 10240);
 	int i  = recv(client.fd_client, line, 10240, 0);
-	client.check += i;
+	// client.check += i;
 	std::cout << "i = " << i << std::endl;
+	// if (i < 1024) {
+	// 	client.bodyReady = true;
+	// 	client.ready = true;
+	// 	// client.is_delete = true;
+	// 	return;
+	// 	// close(client.fd_client);
+	// }
 	// line[i] = '\0';
 	// client.read_size += i;
 	// client.request += std::string(line);
@@ -184,6 +189,7 @@ void Server::read_from_socket_client(Client &client)
 		client.ret = is_carriage(std::string(line), client);
 		if (client.readyToParse) {
 			client.header = std::string(line).substr(0, client.ret);
+			std::cout << "header = " << client.header.length() << std::endl;
 			client.parse.parse_request(client.header);
 			client.b_pos = client.ret + 4;
 			client.isChuncked = checkifchuncked(client.header);
@@ -200,15 +206,20 @@ void Server::read_from_socket_client(Client &client)
 		// 	client.b_pos = client.ret + 2;
 			
 	}
-
 	if (!client.isChuncked) {
 		// std::string _body(line);
 		if (client.j) {
 			// std::string holder = _body.substr(client.b_pos, i);
 			char *holder;
 			holder = substr_no_null(line, client.b_pos, i, i);
+			std::cout <<  (size_t)std::atoi(client.parse._data["Content-Length"].c_str()) << std::endl;
 			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, holder, i - client.b_pos);
+				if (getFileSize(client.file_name) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+					close(client.file);
+					client.bodyReady = true;
+					client.ready = true;
+				}
 			}
 			else {
 				close(client.file);
@@ -219,16 +230,24 @@ void Server::read_from_socket_client(Client &client)
 		}
 		else {
 
-			// std::cout << "file_size = " << getFileSize(client.file_name) << std::endl;
-			// std::cout << "Content-Length = " << client.parse._data["Content-Length"] << std::endl;
+			// std::cout << "file_size = " << getFileSize(client.file_name)<< std::endl;
+			// std::cout << "Content-Length = " << (size_t)std::atoi(client.parse._data["Content-Length"].c_str()) << std::endl;
+				// printf("here\n");
 			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, line, i);
+				if (getFileSize(client.file_name) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
+					printf("here\n");
+					close(client.file);
+					client.bodyReady = true;
+					client.ready = true;
+				}
 			}
-			else {
-				close(client.file);
-				client.bodyReady = true;
-				client.ready = true;
-			}
+			// else {
+			// 	printf("here\n");
+			// 	close(client.file);
+			// 	client.bodyReady = true;
+			// 	client.ready = true;
+			// }
 		}
 			// client.body += _body;
 	}
@@ -253,13 +272,6 @@ void Server::read_from_socket_client(Client &client)
 		// 	client.bodyReady = true;
 		// }
 	} 
-	if (i < 10240) {
-		client.bodyReady = true;
-	    client.ready = true;
-		// client.is_delete = true;
-		return;
-		// close(client.fd_client);
-	}
 	// std::cout << "251045223 = " << std::atoi(client.parse._data["Content-Length"].c_str())<< std::endl;
 }
 
