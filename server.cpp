@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:12:46 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/13 17:38:30 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/13 20:43:18 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,9 @@ void Server::read_from_socket_client(Client &client)
 		client.ret = is_carriage(std::string(line), client);
 		if (client.readyToParse) {
 			client.header = std::string(line).substr(0, client.ret);
-			std::cout << "header = " << client.header.length() << std::endl;
+			// std::cout << "header = " << client.header.length() << std::endl;
 			client.parse.parse_request(client.header);
+			std::cout << "content = " << client.parse._data["Content-Length"] << std::endl;
 			client.b_pos = client.ret + 4;
 			client.isChuncked = checkifchuncked(client.header);
 			client.j = 1;
