@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:12:46 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/13 16:33:09 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:38:30 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,9 @@ bool findHex(Client &client) {
 }
 
 void handel_chunked(Client &client, char *_body, int i) {
-	int reades = 0;;
-	// client._body = _body;
-	// std::string n_hex;
-	// n_hex.reserve(20);
-	// client._hex = (char *)n_hex.c_str();
+	int reades = 0;
 	client.hex_ready = false;
 	while (reades < i) {
-	// std::cout << "I'm here motherfucker!" << std::endl;
 		if (!client.chunk_size) {
 			while (reades < i) {
 				client._hex[client.hex_len++] = _body[reades++];
@@ -91,7 +86,6 @@ void handel_chunked(Client &client, char *_body, int i) {
 			}
 			if (!client.hex_ready)
 				break;
-			// std::cout << "|" << client._hex <<c "|" << std::endl;
 			client.chunk_size = std::strtoul(client._hex, nullptr, 16);
 			client.hex_len = 0;
 			memset(client._hex, 0, 20);
@@ -103,31 +97,15 @@ void handel_chunked(Client &client, char *_body, int i) {
 			}
 		}
 		while (reades < i && client.chunk_size) {
-			// std::cout << "|" << client._body + reades << "|" << std::endl;
 			write(client.file ,_body + reades, 1);
 			client.chunk_size--;
 			reades++;
 		}
 	}
-	// delete(n_hex);
 }
-
-
-// size_t getFileSize(int fd) {
-//     long size;
-//     if (lseek(fd, 0, SEEK_END) != -1) { // move file pointer to the end of file
-//         size = lseek(fd, 0, SEEK_CUR); // get current file pointer position, which is the size of the file
-//         lseek(fd, 0, SEEK_SET); // move file pointer back to the beginning of the file
-//         return static_cast<size_t>(size); // convert size to size_t and return
-//     }
-//     // return 0 if lseek failed
-// }
 
 size_t	getFileSize(const std::string& name)
 {
-	// struct stat	fileStat;
-	// lstat(name.c_str(), &fileStat);
-	// return fileStat.st_size;
 	std::ifstream file(name, std::ifstream::ate | std::ifstream::binary);
 	size_t size = 0;
     if (file.is_open())
@@ -137,7 +115,6 @@ size_t	getFileSize(const std::string& name)
 	}
     else {
 		file.close();
-		//exit(0);
     }
 	return size;
 }
@@ -167,24 +144,8 @@ void Server::read_from_socket_client(Client &client)
 	char line[10240];
 	memset(line,'\0', 10240);
 	int i  = recv(client.fd_client, line, 10240, 0);
-	// client.check += i;
-	std::cout << "i = " << i << std::endl;
-	// if (i < 1024) {
-	// 	client.bodyReady = true;
-	// 	client.ready = true;
-	// 	// client.is_delete = true;
-	// 	return;
-	// 	// close(client.fd_client);
-	// }
-	// line[i] = '\0';
-	// client.read_size += i;
-	// client.request += std::string(line);
-	// if (!client.request.c_str())
-	// {
-	//     std::cerr<<"Dosen't found any request to work on it";
-	//     exit(1);
-	// }
-	// if rtequest doesn't exist chenge is_delete variable to true for drop it.
+
+	// if request doesn't exist chenge is_delete variable to true for drop it.
 	if (!client.alrChecked) {
 		client.ret = is_carriage(std::string(line), client);
 		if (client.readyToParse) {
@@ -196,20 +157,14 @@ void Server::read_from_socket_client(Client &client)
 			client.j = 1;
 			client.alrChecked = true;
 		}
-		else
-		{
+		else{
 			client.is_delete = true;
 			return;
 		}
-		// if (!client.isChuncked)
-		// if (client.isChuncked)
-		// 	client.b_pos = client.ret + 2;
 			
 	}
 	if (!client.isChuncked) {
-		// std::string _body(line);
 		if (client.j) {
-			// std::string holder = _body.substr(client.b_pos, i);
 			char *holder;
 			holder = substr_no_null(line, client.b_pos, i, i);
 			std::cout <<  (size_t)std::atoi(client.parse._data["Content-Length"].c_str()) << std::endl;
@@ -229,37 +184,26 @@ void Server::read_from_socket_client(Client &client)
 			client.j = 0;
 		}
 		else {
-
-			// std::cout << "file_size = " << getFileSize(client.file_name)<< std::endl;
-			// std::cout << "Content-Length = " << (size_t)std::atoi(client.parse._data["Content-Length"].c_str()) << std::endl;
-				// printf("here\n");
 			if (getFileSize(client.file_name) < (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
 				write(client.file, line, i);
 				if (getFileSize(client.file_name) == (size_t)std::atoi(client.parse._data["Content-Length"].c_str())) {
-					printf("here\n");
 					close(client.file);
 					client.bodyReady = true;
 					client.ready = true;
 				}
 			}
 			// else {
-			// 	printf("here\n");
 			// 	close(client.file);
 			// 	client.bodyReady = true;
 			// 	client.ready = true;
 			// }
 		}
-			// client.body += _body;
 	}
 	else if (client.isChuncked) {
-		// std::string _body(line);
 		if (client.j) {
-			// printf("here\n");
 			client.b_pos -=2;
 			char *holder;
 			holder = substr_no_null(line, client.b_pos, i, i);
-			// std::string s =  _body.substr(client.b_pos, i);
-			// std::cout << "s = " << s << std::endl;
 			handel_chunked(client, holder, i - client.b_pos);
 			delete(holder);
 			client.j = 0;
@@ -267,12 +211,7 @@ void Server::read_from_socket_client(Client &client)
 		else {
 			handel_chunked(client, line, i);
 		}
-		// if (client.chunk_size == 0) {
-		// 	close(client.file);
-		// 	client.bodyReady = true;
-		// }
-	} 
-	// std::cout << "251045223 = " << std::atoi(client.parse._data["Content-Length"].c_str())<< std::endl;
+	}
 }
 
 void Server::write_in_socket_client(std::string str, std::string file , Client &client)
@@ -281,14 +220,11 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 	s = new char[1024];
     memset(s, '\0', 1024);
     int i = str.length();
-	//s = strdup(str.c_str());
     if (client.start_writting == 1)
     {
 	    client.fd_file = open (file.c_str(),O_RDONLY);
-        if (client.fd_file == -1)
-        {
+        if (client.fd_file == -1){
             client.is_delete = true;
-           // exit(0);
         }
         client.start_writting = 0;
 		write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023));
@@ -297,9 +233,6 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     else if (client.start_writting == 0)
     {
         i = read(client.fd_file,s,1023);
-        //std::cout<<"read = "<<i<<std::endl;
-		// write(1,s,strnlen(s,1023));
-        //str = s;
     }
     // write(1,"\n",1);
 	int b = send(client.fd_client,s,i,0);

@@ -2,11 +2,19 @@ nserv: 2
 body_size 1000000
 server:
 	listen 127.0.0.255:8080
+<<<<<<< HEAD
 	methods POST GIT DELETE
 	cgi: off
 			/Users/orbiay/Desktop/Webserv_v2/cgi.php php
 	location /var:
 		root /Users/orbiay/Desktop
+=======
+	methods POST GET DELETE
+	cgi: off
+			/Users/fbouanan/Desktop/lkhra/cgi.php php
+	location /:
+		root ./test/home
+>>>>>>> 3b856ab82d79b0bdef970027ddaac604508c1488
 		upload on
 		return 200 /test0
 		index ok
@@ -37,7 +45,11 @@ server:
 	listen 2.2.2.2:9090
 	methods POST GIT DELETE
 	cgi: off
+<<<<<<< HEAD
 			/Users/orbiay/Desktop/Webserv_v2/cgi2.php php
+=======
+			/Users/fbouanan/Desktop/lkhra/cgi.php php
+>>>>>>> 3b856ab82d79b0bdef970027ddaac604508c1488
 	location /exampls1l2:
 		index file_names2
 		autoindex on
