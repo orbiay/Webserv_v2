@@ -18,6 +18,7 @@ class Server{
     unsigned int     sizeof_struct;
     static int maxfd;
     Pserver server_config;
+    
     static fd_set initializer();
 };
 

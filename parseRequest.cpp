@@ -136,39 +136,31 @@ int check_url_size (std::string url) {
 int	matched_location(Server &server ,std::string url)
 {
 	(void)url;
-	// std::cout << "url = " << url << std::endl;
+	std::cout << "url = " << url << std::endl;
+	int i = 0;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
+	std::vector<size_t> vec;
+	Location &save = *it;
+	bool flag = false;
 	while (it != server.server_config.L.end()) {
-		// std::cout << "location = " << it->location_val <<std::endl;
+		i = 0;
+		Location &loc = *it;
+		size_t pos = url.find(loc.location_val);
+		if (pos != std::string::npos)
+		{
+			if (!flag)
+			{
+				save = loc;
+				flag = true;
+			}
+			if (loc.location_val.length() > save.location_val.length())
+				save = loc;
+		}
 		it++;
 	}
-
-
-
-
-
-
-	// t_hcode g_v;
-	// g_v.location = "/example";
-	// g_v.root = "/var/www/html";
-
-	// std::size_t pos = url.find(g_v.location);
-
-	// if (pos == 0) {
-	// 	std::string tmp = url.substr(g_v.location.length(), url.length());
-	// 	g_v.root.insert(g_v.root.length(), tmp);
-	// 	if (access(g_v.root.c_str(), R_OK) == -1) {
-	// 		return (1);
-	// 	}
-	// 	else
-	// 		return 0;
-	// }
-	
-	// if (pos == std::string::npos) {
-	// 	std::cout << "invalid url" << std::endl;
-	// 	return (1);
-	// }
-	return (0);
+	std::cout<<"max value=======>"<<save.location_val<<std::endl;
+	exit(0);
+	return (flag);
 }
 		//-------------------------------------------------------------------------------------------
 

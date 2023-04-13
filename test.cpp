@@ -19,12 +19,20 @@
 
 using namespace std;
 
+#include <iostream>
+#include <string>
+
 int main() {
-   int fd = open (".f", O_CREAT | O_RDWR );
-   char *str = new char[1024];
-   int i = read(fd,str,1024);
-   str[i] = 0;
-   std::cout<<str;
+    std::string str = "Hello, world!";
+    std::string subStr = "world";
+
+    size_t found = str.find(subStr);
+
+    if (found != std::string::npos) {
+        std::cout << "Substring found at position " << found << std::endl;
+    } else {
+        std::cout << "Substring not found" << std::endl;
+    }
+
     return 0;
 }
-

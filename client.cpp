@@ -43,14 +43,15 @@ Client::Client() {
 	next_crlf_pos = 0;
 	hex_len = 0;
 	readyToParse = false;
+	check = 0;
 	// memset(_hex, 0, 1024);
 	// file.open("fcc");
 	std::string m = "data/";
 	file_name = m.append(generateRandomString(6));
 	file_name.append(".mp4");
-	std::cout << "fle_name = " << file_name << std::endl;
+	//std::cout << "fle_name = " << file_name << std::endl;
 	file = open(file_name.c_str(), O_CREAT | O_RDWR | O_APPEND, 0644);
-	std::cout << "file 1 = " << file << std::endl;
+	// << "file 1 = " << file << std::endl;
 }
 
 Client::~Client() {

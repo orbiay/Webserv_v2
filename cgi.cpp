@@ -12,9 +12,11 @@
 
 #include"parsing/config.hpp"
 #include"parsing/Webserv.hpp"
+#include"client.hpp"
 
-void	cgi(Pserver &s)
+void	cgi(Pserver &s, Client &c)
 {
+	(void)c;
 	int	fd[2];
 	char	*argc_s[3];
 	argc_s[0] = (char *)"/usr/bin/php";

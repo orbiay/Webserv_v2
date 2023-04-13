@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/06 20:21:02 by aomman           ###   ########.fr       */
+/*   Updated: 2023/04/12 05:00:10 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ std::string	Location::set_values(std::string line)
 	size_t	start;
 	start = line.find("/");
 	if (start == std::string::npos)
-		throw(PathError());
-	this->line_val = line.substr(start+1, line.length());
+		throw(SyntaxError());
+	this->line_val = line.substr(start, line.length());
 	return (this->line_val);
 }
 

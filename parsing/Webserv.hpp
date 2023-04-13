@@ -21,6 +21,7 @@ class Pserver
 		std::string	server;
 	public :
 		std::string	host;
+		std::string	ports;
 		int			nserv;
 		int			port;
 		int			nloc;
