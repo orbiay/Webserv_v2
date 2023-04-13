@@ -74,6 +74,17 @@ void	parseRequest::parse_infos(std::string _data)
 	else if (output[0] == "Transfer-Encoding:") {
 		this->_data.insert(std::make_pair("Transfer-Encoding", output[1]));
 	}
+	else if (output[0] == "Accept:") {
+		this->_data.insert(std::make_pair("Accept", output[1]));
+	}
+	else if (output[0] == "Accept-Encoding:")
+	{
+		this->_data.insert(std::make_pair("Accept-Encoding", output[0]));
+	}
+	else if (output[0] == "Host:")
+	{
+		this->_data.insert(std::make_pair("Host", output[1]));
+	}
 }
 
 void	parseRequest::save_body(std::string req) {

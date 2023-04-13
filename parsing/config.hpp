@@ -66,6 +66,7 @@ class Config
 		std::string	get_location() const;
 		void	check_yml(char *str);
 		void	set_body_size(std::ifstream &rf);
+		void	server_methods(Pserver serv);
 		~Config();
 };
 #endif

@@ -25,7 +25,8 @@ int parsing(int argc, char **argv, char **env)
 		(void)env;
 		(void)argc;
 		Config c(argv);
-		if (cgi_post(c.s[1], c_c, env) == 1)
+		std::cout << c.s[0].methods[0] << std::endl;
+		if (cgi_post(c.s[0], c_c, env) == 1)
 			return (1);
 		return (0);
 	}

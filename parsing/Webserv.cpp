@@ -100,6 +100,8 @@ void	Pserver::set_cgi_path(std::ifstream &rf)
 			this->cgi_extention = line.substr(j + 1);
 			return ;
 		}
+		else
+			throw (SyntaxError());
 	}
 }
 
@@ -134,14 +136,21 @@ void	Pserver::set_method(std::ifstream &rf)
 		getline(rf, line);
 		if (line.compare(0, 8, "\tmethods") == 0)
 		{
-			GIT = line.find("GIT");
-			DELETE = line.find("DELETE");
+			GIT = line.find("GET");
+			if (GIT == std::string::npos)
+				this->methods[0] = "";
+			else
+				this->methods[0] = this->methods[0] = line.substr(GIT, 3);
 			POST = line.find("POST");
-			if (GIT == std::string::npos || DELETE == std::string::npos || POST == std::string::npos)
-				throw (SyntaxError());
-			this->methods[0] = line.substr(GIT, 3);
-			this->methods[1] = line.substr(POST, 4);
-			this->methods[2] = line.substr(DELETE, 6);
+			if (POST == std::string::npos)
+				this->methods[1] = "";
+			else
+				this->methods[1] = line.substr(POST, 4);
+			DELETE = line.find("DELETE");
+			if (DELETE == std::string::npos)
+				this->methods[2] = "";
+			else
+				this->methods[2] = line.substr(DELETE, 6);
 			this->set_cgi (rf);
 			return ;
 		}
