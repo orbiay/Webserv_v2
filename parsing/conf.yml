@@ -9,7 +9,6 @@ server:
 		root ./test/home
 		upload on
 		return 200 /test0
-		index ok
 		autoindex off
 		error_pages: 22
 			/path_for_error_file
@@ -37,7 +36,7 @@ server:
 	listen 2.2.2.2:9090
 	methods POST GIT DELETE
 	cgi: off
-				/Users/fbouanan/Desktop/lkhra/cgi.php php
+			/Users/fbouanan/Desktop/lkhra/cgi.php php
 	location /exampls1l2:
 		index file_names2
 		autoindex on

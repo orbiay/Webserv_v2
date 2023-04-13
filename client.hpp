@@ -57,7 +57,7 @@ class Client{
     std::string client_header;
     std::string content_type;
 	std::string path;
-	Location location;
+	// Location location;
     /*************************/
 	socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;

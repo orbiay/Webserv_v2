@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgi_post.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 17:34:45 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/11 17:34:46 by aomman           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:44:09 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 #include"parsing/Webserv.hpp"
 #include"client.hpp"
 
-int	cgi_post(Pserver &s, Client &c, char **envm)
+int	cgi_post(Pserver &s, Client &c, char **envm = NULL)
 {
 	(void)c;
 	std::map<std::string, std::string> env;
 
+	// env["HTTP_COOKIE"] = 
 	env["GATEWAY_INTERFACE"] = "CGI/1.1";
 	env["DOCUMENT_ROOT"] = s.L[0].root_val;
 	env["HTTP_HOST"] = s.host;
@@ -47,17 +48,20 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
 	while (i <= j)
 	{
 		envm[i] = (char *)envp[i].c_str();
-		std::cout << envm[i] << std::endl;
+		// std::cout << envm[i] << std::endl;
 		i++;
 	}
 	std::string	line;
 	std::ifstream f (s.cgi_path);
 	if (!f.is_open())
+	{
+		std::cout << "Unable to open file\n";		
 		return (1);
+	}
 	std::ofstream body("rendom.txt", std::ios::out);
 	struct stat buff;
 	int	st = stat (s.cgi_path.c_str(), &buff);
-	std::cout << "------------>" << buff.st_size << std::endl;
+	// std::cout << "------------>" << buff.st_size << std::endl;
 	(void)st;
     if (!f.is_open())
     {
@@ -74,7 +78,7 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
     while (!found_rn && count < size)
     {
         f.read(buffer + count, 1);
-        if (count > 0 && buffer[count] == '\r' && buffer[count + 1] == '\n')
+        if (count > 0 && buffer[count - 1] == '\r' && buffer[count] == '\n')
         {
             found_rn = true;
             count++;
@@ -90,10 +94,10 @@ int	cgi_post(Pserver &s, Client &c, char **envm)
 		f.read(ramain_buff, remains);
 		std::string remaining_content(ramain_buff, remains);
 		output = remaining_content;
-		std::cout << remaining_content << std::endl;
+		// std::cout << remaining_content << std::endl;
 		delete []ramain_buff;
 	}
-    std::cout.write (buffer, count);
+    // std::cout.write (buffer, count);
 	int	fd[2];
 	char	*argc_s[3];
 	argc_s[0] = (char *)"/usr/bin/php";

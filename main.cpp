@@ -218,7 +218,6 @@ void run_server(std::vector<Server> &server_list)
 				// IF statement for Response.
 				else if(i >= 0 && client.ready && FD_ISSET(client.fd_client, &writable))
 				{
-					std::cout << "im here" << std::endl;
 					if (client.bodyReady) {
 						// std::cout << "heeeere\n" << std::endl;
 						client.parse.check_request(server, client);
