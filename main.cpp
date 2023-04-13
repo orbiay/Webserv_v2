@@ -6,13 +6,8 @@
 #include"./parsing/Webserv.hpp"
 
 #define num_of_servers 5
-
-
-
-
+int parsing(int argc, char **argv, char **env);
 bool Http::finish = false;
-
-int	parsing(int argc, char **argv, char **env);
 
 int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserver server)
 {
