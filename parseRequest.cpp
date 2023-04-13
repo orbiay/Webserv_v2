@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+ /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parseRequest.cpp                                   :+:      :+:    :+:   */
@@ -248,7 +248,7 @@ void	parseRequest::check_request(Server &server,Client &iter) {
 		//---------------------------------this part need confg file------------------------------------>
 	// request body larger then client max body size in config file
 	// if (server.server_config.L[0].body_size)
-	else if (matched_location(server ,this->_data["path"])) {
+	else if (matched _         ocation(server ,this->_data["path"])) {
     	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
 	}
 		//---------------------------------------------------------------------------------------------->

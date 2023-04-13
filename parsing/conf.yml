@@ -4,8 +4,8 @@ server:
 	listen 127.0.0.255:8080
 	methods POST GIT DELETE
 	cgi: off
-			/Users/aomman/Desktop/Webserv_v2/cgi.php php
-	location /exampl:
+			/Users/fbouanan/Desktop/lkhra/cgi.php php
+	location /:
 		root ./test/home
 		upload on
 		return 200 /test0
@@ -37,7 +37,7 @@ server:
 	listen 2.2.2.2:9090
 	methods POST GIT DELETE
 	cgi: off
-			/Users/orbiay/Desktop/Webserv_v2/cgi2.php php
+				/Users/fbouanan/Desktop/lkhra/cgi.php php
 	location /exampls1l2:
 		index file_names2
 		autoindex on

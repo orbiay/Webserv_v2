@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/12 07:51:04 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:11:28 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,9 +220,11 @@ void Response::Post(Server &server, int flag) {
 	std::string location = "/home";
 	std::string index = "./index.html";
 	int is_index = 1;
-	int upload = 1;
-	// std::cout << "|" << server.server_config.L[0].upload << "|" << std::endl;
-	if (upload) {
+	//int upload = 1;
+	std::cout << "|" << server.server_config.L[0].root_val << "|" << std::endl;
+	std::cout << "|" << server.server_config.L[0].upload << "|" << std::endl;
+	exit(0);
+	if (server.server_config.L[0].upload) {
 		// std::cout << "upload" << std::endl;
 		if (flag == FILE) {
 			if (!client.enter)
