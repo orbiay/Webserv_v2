@@ -9,6 +9,7 @@ server:
 		root /Users/fbouanan/Desktop
 		upload on
 		return 200 /test0
+		index ok
 		autoindex off
 		error_pages: 22
 			/path_for_error_file

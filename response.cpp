@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/14 04:23:42 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/14 04:26:20 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,8 +235,8 @@ void Response::Post(Server &server, int flag) {
 			// }
 		}
 		else if(flag == DIRE) {
-			if (!this->client.location.index_val.empty()) {
-				std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
+			if (this->client.location.index_val.empty()) {
+				// std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
 				rename(client.file_name.c_str(), "data/DIR_video.mp4");
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 

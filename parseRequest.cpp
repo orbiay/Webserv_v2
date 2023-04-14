@@ -153,7 +153,7 @@ std::string get_pure_one(std::string &location_val,std::string url)
 	std::string str;
 	std::cout<<"c = "<<*c<<std::endl;
 	for(;c != url.end();c++)
-		str.push_back(*c); segfault
+		str.push_back(*c); segfault if url is a directory
 	return str;
 }
 
