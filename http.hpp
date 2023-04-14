@@ -26,8 +26,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <new>
+#include <cerrno>
 #include <cstdlib>
-
+#include <signal.h>
+#include "parsing/location.hpp"
 int	cgi_post(Pserver &s, Client &c, char **envm = NULL);
 
 #define DIRE 1

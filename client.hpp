@@ -2,12 +2,12 @@
 #define CLIENT_HPP
 
 #include "http.hpp"
-
+#include "parsing/location.hpp"
 class Client{
 	public:
 	Client();
 	~Client();
-	int read_size;
+	size_t read_size;
 	int fd_client;
 	parseRequest parse;
 	std::string request;
@@ -51,13 +51,14 @@ class Client{
 	bool hex_ready;
 	int file;
 	int check;
+	bool checker;
 	
 	/*************************/
     std::string url;
     std::string client_header;
     std::string content_type;
 	std::string path;
-	// Location location;
+	Location location;
     /*************************/
 	socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;

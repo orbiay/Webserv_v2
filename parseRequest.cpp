@@ -139,46 +139,56 @@ int	check_url(std::string url)
 }
 
 int check_url_size (std::string url) {
+	printf("here\n");
 	if (url.size() > 2048)
 		return (1);
 	return (0);
 }
 
-int	matched_location(Server &server ,std::string url)
+std::string get_pure_one(std::string &location_val,std::string url)
 {
-	(void)url;
-	// std::cout << "url = " << url << std::endl;
+	// std::cout<<<<
+	std::string::iterator c = url.begin() + location_val.length();
+	c++;
+	std::string str;
+	std::cout<<"c = "<<*c<<std::endl;
+	for(;c != url.end();c++)
+		str.push_back(*c); segfault
+	return str;
+}
+
+int	matched_location(Server &server ,std::string url,Client &client)
+{
+	printf("here\n");
+	std::cout << "url = " << url << std::endl;
+	int i = 0;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
+	std::vector<size_t> vec;
+	Location save;
+	bool flag = false;
 	while (it != server.server_config.L.end()) {
-		// std::cout << "location = " << it->location_val <<std::endl;
+		i = 0;
+		Location &loc = *it;
+		size_t pos = url.find(loc.location_val);
+		if (pos != std::string::npos)
+		{
+			if (!flag) {
+				save = loc;
+				flag = true;
+			}
+			if (loc.location_val.length() >= save.location_val.length()) {
+				save = loc;
+			}
+		}
 		it++;
 	}
-
-
-
-
-
-
-	// t_hcode g_v;
-	// g_v.location = "/example";
-	// g_v.root = "/var/www/html";
-
-	// std::size_t pos = url.find(g_v.location);
-
-	// if (pos == 0) {
-	// 	std::string tmp = url.substr(g_v.location.length(), url.length());
-	// 	g_v.root.insert(g_v.root.length(), tmp);
-	// 	if (access(g_v.root.c_str(), R_OK) == -1) {
-	// 		return (1);
-	// 	}
-	// 	else
-	// 		return 0;
-	// }
-	
-	// if (pos == std::string::npos) {
-	// 	std::cout << "invalid url" << std::endl;
-	// 	return (1);
-	// }
+	client.location = save;
+	client.location.location_val = get_pure_one(client.location.location_val,url);
+	// std::cout<<"locval =======>"<<client.location.location_val<<std::endl;
+	// exit(0);
+	std::cout << "upload = " << save.upload << std::endl;
+	if (save.location_val.empty())
+		return (-1);
 	return (0);
 }
 		//-------------------------------------------------------------------------------------------
@@ -197,26 +207,39 @@ int	is_file(Client &client) {
     }
 	return (0);
 }
+
+int find_index(Server &server, std::string method) {
+	int i = 0;
+	while(i < 3) {
+		if (server.server_config.methods[i] == method)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 		//--------------------------------checking methods-------------------------------------------
 void	check_methods(Server &server, Client &client)
 {
 	Response res(client);
 	//res.client = &client;
 	// res.client = client.parse;
-	if (client.parse._data["method"] == "GET") {
+	// std::cout << "method = " << server.server_config.methods[0] << std::endl;
+	if (client.parse._data["method"] == "GET" && find_index(server, "GET")) {
 		res.Get(server);
 		//server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
 	}
-	else if (client.parse._data["method"] == "POST") {
+	else if (client.parse._data["method"] == "POST" && find_index(server, "POST")) {
 		if (is_file(client)) {
 			res.Post(server, FILE);
 			// res.Post(server);
 		}
-		else
+		else {
 			res.Post(server, DIRE);
+		}
 	}
 
-	else if (client.parse._data["method"] == "DELETE") {
+	else if (client.parse._data["method"] == "DELETE" && find_index(server, "DELETE")) {
 		// DELETE();
 	}
 	else {
@@ -241,28 +264,40 @@ void parseRequest::display_request(parseRequest parse)
 }
 
 void	parseRequest::check_request(Server &server,Client &iter) {
-	if (this->_data["method"] == "POST") {
-		if (this->_data["Content-Length"].length() == 1){
-			printf("here\n");
+	if (!iter.checker) {
+		// printf("here\n");
+		if (this->_data["method"] == "POST") {
+			if (this->_data["Content-Length"].length() == 1){
+				server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+				return ;
+			}
+		}
+
+		int _check_url = check_url(this->_data["path"]);
+		if (_check_url) {
 			server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+			return;
+		}
+
+		int _check_url_size = check_url_size(this->_data["path"]);
+		if (_check_url_size) {
+			server.write_in_socket_client("HTTP/1.1 414 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","414error.html", iter);
 			return ;
 		}
+			//---------------------------------this part need confg file------------------------------------>
+		// request body larger then client max body size in config file
+		// matched_location(server ,this->_data["path"],iter);
+		int _check_matched_location = matched_location(server ,this->_data["path"],iter);
+		if (_check_matched_location == -1) {
+    		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
+			return ;
+		}
+		// else if (std::stoi(this->_data["Content-Length"]) > std::atoi(server.server_config. .c_str())) {
+		// 	std::cout << "body size = " << std::atoi(iter.location.body_size.c_str()) << std::endl; 
+		// 	server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
+		// 	return ;
+		iter.checker = true;
 	}
-	else if (check_url(this->_data["path"])) {
-		server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
-		return;
-	}
-	else if (check_url_size(this->_data["path"])) {
-		server.write_in_socket_client("HTTP/1.1 414 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","414error.html", iter);
-		return ;
-	}
-		//---------------------------------this part need confg file------------------------------------>
-	// request body larger then client max body size in config file
-	// if (server.server_config.L[0].body_size)
-	else if (matched_location(server ,this->_data["path"])) {
-    	server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
-	}
-		//---------------------------------------------------------------------------------------------->
 	check_methods(server, iter);
 }
 

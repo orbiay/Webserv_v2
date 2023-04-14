@@ -253,6 +253,7 @@ int main (int ac, char **av, char **env)
 {
 	try
 	{
+		signal(SIGPIPE, SIG_IGN);
 		Config conf(av);
 		if (parsing (ac, av, env) == 1)
 			return (1);

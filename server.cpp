@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:12:46 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/13 20:43:18 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/14 02:19:33 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void Server::read_from_socket_client(Client &client)
 			client.header = std::string(line).substr(0, client.ret);
 			// std::cout << "header = " << client.header.length() << std::endl;
 			client.parse.parse_request(client.header);
-			std::cout << "content = " << client.parse._data["Content-Length"] << std::endl;
+			// std::cout << "content = " << client.parse._data["Content-Length"] << std::endl;
 			client.b_pos = client.ret + 4;
 			client.isChuncked = checkifchuncked(client.header);
 			client.j = 1;
@@ -235,10 +235,15 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     {
         i = read(client.fd_file,s,1023);
     }
-    write(1,"\n",1);
-    if (write(client.fd_client,s,strnlen(s,1023)) < 1)
+    // write(1,"\n",1);
+	int b = send(client.fd_client,s,i,0);
+	//std::cout << " send = "<< b << std::endl;
+	client.read_size += b;
+	//std::cout<<"->>>>>>>>"<<client.read_size<<std::endl;
+    if (b < 1)
     {
         client.is_delete = true;
+		//std::cout << "Error : " << strerror(errno) << std::endl;
         close(client.fd_client);
 		delete(s);
         return;

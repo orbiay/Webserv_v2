@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/13 17:33:16 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/14 04:23:42 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ std::string Response::getContentType(Server &server) {
 	if (pos == std::string::npos)
 		return "application/octet-stream";
 	std::string fileExtension = str.substr(pos);
+	if (fileExtension == ".mp4")
+		return "video/mp4";
     if (fileExtension == ".html" || fileExtension == ".htm") {
         return "text/html";
     } else if (fileExtension == ".css") {
@@ -217,46 +219,27 @@ int Response::read_and_write(Client &client)
 // }
 
 void Response::Post(Server &server, int flag) {
-	std::string location = "/home";
-	std::string index = "./index.html";
-	int is_index = 1;
+	// std::string location = "/home";
+	// std::string index = "./index.html";
 	//int upload = 1;
 	// std::cout << "|" << server.server_config.L[0].root_val << "|" << std::endl;
 	// std::cout << "|" << server.server_config.L[0].upload << "|" << std::endl;
 	// exit(0);
-	if (server.server_config.L[0].upload) {
+	// std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
+	if (this->client.location.upload) {
 		// std::cout << "upload" << std::endl;
+			// printf("here\n");
 		if (flag == FILE) {
 			rename(client.file_name.c_str(), "data/FILE_video.mp4");
-			// if (!client.enter)
-			// {
-				// if (!client.post_fd)
-				// 	client.post_fd = open(path.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
-				// // std::cout << "post_fd 1 = " << client.post_fd << std::endl;
-				// if (client.post_fd == -1) {
-				// 	std::cout << "File Alredy Exists" << std::endl;
-				// 	server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 549\r\n\r\n","200exists.html",client);
-				// }
-				// client.enter = true;
-			// }
-			// int f = read_and_write(client);
-			// if (f < 1024) {
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 			// }
 		}
 		else if(flag == DIRE) {
-			if (is_index) {
+			if (!this->client.location.index_val.empty()) {
+				std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
 				rename(client.file_name.c_str(), "data/DIR_video.mp4");
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
-				
-				// if (!client.enter)
-				// {
-				// 	client.post_fd = open(index.c_str(),O_CREAT | O_RDWR | O_TRUNC, 0644);
-				// 	client.enter = true;
-				// }
-				// int f = read_and_write(client);
-				// if (f < 1024) {
-				// }
+
 			}
 			else {
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
