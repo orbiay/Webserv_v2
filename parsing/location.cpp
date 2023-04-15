@@ -28,12 +28,6 @@ std::vector<std::string> split(const std::string& str, char delimiter = ' ')
 
 Location::Location()
 {
-	this->location_val = "";
-	this->root_val = "";
-	this->autoindex_val = "";
-	this->upload_val = "";
-	this->status_str = "";
-	this->error_path = "";
 }
 
 const char *Location::PathError::what() const throw()
@@ -51,10 +45,39 @@ void	Location::check_errors(void) const
 	if (this->root_val == ""
 		|| this->location_val == ""
 		|| this->upload_val == ""
-		|| this->autoindex_val == ""
 		|| this->error_cods.size() == 0
 		|| this->error_path == "")
 		throw (SyntaxError());
+	if ((this->cgi == true && this->upload == true) || (this->cgi == true && this->autoindex == true)
+		|| (this->upload == true && this->autoindex == true))
+		throw (SyntaxError());
+	if (this->status != 301)
+	{
+		std::cout << this->status << std::endl;
+		throw (SyntaxError());
+	}
+}
+
+void	Location::set_cgi_path(std::string line)
+{
+	size_t	i;
+	size_t	j;
+	i = line.find("/");
+	this->cgi_path = line.substr(i, line.length() - 7);
+	j = line.find(" ");
+	if (j == std::string::npos)
+		return ;
+	this->cgi_extention = line.substr(j + 1, line.length());
+}
+
+void	Location::set_cgi(std::string	line)
+{
+	size_t	i;
+	i = line.find(" ");
+	std::cout << "cgi" << std::endl;
+	line = line.substr(i + 1, line.length());
+	if (line == "on")
+		cgi = true;
 }
 
 void	Location::set_error_path(std::string line)
@@ -164,8 +187,6 @@ std::string	Location::get_index(void) const
 
 void	Location::set_root(std::ifstream &rf)
 {
-	this->upload = false;
-	this->autoindex = false;
 	std::string line;
 
 	while (!rf.eof())
@@ -187,6 +208,10 @@ void	Location::set_root(std::ifstream &rf)
 			this->set_error_pages (line);
 		if (line.compare(0, 4, "\t\t\t/") == 0)
 			this->set_error_path (line);
+		if (line.compare(0, 6, "\t\tcgi:") == 0)
+			this->set_cgi(line);
+		if (line.compare(0, 5, "\t\t\t\t/") == 0)
+			this->set_cgi_path(line);
 	}
 }
 
@@ -197,6 +222,16 @@ std::string	Location::get_root(void) const
 
 void	Location::set_location(std::ifstream &rf)
 {
+	this->upload = false;
+	this->autoindex = false;
+	this->cgi = false;
+	this->location_val = "";
+	this->root_val = "";
+	this->autoindex_val = "";
+	this->upload_val = "";
+	this->status_str = "";
+	this->error_path = "";
+	this->status = 301;
 	std::string line;
 
 	while (!rf.eof())

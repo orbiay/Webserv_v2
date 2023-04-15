@@ -12,6 +12,7 @@ std::string get_html_file(std::string& links)
     std::string searchString = "<ul>";
     size_t pos = content.find(searchString);
     content.insert(pos + 4,links);
+	close(fd);
 	return (content);
 }
 

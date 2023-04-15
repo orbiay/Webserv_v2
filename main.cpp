@@ -67,7 +67,7 @@ Client accept_new_connection(Server &server)
 		Server::maxfd = client.fd_client;
 	FD_SET(client.fd_client, &Server::current);
 	client.position = 0;
-	sleep(1);
+	//sleep(1);
 	return (client);
 }
 
@@ -80,8 +80,9 @@ void run_server(std::vector<Server> &server_list)
 		fd_set writable = Server::current;
 		fd_set readable = Server::current;
 		ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
+		std::cout<<"max=========== "<<Server::maxfd<<std::endl;
 		if (ret < 0) {
-			std::perror("Error ");
+			std::perror("select() Error ");
 			exit(EXIT_FAILURE);
 		}
 		if (!ret)
@@ -128,7 +129,7 @@ void run_server(std::vector<Server> &server_list)
 					// }
 				}
 				// IF statement for Response.
-				else if(i >= 0 && client.ready && FD_ISSET(client.fd_client, &writable))
+				else if(i >= 0  && FD_ISSET(client.fd_client, &writable))
 				{
 					if (client.bodyReady) {
 						// std::cout << "heeeere\n" << std::endl;
@@ -136,11 +137,15 @@ void run_server(std::vector<Server> &server_list)
 						if (client.is_delete == true)
 						{
 							//server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
-							close(client.fd_client);
 							FD_CLR(client.fd_client,&server.current);
+							if (close(client.fd_client) != 0 || close(client.file) != 0)
+								perror("close() failed");
 							server.clients.erase(std::next(server.clients.begin(), i));
 							std::cout << "The client droped secsusfully \n";
+							//if (i == 2)
+							//	while(1);
 							i--;
+							
 						}
 					}
 				}

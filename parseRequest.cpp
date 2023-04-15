@@ -143,7 +143,7 @@ int	check_url(std::string url)
 }
 
 int check_url_size (std::string url) {
-	printf("here\n");
+	// printf("here\n");
 	if (url.size() > 2048)
 		return (1);
 	return (0);
@@ -163,8 +163,8 @@ std::string get_pure_one(std::string &location_val,std::string url)
 
 int	matched_location(Server &server ,std::string url,Client &client)
 {
-	printf("here\n");
-	std::cout << "url = " << url << std::endl;
+	// printf("here\n");
+	// std::cout << "url = " << url << std::endl;
 	int i = 0;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
 	std::vector<size_t> vec;
@@ -190,7 +190,7 @@ int	matched_location(Server &server ,std::string url,Client &client)
 	client.location.location_val = get_pure_one(client.location.location_val,url);
 	// std::cout<<"locval =======>"<<client.location.location_val<<std::endl;
 	// exit(0);
-	std::cout << "upload = " << save.upload << std::endl;
+	// std::cout << "upload = " << save.upload << std::endl;
 	if (save.location_val.empty())
 		return (-1);
 	return (0);
@@ -293,12 +293,12 @@ void	parseRequest::check_request(Server &server,Client &iter) {
 		// matched_location(server ,this->_data["path"],iter);
 		int _check_matched_location = matched_location(server ,this->_data["path"],iter);
 		if (_check_matched_location == -1) {
-    		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
+    		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 1367\r\n\r\n","404error.html", iter);
 			return ;
 		}
-		std::cout << "body size = " << server.body_size << std::endl;
-		if ((size_t)std::stoi(this->_data["Content-Length"]) > server.body_size){
-			std::cout << "body size = " << std::atoi(iter.location.body_size.c_str()) << std::endl; 
+		//std::cout << "body size = " << server.body_size << std::endl;
+		if ((size_t)std::atoi(this->_data["Content-Length"].c_str()) > server.body_size){
+			//std::cout << "body size = " << std::atoi(iter.location.body_size.c_str()) << std::endl; 
 			server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
 			return ;
 		}

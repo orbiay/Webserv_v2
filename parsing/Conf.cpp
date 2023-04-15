@@ -80,10 +80,7 @@ int	count_servers(char **argv)
 	int			n_servr;
 	std::ifstream file(argv[1], std::ios::in);
 	if (file.is_open() == false)
-	{
-		file.close();
 		throw ("Error");
-	}
 	n_servr = 0;
 	while (!file.eof())
 	{

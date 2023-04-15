@@ -87,7 +87,7 @@ Response::Response(Client &client):client(client)
 	this->is_done = false;
 	path = "body2";
 	result = chmod(path.c_str(), S_IRUSR | S_IWUSR);
-	is_exist.open(path);
+	//is_exist.open(path);
 	//outfile.open(path);
 	//if (!outfile.is_open()) {
 	//	perror("error");
@@ -141,7 +141,7 @@ void Response::Post(Server &server, int flag) {
 			std::cout << "root_val = " << "|" << this->client.location.root_val << "|" << std :: endl;
 			std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
 			if (!this->client.location.index_val.empty()) {
-				std::cout << "here 1" << std::endl;
+				// std::cout << "here 1" << std::endl;
 				rename(client.file_name.c_str(), (this->client.location.root_val + this->client.location.index_val).c_str());
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 			}
@@ -151,7 +151,7 @@ void Response::Post(Server &server, int flag) {
 		}
 
 	}
-	else if (server.server_config.cgi)
+	else if (client.location.cgi)
 	{
 		CGI C;
 		int	f;
