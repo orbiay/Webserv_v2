@@ -1,5 +1,6 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
 
     // save $_FILES['avatar'] to a inside a folder
     $avatar = $_FILES['avatar'];

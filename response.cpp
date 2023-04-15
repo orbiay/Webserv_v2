@@ -103,6 +103,27 @@ Response Response::operator=(const Response &r) {
 	return *this;
 }
 
+size_t	getFileSize(const std::string& name);
+//{
+//	std::ifstream file(name, std::ifstream::ate | std::ifstream::binary);
+//	size_t size = 0;
+//    if (file.is_open())
+//	{
+//       	size = file.tellg();
+//		file.close();
+//	}
+//    else {
+//		file.close();
+//    }
+//	return size;
+//}
+
+std::string size_t_to_string(size_t value) {
+    std::ostringstream os;
+    os << value;
+    return os.str();
+}
+
 void Response::Post(Server &server, int flag) {
 	std::string path = this->client.location.root_val + this->client.location.location_val;
 	//int upload = 1;
@@ -135,7 +156,9 @@ void Response::Post(Server &server, int flag) {
 		CGI C;
 		int	f;
 		f = C.cgi(server.server_config, client, NULL);
-		server.write_in_socket_client("HTTP/1.1 403 Forbidden\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
+		size_t rand_size = getFileSize("rand");
+		std::string str = size_t_to_string(rand_size);
+		server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: application/json\nContent-Length: " + str + "\r\n\r\n","rand",client);
 		
 	}
 }

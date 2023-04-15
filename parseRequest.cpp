@@ -85,6 +85,10 @@ void	parseRequest::parse_infos(std::string _data)
 	{
 		this->_data.insert(std::make_pair("Host", output[1]));
 	}
+	else if (output[0] == "Cookie:")
+	{
+		this->_data.insert(std::make_pair("Cookie", output[1]));
+	}
 }
 
 void	parseRequest::save_body(std::string req) {

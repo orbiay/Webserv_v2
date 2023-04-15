@@ -15,13 +15,13 @@
 # include"parsing/config.hpp"
 # include"parsing/Webserv.hpp"
 # include"client.hpp"
-# include <sys/wait.h>
+# include <fstream>
 
 class	CGI
 {
 	public:
 		CGI();
-		int	filename;
+		//int	filename;
 		int cgi(Pserver &s, Client &c, char **env);
 		int	cgi(Pserver &s, Client &c);
 		~CGI();

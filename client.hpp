@@ -52,6 +52,7 @@ class Client{
 	int file;
 	int check;
 	bool checker;
+	std::string rand_file;
 	
 	/*************************/
     std::string url;

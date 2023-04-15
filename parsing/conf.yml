@@ -6,8 +6,8 @@ server:
 	cgi: on
 			/Users/aomman/Desktop/Webserv_v2/test.php php
 	location /var:
-		root /Users/fbouanan/Desktop/
-		upload on
+		root /Users/aomman/Desktop/
+		upload off
 		return 301 http://facebook.com
 		autoindex off
 		error_pages: 22
