@@ -18,6 +18,7 @@ std::string generateRandomString(int length) {
 }
 
 Client::Client() {
+	fd_client = -1;
 	read_size = 0;
 	address_length = sizeof(addresStorage);
 	ready = false;
@@ -56,7 +57,9 @@ Client::Client() {
 }
 
 Client::~Client() {
-
+	std::cout<<"Destructor called"<<std::endl;
+	//if (fd_client > -1)
+	//	close(fd_client);
 }
 
 // Client::Client(const Client &r) {

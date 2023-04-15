@@ -160,6 +160,8 @@ void Server::read_from_socket_client(Client &client)
 		}
 		else{
 			client.is_delete = true;
+        	close(client.fd_client);
+			FD_CLR(client.fd_client,&current);
 			return;
 		}
 			
@@ -217,6 +219,7 @@ void Server::read_from_socket_client(Client &client)
 
 void Server::write_in_socket_client(std::string str, std::string file , Client &client)
 {
+	std::cout<<"write in client = "<<client.fd_client<<std::endl;
 	char *s;
 	s = new char[1024];
     memset(s, '\0', 1024);
@@ -225,6 +228,8 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     {
 	    client.fd_file = open (file.c_str(),O_RDONLY);
         if (client.fd_file == -1){
+			close(client.fd_client);
+			FD_CLR(client.fd_client,&current);
             client.is_delete = true;
         }
         client.start_writting = 0;
@@ -237,21 +242,27 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     }
     // write(1,"\n",1);
 	int b = send(client.fd_client,s,i,0);
-	//std::cout << " send = "<< b << std::endl;
+	std::cout << " send = "<< b << std::endl;
+	if (b == 0)
+		usleep(1);
 	client.read_size += b;
 	//std::cout<<"->>>>>>>>"<<client.read_size<<std::endl;
-    if (b < 1)
+    if (b < 1023)
     {
         client.is_delete = true;
 		//std::cout << "Error : " << strerror(errno) << std::endl;
+		close(client.fd_file);
         close(client.fd_client);
+		FD_CLR(client.fd_client,&current);
 		delete(s);
         return;
     }
-    if (i <= 0)
+    if (i < 1023)
     {
         client.is_delete = true;
+		close(client.fd_file);
         close(client.fd_client);
+		FD_CLR(client.fd_client,&current);
         return;
     }
    	delete(s);
