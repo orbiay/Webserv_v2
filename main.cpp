@@ -82,7 +82,7 @@ void run_server(std::vector<Server> &server_list)
 		ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
 		std::cout<<"max=========== "<<Server::maxfd<<std::endl;
 		if (ret < 0) {
-			std::perror("Error ");
+			std::perror("select() Error ");
 			exit(EXIT_FAILURE);
 		}
 		if (!ret)
@@ -138,7 +138,7 @@ void run_server(std::vector<Server> &server_list)
 						{
 							//server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 							FD_CLR(client.fd_client,&server.current);
-							if ( close(client.file) != 0)
+							if (close(client.fd_client) != 0 || close(client.file) != 0)
 								perror("close() failed");
 							server.clients.erase(std::next(server.clients.begin(), i));
 							std::cout << "The client droped secsusfully \n";
