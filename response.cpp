@@ -6,11 +6,12 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/15 00:20:30 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/15 01:16:42 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "http.hpp"
+#include "CGI.hpp"
 
 #include <string>
 
@@ -108,7 +109,6 @@ void Response::Post(Server &server, int flag) {
 	// std::cout << "|" << server.server_config.L[0].root_val << "|" << std::endl;
 	// std::cout << "|" << server.server_config.L[0].upload << "|" << std::endl;
 	// exit(0);
-	// std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
 	if (this->client.location.upload) {
 		// std::cout << "upload" << std::endl;
 			// printf("here\n");
@@ -131,8 +131,13 @@ void Response::Post(Server &server, int flag) {
 		}
 
 	}
-	else if (server.server_config.cgi) {
-		cgi_post(server.server_config, client, NULL);
+	else if (server.server_config.cgi)
+	{
+		CGI C;
+		int	f;
+		f = C.cgi(server.server_config, client, NULL);
+		server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
+		
 	}
 }
 
