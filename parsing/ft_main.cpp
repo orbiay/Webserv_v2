@@ -25,8 +25,8 @@ int parsing(int argc, char **argv, char **env)
 		(void)env;
 		(void)argc;
 		Config c(argv);
-		//cgi_post(c.s[0], c_c, NULL);
-		return (0);
+		std::cout << c.s[0].L[0].redirec << std::endl;
+		exit (0);
 	}
-	return (1);
+	return (0);
 }

@@ -8,7 +8,7 @@ server:
 	location /var:
 		root /Users/aomman/Desktop/Webserv_v2
 		upload off
-		return 200 /test0
+		return 301 /test0
 		index ok
 		autoindex off
 		error_pages: 22
