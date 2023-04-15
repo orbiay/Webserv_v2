@@ -153,7 +153,7 @@ std::string get_pure_one(std::string &location_val,std::string url)
 	std::string str;
 	std::cout<<"c = "<<*c<<std::endl;
 	for(;c != url.end();c++)
-		str.push_back(*c); segfault if url is a directory
+		str.push_back(*c);
 	return str;
 }
 
@@ -292,10 +292,18 @@ void	parseRequest::check_request(Server &server,Client &iter) {
     		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","404error.html", iter);
 			return ;
 		}
-		// else if (std::stoi(this->_data["Content-Length"]) > std::atoi(server.server_config. .c_str())) {
-		// 	std::cout << "body size = " << std::atoi(iter.location.body_size.c_str()) << std::endl; 
-		// 	server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
+		std::cout << "body size = " << server.body_size << std::endl;
+		if ((size_t)std::stoi(this->_data["Content-Length"]) > server.body_size){
+			std::cout << "body size = " << std::atoi(iter.location.body_size.c_str()) << std::endl; 
+			server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
+			return ;
+		}
+		// if (!iter.location.redirec.empty()) {
+		// 	std::cout << "redirec = " << iter.location.redirec << std::endl;
+		// 	// server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
+		// 	server.write_in_socket_client("HTTP/1.1 301 MOVED PERMANENTLY\nLocation: " + iter.location.redirec + "\nContent-Type: text/html\nContent-Length: 200\r\n\r\n", "301red.html", iter);
 		// 	return ;
+		// }
 		iter.checker = true;
 	}
 	check_methods(server, iter);

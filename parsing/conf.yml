@@ -1,15 +1,15 @@
 nserv: 2
-body_size 1000000
+body_size 1090000000
 server:
 	listen 127.0.0.255:8080
 	methods POST GET DELETE
 	cgi: off
 			/Users/fbouanan/Desktop/lkhra/cgi.php php
 	location /var:
-		root /Users/fbouanan/Desktop
+		root /Users/fbouanan/Desktop/
 		upload on
-		return 200 /test0
-		index ok
+		return 301 http://facebook.com
+		index /ok
 		autoindex off
 		error_pages: 22
 			/path_for_error_file
@@ -17,7 +17,7 @@ server:
 	location /exampl1:
 		autoindex on
 		upload off
-		return 201 /test1
+		return 301 /test1
 		index file_name1
 		root /Users/fbouanan/Desktop
 		error_pages: 122

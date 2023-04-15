@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 15:50:35 by aomman            #+#    #+#             */
-/*   Updated: 2023/03/19 15:50:37 by aomman           ###   ########.fr       */
+/*   Updated: 2023/04/14 22:57:55 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <new>
 # include <string>
+# include "../http.hpp"
 
 class Config
 {

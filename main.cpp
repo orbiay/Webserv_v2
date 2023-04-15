@@ -71,86 +71,6 @@ Client accept_new_connection(Server &server)
 	return (client);
 }
 
-// int	checkifchuncked(std::string request) {
-// 	std::vector<std::string> output;
-// 	std::string token;
-// 	std::stringstream ss(request);
-// 	while (std::getline(ss, token, '\n')) {
-// 		output.push_back(token);
-// 	}
-// 	std::vector<std::string>::iterator it;
-// 	for (it = output.begin(); it != output.end(); it++){
-// 		std::string tmp = *it;
-// 		if (tmp.find("Transfer-Encoding: chunked")) {
-// 			return 1;
-// 		}
-// 	}
-// 	return 0;
-// }
-
-void parse_chuncked(Client &client) {
-
-	// int decimal_number = std::stoi(hex_number, 0, 16)
-	// client.tmp_body;
-	// if (std::stoi())
-	std::string token;
-	std::stringstream ss(client.tmp_body);
-	// while (std::getline(ss, token, '\n')) {
-		//check if the token is "\r\nhex_num" and skip it if it's not 0 
-
-		//else if it it's normal string from the body then insert it into client.body 1kb by 1kb
-
-		// if (std::stoi(token, 0, 16) == 0) {
-		// 	client.bodyReady = true;
-		// 	return;
-		// }
-		// else if (std::stoi(token, 0, 16) != 0)
-	// }
-	
-}
-
-// void	Client::split_request(std::string request) {
-
-// 	std::ofstream header("./header");
-// 	std::ofstream req_body("./req_body");
-// 	// std::stringstream ss(request);
-// 	// while (std::getline(ss, token, "")) {
-// 	// std::cout << "----------------Req----------------\n";
-// 	// std::cout << request << std::endl;
-// 	// std::cout << "----------------Req----------------\n";
-// 	// }
-// 	if (checkifchuncked(request)) {
-// 		printf("it's chunckerd\n");
-// 		if (!this->chunck_done) {
-// 			size_t pos = request.find("\r\n\r\n");
-// 			this->header = request.substr(0, pos+4); // Include the final CRLF
-// 			this->tmp_body = request.substr(pos+4);
-// 			header << this->header << std::endl;
-// 			req_body << this->tmp_body << std::endl;
-// 		}
-// 		if (!this->bodyReady)	
-// 			parse_chuncked(*this);
-// 	}
-// 	else {
-// 		size_t pos = 0;
-// 		std::string f = "\r\n\r\n";
-// 		std::string token;
-// 		while ((pos = request.find(f)) != std::string::npos) {
-// 			token = request.substr(0, pos);
-// 			this->header = token;
-// 			// std::cout << "heder :\n" << token << std::endl;
-// 			request.erase(0, pos + f.length());
-// 		}
-// 		this->body = request;
-// 		this->bodyReady = true;
-// 	}
-// 	// std::ofstream out("body");
-// 	// std::cout << "------------------b---------------------------\n";
-// 	// out  << request << std::endl;
-// 	// std::cout  << request << std::endl;
-// 	// std::cout << "------------------b---------------------------\n";
-// }
-
 void run_server(std::vector<Server> &server_list)
 {
    
@@ -175,10 +95,7 @@ void run_server(std::vector<Server> &server_list)
 			// If Statement for new connection.
 			if (FD_ISSET(server.fd_serv, &readable))
 			{
-				// std::cout<<"Statement for new connection\n";
-				// std::cout<< "server Fd = " << server.fd_serv <<"\n\n"<<std::endl;
 				server.clients.push_back(accept_new_connection(server));
-				// std::cout<<"The server number "<< server.fd_serv << " accept new connection seccesfully\n\n"<<std::endl;
 			}
 			for (int i = 0; i < (int)server.clients.size(); i++)
 			{
@@ -189,7 +106,7 @@ void run_server(std::vector<Server> &server_list)
 					// std::cout<<"statement for Request.\n";
 					fcntl(client.fd_client, F_SETFL, O_NONBLOCK);
 					// if (!client.ready)
-						server.read_from_socket_client(client);
+					server.read_from_socket_client(client);
 					// std::cout<<"-----------------------"<<std::endl;
 					// std::cout<<client.request<<std::endl;
 					// std::cout<<"-----------------------"<<std::endl;
@@ -231,8 +148,9 @@ void run_server(std::vector<Server> &server_list)
 		}
 	}
 }
-Server init_server(int id_servers,struct sockaddr_in addr,Pserver &server_config){
+Server init_server(int id_servers,struct sockaddr_in addr,Pserver &server_config, Config &conf){
 	Server server;
+	server.body_size = conf.body_size;
 	server.fd_serv = id_servers;
 	FD_ZERO(&server.readable);
 	FD_ZERO(&server.writable);
@@ -272,7 +190,7 @@ int main (int ac, char **av, char **env)
 		std::vector<Pserver>::iterator iter_conf = conf.s.begin();
 		while (i < num_srver)
 		{
-			server_list.push_back(init_server(id_servers[i],sed_struct[i],*iter_conf));
+			server_list.push_back(init_server(id_servers[i],sed_struct[i],*iter_conf, conf));
 			//std::cout<<id_servers[i]<<std::endl;
 			i++;
 			iter_conf++;
