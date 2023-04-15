@@ -153,7 +153,7 @@ std::string get_pure_one(std::string &location_val,std::string url)
 	std::string str;
 	std::cout<<"c = "<<*c<<std::endl;
 	for(;c != url.end();c++)
-		str.push_back(*c); segfault if url is a directory
+		str.push_back(*c);//segfault if url is a directory
 	return str;
 }
 
@@ -266,12 +266,12 @@ void parseRequest::display_request(parseRequest parse)
 void	parseRequest::check_request(Server &server,Client &iter) {
 	if (!iter.checker) {
 		// printf("here\n");
-		if (this->_data["method"] == "POST") {
-			if (this->_data["Content-Length"].length() == 1){
-				server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
-				return ;
-			}
-		}
+		//if (this->_data["method"] == "POST") {
+		//	if (this->_data["Content-Length"].length() == 1){
+		//		server.write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: 203\r\n\r\n","400error.html", iter);
+		//		return ;
+		//	}
+		//}
 
 		int _check_url = check_url(this->_data["path"]);
 		if (_check_url) {

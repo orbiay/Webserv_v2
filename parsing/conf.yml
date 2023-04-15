@@ -3,11 +3,11 @@ body_size 1000000
 server:
 	listen 127.0.0.255:8080
 	methods POST GET DELETE
-	cgi: off
-			/Users/fbouanan/Desktop/lkhra/cgi.php php
+	cgi: on
+			/Users/aomman/Desktop/Webserv_v2/test.php php
 	location /var:
-		root /Users/fbouanan/Desktop
-		upload on
+		root /Users/aomman/Desktop/Webserv_v2
+		upload off
 		return 200 /test0
 		index ok
 		autoindex off
