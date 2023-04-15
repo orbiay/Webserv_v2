@@ -26,7 +26,7 @@ int parsing(int argc, char **argv, char **env)
 		(void)argc;
 		Config c(argv);
 		std::cout << c.s[0].L[0].redirec << std::endl;
-		exit (0);
+		//exit (0);
 	}
 	return (0);
 }

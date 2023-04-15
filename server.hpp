@@ -2,7 +2,10 @@
 #define SERVER_HPP
 #include"./parsing/location.hpp"
 #include"./parsing/Webserv.hpp"
+#include"./parsing/config.hpp"
 #include"http.hpp"
+
+
 class Server{
     public:
     Server();
@@ -18,6 +21,7 @@ class Server{
     unsigned int     sizeof_struct;
     static int maxfd;
     Pserver server_config;
+    size_t body_size;
     
     static fd_set initializer();
 };

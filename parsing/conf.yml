@@ -6,10 +6,9 @@ server:
 	cgi: on
 			/Users/aomman/Desktop/Webserv_v2/test.php php
 	location /var:
-		root /Users/aomman/Desktop/Webserv_v2
-		upload off
-		return 301 /test0
-		index ok
+		root /Users/fbouanan/Desktop/
+		upload on
+		return 301 http://facebook.com
 		autoindex off
 		error_pages: 22
 			/path_for_error_file
@@ -17,7 +16,7 @@ server:
 	location /exampl1:
 		autoindex on
 		upload off
-		return 201 /test1
+		return 301 /test1
 		index file_name1
 		root /Users/fbouanan/Desktop
 		error_pages: 122

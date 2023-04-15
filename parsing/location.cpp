@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/12 05:00:10 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/15 01:11:58 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,9 @@ Location::Location()
 {
 	this->location_val = "";
 	this->root_val = "";
-	this->index_val = "";
 	this->autoindex_val = "";
 	this->upload_val = "";
 	this->status_str = "";
-	this->redirec = "";
 	this->error_path = "";
 }
 
@@ -53,8 +51,6 @@ void	Location::check_errors(void) const
 	if (this->root_val == ""
 		|| this->location_val == ""
 		|| this->upload_val == ""
-		|| this->status_str == ""
-		|| this->redirec == ""
 		|| this->autoindex_val == ""
 		|| this->error_cods.size() == 0
 		|| this->error_path == "")
