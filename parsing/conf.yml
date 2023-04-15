@@ -9,7 +9,6 @@ server:
 		root /Users/fbouanan/Desktop/
 		upload on
 		return 301 http://facebook.com
-		index /ok
 		autoindex off
 		error_pages: 22
 			/path_for_error_file

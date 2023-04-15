@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/15 01:16:42 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/15 01:38:27 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,20 +113,19 @@ void Response::Post(Server &server, int flag) {
 		// std::cout << "upload" << std::endl;
 			// printf("here\n");
 		if (flag == FILE) {
-			std::cout << "location_val = " << "|" << this->client.location.location_val << "|" << std :: endl;
-			std::cout << "root_val = " << "|" << this->client.location.root_val << "|" << std :: endl;
 			rename(client.file_name.c_str(), path.c_str());
 			server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 		}
 		else if(flag == DIRE) {
 			std::cout << "root_val = " << "|" << this->client.location.root_val << "|" << std :: endl;
-				std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
+			std::cout << "index_val = " << "|" << this->client.location.index_val << "|" << std :: endl;
 			if (!this->client.location.index_val.empty()) {
+				std::cout << "here 1" << std::endl;
 				rename(client.file_name.c_str(), (this->client.location.root_val + this->client.location.index_val).c_str());
 				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
 			}
 			else {
-				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
+				server.write_in_socket_client("HTTP/1.1 403 Forbidden\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
 			}
 		}
 
@@ -136,7 +135,7 @@ void Response::Post(Server &server, int flag) {
 		CGI C;
 		int	f;
 		f = C.cgi(server.server_config, client, NULL);
-		server.write_in_socket_client("HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
+		server.write_in_socket_client("HTTP/1.1 403 Forbidden\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
 		
 	}
 }
