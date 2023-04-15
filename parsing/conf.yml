@@ -3,47 +3,51 @@ body_size 1000000
 server:
 	listen 127.0.0.255:8080
 	methods POST GET DELETE
-	cgi: on
-			/Users/aomman/Desktop/Webserv_v2/test.php php
 	location /var:
 		root /Users/orbiay/Desktop/
 		upload off
 		return 301 http://facebook.com
 		autoindex off
+		cgi: on
+				/Users/aomman/Desktop/Webserv_v2/test.php php
 		error_pages: 22
 			/path_for_error_file
 	lend
 	location /exampl1:
-		autoindex on
+		autoindex off
 		upload off
 		return 301 /test1
 		index file_name1
 		root /Users/fbouanan/Desktop
 		error_pages: 122
 			/path_for_error_file1
+		cgi: off
+				/Users/aomman/Desktop/Webserv_v2/test1.php php
 	lend
 	location /var/www/html:
-		autoindex off
+		autoindex on
 		root /Users/fbouanan/Desktop
-		return 202 /test2
+		return 301 /test2
 		index file_name2
 		upload off
 		error_pages: 222
 			/path_for_error_file2
+		cgi: off
+				/Users/aomman/Desktop/Webserv_v2/test2.php php
 	lend
 end
 server:
 	listen 2.2.2.2:9090
 	methods POST GET DELETE
-	cgi: off
-			/Users/fbouanan/Desktop/lkhra/cgi2.php php
 	location /exampls1l2:
 		index file_names2
-		autoindex on
+		autoindex off
 		root /valid_path_files2
-		upload on
-		return 205 /tests0l0
+		upload off
+		return 301 /tests0l0
 		error_pages: 322
 			/path_for_error_file13
+		cgi: off
+				/Users/fbouanan/Desktop/lkhra/cgi2.php php
 	lend
 end

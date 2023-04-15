@@ -26,6 +26,7 @@ class Location
 		int			status;
 		bool		upload;
 		bool		autoindex;
+		bool		cgi;
 		std::string file_name;
 		std::string	root_val;
 		std::string line_val;
@@ -37,6 +38,8 @@ class Location
 		std::string	autoindex_val;
 		std::string	body_size;
 		std::string	error_path;
+		std::string	cgi_path;
+		std::string cgi_extention;
 		std::vector<std::string> error_cods;
 		Location();
 	
@@ -82,6 +85,8 @@ class Location
 		void	set_error_path(std::string);
 		std::string	get_error_path(void) const;
 
+		void	set_cgi(std::string line);
+		void	set_cgi_path(std::string line);
 		void	check_errors(void) const;
 
 		virtual ~Location();

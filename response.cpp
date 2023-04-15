@@ -151,7 +151,7 @@ void Response::Post(Server &server, int flag) {
 		}
 
 	}
-	else if (server.server_config.cgi)
+	else if (client.location.cgi)
 	{
 		CGI C;
 		int	f;

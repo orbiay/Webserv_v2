@@ -23,10 +23,10 @@ int	CGI::cgi(Pserver &s, Client &c)
 	env["HTTP_ACCEPT_ENCODING"] = c.parse._data["Accept-Encoding"];
 	env["HTTP_HOST"] = c.parse._data["Host"];
 	env["GATEWAY_INTERFACE"] = "CGI/1.1";
-	env["DOCUMENT_ROOT"] = s.L[0].root_val;
+	env["DOCUMENT_ROOT"] = c.location.root_val;
 	env["REQUEST_METHOD"] = "GET";
-	env["REQUEST_URI"] = s.cgi_path;
-	env["SCRIPT_FILENAME"] = s.cgi_path;
+	env["REQUEST_URI"] = c.location.cgi_path;
+	env["SCRIPT_FILENAME"] = c.location.cgi_path;
 	env["SERVER_ADMIN"] = "abdelilahoma@gmail.com";
 	env["SERVER_PORT"] = s.ports;
 	env["SERVER_PROTOCOL"] = "HTTP/1.1";
@@ -48,16 +48,13 @@ int	CGI::cgi(Pserver &s, Client &c)
 	i = 0;
 	char **envm;
 	envm = new char *[env.size() + 1];
-	std::cout << i << j << std::endl;
 	while (i < j)
 	{
 		envm[i] = (char *)envp[i].c_str();
-		std::cout << envm[i] << std::endl;
 		i++;
 	}
 	envm[i] = NULL;
-	std::cout << s.cgi_path << std::endl;
-	std::ifstream f(s.cgi_path);
+	std::ifstream f(c.location.cgi_path);
 	if (!f.is_open())
 	{
 		std::cout << "Unable to open file" << std::endl;		
@@ -65,18 +62,18 @@ int	CGI::cgi(Pserver &s, Client &c)
 	}
 	int	fd[2];
 	char	*argc_s[3];
-	std::cout << s.cgi_extention << std::endl;
-	if (s.cgi_extention == "php")
+	std::cout << s.L[0].cgi_extention << std::endl;
+	if (s.L[0].cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	if (s.cgi_extention == "cpp")
+	if (s.L[0].cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
-	if (s.cgi_extention == "js")
+	if (s.L[0].cgi_extention == "js")
 		argc_s[0] = (char *)"/usr/bin/node";
-	if (s.cgi_extention == "py")
+	if (s.L[0].cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
-	if (s.cgi_extention == "c")
+	if (s.L[0].cgi_extention == "c")
 		argc_s[0] = (char *)"/usr/bin/gcc";
-	argc_s[1] = (char *)s.cgi_path.c_str();
+	argc_s[1] = (char *)s.L[0].cgi_path.c_str();
 	argc_s[2] = NULL;
 	int	tmp_fd = open("rand", O_CREAT | O_RDWR, 0644);
 	int	fd_cline = open(c.file_name.c_str(), std::ios::in);
@@ -99,6 +96,13 @@ int	CGI::cgi(Pserver &s, Client &c)
 		close (fd[1]);
 		dup2 (fd[0], STDIN_FILENO);
 	}
+	i = 0;
+	while (envm[i])
+	{
+		delete []envm[i];
+		i++;	
+	}
+	delete []envm;
     f.close();
 	return (0);
 }
@@ -113,10 +117,10 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	env["HTTP_ACCEPT_ENCODING"] = c.parse._data["Accept-Encoding"];
 	env["HTTP_HOST"] = c.parse._data["Host"];
 	env["GATEWAY_INTERFACE"] = "CGI/1.1";
-	env["DOCUMENT_ROOT"] = s.L[0].root_val;
+	env["DOCUMENT_ROOT"] = c.location.root_val;
 	env["REQUEST_METHOD"] = "POST";
-	env["REQUEST_URI"] = s.cgi_path;
-	env["SCRIPT_FILENAME"] = s.cgi_path;
+	env["REQUEST_URI"] = c.location.cgi_path;
+	env["SCRIPT_FILENAME"] = c.location.cgi_path;
 	env["SERVER_ADMIN"] = "abdelilahoma@gmail.com";
 	env["SERVER_PORT"] = s.ports;
 	env["SERVER_PROTOCOL"] = "HTTP/1.1";
@@ -137,16 +141,13 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	}
 	i = 0;
 	envm = new char *[env.size() + 1];
-	std::cout << i << j << std::endl;
 	while (i < j)
 	{
 		envm[i] = (char *)envp[i].c_str();
-		std::cout << envm[i] << std::endl;
 		i++;
 	}
 	envm[i] = NULL;
-	std::cout << s.cgi_path << std::endl;
-	std::ifstream f(s.cgi_path);
+	std::ifstream f(c.location.cgi_path);
 	if (!f.is_open())
 	{
 		std::cout << "Unable to open file" << std::endl;		
@@ -154,18 +155,18 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	}
 	int	fd[2];
 	char	*argc_s[3];
-	std::cout << s.cgi_extention << std::endl;
-	if (s.cgi_extention == "php")
+	std::cout << s.L[0].cgi_extention << std::endl;
+	if (s.L[0].cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	if (s.cgi_extention == "cpp")
+	if (s.L[0].cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
-	if (s.cgi_extention == "js")
+	if (s.L[0].cgi_extention == "js")
 		argc_s[0] = (char *)"/usr/bin/node";
-	if (s.cgi_extention == "py")
+	if (s.L[0].cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
-	if (s.cgi_extention == "c")
+	if (s.L[0].cgi_extention == "c")
 		argc_s[0] = (char *)"/usr/bin/gcc";
-	argc_s[1] = (char *)s.cgi_path.c_str();
+	argc_s[1] = (char *)s.L[0].cgi_path.c_str();
 	argc_s[2] = NULL;
 	int	tmp_fd = open("rand", O_CREAT | O_RDWR, 0644);
 	int	fd_cline = open(c.file_name.c_str(), std::ios::in);
@@ -188,6 +189,13 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 		close (fd[1]);
 		dup2 (fd[0], STDIN_FILENO);
 	}
+	//i = 0;
+	//while (envm[i])
+	//{
+	//	delete []envm[i];
+	//	i++;	
+	//}
+	//delete []envm;
     f.close();
 	return (0);
 }

@@ -21,11 +21,13 @@ int parsing(int argc, char **argv, char **env)
 {
 	if (argc == 2)
 	{
-		Client c_c;
 		(void)env;
 		(void)argc;
 		Config c(argv);
-		std::cout << c.s[0].L[0].redirec << std::endl;
+		std::cout << c.s[0].L[0].cgi << std::endl;
+		std::cout << c.s[0].L[0].autoindex << std::endl;
+		std::cout << c.s[0].L[1].autoindex << std::endl;
+		std::cout << c.s[0].L[2].autoindex << std::endl;
 		//exit (0);
 	}
 	return (0);
