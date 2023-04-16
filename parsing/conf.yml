@@ -2,7 +2,7 @@ nserv: 2
 body_size 10000000000000000000
 server:
 	listen 127.0.0.255:8080
-	methods GET DELETE
+	methods GET DELETE POST
 	location /var:
 		root /Users/orbiay/Desktop/
 		upload off

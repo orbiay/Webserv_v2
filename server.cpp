@@ -220,7 +220,6 @@ void Server::read_from_socket_client(Client &client)
 void Server::write_in_socket_client(std::string str, std::string file , Client &client)
 {
 	std::cout<<"header "<<str<<std::endl;
-	//exit(0);
 	char *s;
 	s = new char[1024];
     memset(s, '\0', 1024);
