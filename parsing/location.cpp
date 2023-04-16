@@ -48,10 +48,11 @@ void	Location::check_errors(void) const
 		|| this->error_cods.size() == 0
 		|| this->error_path == "")
 		throw (SyntaxError());
-	if ((this->cgi == true && this->upload == true) || (this->cgi == true && this->autoindex == true)
-		|| (this->upload == true && this->autoindex == true))
+	if ((this->cgi == true && this->upload == true) || (this->cgi == false && upload == false))
 		throw (SyntaxError());
 	if (this->status != 301)
+		throw (SyntaxError());
+	if (this->error_cods.size() != this->files_path.size())
 		throw (SyntaxError());
 }
 
