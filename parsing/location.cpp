@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/15 22:58:02 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/16 05:57:51 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,13 @@ void	Location::check_errors(void) const
 {
 	if (this->root_val == ""
 		|| this->location_val == ""
-		|| this->upload_val == ""
-		|| this->error_cods.size() == 0
-		|| this->error_path == "")
-		{
-			throw (SyntaxError());
-		}
-	if ((this->cgi == true && this->upload == true) || (this->cgi == false && this->upload == false))
-		{
-		std::cout << "here" << std::endl;
+		|| this->upload_val == "")
 		throw (SyntaxError());
-		}
+	if ((this->cgi == true && this->upload == true) || (this->cgi == false && upload == false))
+		throw (SyntaxError());
 	if (this->status != 301)
+		throw (SyntaxError());
+	if (this->error_cods.size() != this->files_path.size())
 		throw (SyntaxError());
 }
 
@@ -88,8 +83,8 @@ void	Location::set_error_path(std::string line)
 	i = line.find("/");
 	this->error_path = line.substr(i, line.length());
 	this->files_path = split(this->error_path, '|');
-	//std::cout << this->files_path[1] << std::endl;
-	//exit (0);
+	if (this->files_path.size() == 0 || this->error_cods.size() == 0)
+		throw (SyntaxError());
 }
 
 std::string	Location::set_values(std::string line)

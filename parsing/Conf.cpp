@@ -48,7 +48,7 @@ void	Config::check_yml(char *str)
 
 	std::string s(str);
 	i = s.find(".yml");
-	if (i == std::string::npos)
+	if (i == std::string::npos || i != s.length() - 4)
 		throw (YmlFileError());
 	std::ifstream f(str);
 	if (f.is_open() == false)
@@ -68,7 +68,9 @@ void	Config::set_body_size(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			line = line.substr(i + 1, line.length());
-			this->body_size = std::atoi(line.c_str());
+			//std::cout << line << std::endl;
+			std::stringstream stream(line);
+			stream >> this->body_size;
 			return ;
 		}
 	}
