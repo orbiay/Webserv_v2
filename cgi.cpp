@@ -110,6 +110,14 @@ int	CGI::cgi(Pserver &s, Client &c)
 int	CGI::cgi(Pserver &s, Client &c, char **envm)
 {
 	std::map<std::string, std::string> env;
+	std::stringstream header(c.header);
+	std::string line;
+	while (!header.eof())
+	{
+		getline(header, line);
+		if (line.compare(0, 6, "Cookie") == 0)
+			break;
+	}
 	env["CONTENT_LENGTH"] = c.parse._data["Content-Length"];
 	env["CONTENT_TYPE"] = c.parse._data["Content-Type"];
 	env["REDIRECT_STATUS"] = "200";
@@ -124,7 +132,7 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	env["SERVER_ADMIN"] = "abdelilahoma@gmail.com";
 	env["SERVER_PORT"] = s.ports;
 	env["SERVER_PROTOCOL"] = "HTTP/1.1";
-	env["HTTP_COOKIE"] = c.parse._data["Cookie"];
+	env["HTTP_COOKIE"] = line.substr(8, line.length());
 	std::map<std::string, std::string>::iterator it;
 	std::string	envp[env.size()];
 	it = env.begin();
@@ -144,6 +152,7 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	while (i < j)
 	{
 		envm[i] = (char *)envp[i].c_str();
+		std::cout << envm[i] << std::endl;
 		i++;
 	}
 	envm[i] = NULL;
@@ -189,13 +198,13 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 		close (fd[1]);
 		dup2 (fd[0], STDIN_FILENO);
 	}
-	//i = 0;
-	//while (envm[i])
-	//{
-	//	delete []envm[i];
-	//	i++;	
-	//}
-	//delete []envm;
+	i = 0;
+	while (envm[i])
+	{
+		delete []envm[i];
+		i++;	
+	}
+	delete []envm;
     f.close();
 	return (0);
 }

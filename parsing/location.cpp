@@ -44,9 +44,7 @@ void	Location::check_errors(void) const
 {
 	if (this->root_val == ""
 		|| this->location_val == ""
-		|| this->upload_val == ""
-		|| this->error_cods.size() == 0
-		|| this->error_path == "")
+		|| this->upload_val == "")
 		throw (SyntaxError());
 	if ((this->cgi == true && this->upload == true) || (this->cgi == false && upload == false))
 		throw (SyntaxError());
@@ -85,8 +83,8 @@ void	Location::set_error_path(std::string line)
 	i = line.find("/");
 	this->error_path = line.substr(i, line.length());
 	this->files_path = split(this->error_path, '|');
-	//std::cout << this->files_path[1] << std::endl;
-	//exit (0);
+	if (this->files_path.size() == 0 || this->error_cods.size() == 0)
+		throw (SyntaxError());
 }
 
 std::string	Location::set_values(std::string line)
