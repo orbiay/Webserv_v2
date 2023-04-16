@@ -72,8 +72,10 @@ void Response::file_handler(Server &server)
 {
 	if (is_directory_or_file(client.path) == FILE)
 	{
+		//CGI c;
+		//c.cgi(server.server_config,client);
 		size_file(client.path);
-		client.header = "HTTP/1.1 200 OK\nContent-Type: " + client.content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: closed\r\n\r\n";
+		client.header = "HTTP/1.1 200 OK\nContent-Type: " + client.content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: //closed\r\n\r\n";
 		server.write_in_socket_client(client.header,client.path,client);
 	}
 	else
@@ -86,11 +88,11 @@ bool Response::check_if_exist(Server &server)
 	if (!infile.good())
 	{
 		infile.close();
-		size_file("./404error.html");
+		size_file(getErrorFileName(this->client ,"404"));
 		client.extension = "404error.html";
 		client.content_type = getContentType(server);
 		client.client_header = "HTTP/1.1 404 not found\nContent-Type: " + client.content_type + "\nContent-Length: "+ client.sizefile +"\r\nConnection: closed\r\n\r\n";
-		server.write_in_socket_client(client.client_header,"404error.html", client);
+		server.write_in_socket_client(client.client_header,getErrorFileName(this->client ,"404"), client);
 		return false;
 	}
 	infile.close();
@@ -118,15 +120,11 @@ void Response::directory_handler(Server &server)
 				client.client_header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
 				server.write_in_socket_client(client.client_header,client.path + default_index , client);
 			}
-			//else 
-			//{
-			//	
-			//}
 		}
 		else if (auto_index == false)
 		{
-			client.client_header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length: 	169\r\nConnection: closed\r\n\r\n";
-			server.write_in_socket_client(client.client_header,"403error.html", client);
+			client.client_header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length:"+std::to_string(getFileSize(getErrorFileName(client,"400")))+ "\r\nConnection: closed\r\n\r\n";
+			server.write_in_socket_client(client.client_header,getErrorFileName(client, "403"), client);
 		}
 	}
 	else
@@ -147,12 +145,12 @@ void Response::Get(Server &server) {
 	//addslash(root);
 	if (!infile.good())
 	{
-		size_file("./404error.html");
+		size_file(getErrorFileName(client, "404"));
 		client.extension = "404error.html";
 		client.content_type = getContentType(server);
 		
 		client.client_header = "HTTP/1.1 404 not found\nContent-Type: " + client.content_type + "\nContent-Length: "+ client.sizefile +"\r\nConnection: closed\r\n\r\n";
-		server.write_in_socket_client(client.client_header,"404error.html", client);
+		server.write_in_socket_client(client.client_header,getErrorFileName(client, "404"), client);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/15 01:11:58 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/16 05:57:51 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,14 @@ void	Location::check_errors(void) const
 {
 	if (this->root_val == ""
 		|| this->location_val == ""
-		|| this->upload_val == ""
-		|| this->error_cods.size() == 0
-		|| this->error_path == "")
+		|| this->upload_val == "")
 		throw (SyntaxError());
-	if ((this->cgi == true && this->upload == true) || (this->cgi == true && this->autoindex == true)
-		|| (this->upload == true && this->autoindex == true))
+	if ((this->cgi == true && this->upload == true) || (this->cgi == false && upload == false))
 		throw (SyntaxError());
 	if (this->status != 301)
-	{
-		std::cout << this->status << std::endl;
 		throw (SyntaxError());
-	}
+	if (this->error_cods.size() != this->files_path.size())
+		throw (SyntaxError());
 }
 
 void	Location::set_cgi_path(std::string line)
@@ -63,7 +59,7 @@ void	Location::set_cgi_path(std::string line)
 	size_t	i;
 	size_t	j;
 	i = line.find("/");
-	this->cgi_path = line.substr(i, line.length() - 7);
+	this->cgi_path = line.substr(i, line.length() - 1);
 	j = line.find(" ");
 	if (j == std::string::npos)
 		return ;
@@ -74,7 +70,6 @@ void	Location::set_cgi(std::string	line)
 {
 	size_t	i;
 	i = line.find(" ");
-	std::cout << "cgi" << std::endl;
 	line = line.substr(i + 1, line.length());
 	if (line == "on")
 		cgi = true;
@@ -87,6 +82,9 @@ void	Location::set_error_path(std::string line)
 		return ;
 	i = line.find("/");
 	this->error_path = line.substr(i, line.length());
+	this->files_path = split(this->error_path, '|');
+	if (this->files_path.size() == 0 || this->error_cods.size() == 0)
+		throw (SyntaxError());
 }
 
 std::string	Location::set_values(std::string line)

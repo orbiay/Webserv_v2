@@ -24,7 +24,6 @@ Client::Client() {
 	ready = false;
 	start_writting = 1;
 	fd_file = -1;
-	// post_fd = -1;
 	is_delete = false;
 	is_finish = false;
 	enter = false;
@@ -46,28 +45,12 @@ Client::Client() {
 	readyToParse = false;
 	check = 0;
 	checker = false;
-	// memset(_hex, 0, 1024);
-	// file.open("fcc");
 	std::string m = "data/.";
 	file_name = m.append(generateRandomString(6));
 	file_name.append(".mp4");
-	//std::cout << "fle_name = " << file_name << std::endl;
 	file = open(file_name.c_str(), O_CREAT | O_RDWR | O_APPEND, 0644);
-	// << "file 1 = " << file << std::endl;
 }
 
 Client::~Client() {
 	std::cout<<"Destructor called"<<std::endl;
-	//if (fd_client > -1)
-	//	close(fd_client);
 }
-
-// Client::Client(const Client &r) {
-// 	*this = r;
-// 	// (void)r;
-// }
-
-// Client Client::operator=(const Client &r) {
-// 	(void)r;
-// 	return *this;
-// }

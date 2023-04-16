@@ -1,14 +1,24 @@
-X-Powered-By: PHP/8.0.2
-Content-type: text/html; charset=UTF-8
+error in execve
+|/Users/orbiay/Desktop/web/test.php|
 
-<br />
-<b>Warning</b>:  Undefined array key "avatar" in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>6</b><br />
-<br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>7</b><br />
-<br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>8</b><br />
-<br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>9</b><br />
-<br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>10</b><br />
-Not allowed
+|/Users/orbiay/Desktop/web/test.php|
+
+|/Users/orbiay/Desktop/web/test.php|
+
+|/Users/orbiay/Desktop/web/test.php|
+
+|/Users/orbiay/Desktop/web/test.php|
+
+x109f55c82 in wrap__ZdaPv (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x6ec82)
+    #1 0x109dcc24a in CGI::cgi(Pserver&, Client&) CGI.cpp:105
+    #2 0x109dbef29 in Response::file_handler(Server&) Get.cpp:76
+    #3 0x109dc27f2 in Response::Get(Server&) Get.cpp:163
+    #4 0x109d945f1 in check_methods(Server&, Client&) parseRequest.cpp:236
+    #5 0x109d98199 in parseRequest::check_request(Server&, Client&) parseRequest.cpp:335
+    #6 0x109d4857a in run_server(std::__1::vector<Server, std::__1::allocator<Server> >&) main.cpp:114
+    #7 0x109d4af78 in main main.cpp:186
+    #8 0x7fff7c5593d4 in start (libdyld.dylib:x86_64+0x163d4)
+
+Address 0x7ffee5eb6601 is located in stack of thread T0
+SUMMARY: AddressSanitizer: bad-free (libclang_rt.asan_osx_dynamic.dylib:x86_64h+0x6ec82) in wrap__ZdaPv
+==76091==ABORTING

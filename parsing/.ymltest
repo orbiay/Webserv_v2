@@ -2,14 +2,14 @@ nserv: 2
 body_size 10000000000000000000
 server:
 	listen 127.0.0.255:8080
-	methods GET DELETE
+	methods POST GET DELETE
 	location /var:
 		root /Users/orbiay/Desktop/
 		upload off
 		return 301 http://facebook.com
 		autoindex off
 		cgi: on
-				/Users/orbiay/Desktop/web/test.php php
+				/Users/aomman/Desktop/Webserv_v2/test.php php
 		error_pages: 22 21 32
 			/file1|/file2|file3
 	lend
@@ -18,22 +18,22 @@ server:
 		upload on
 		return 301 /test1
 		index file_name1
-		root /Users/orbiay/Desktop
+		root /Users/fbouanan/Desktop
 		error_pages: 122 133 144
 			/fileL11|/fileL12|fileL13
 		cgi: off
-				/Users/orbiay/Desktop/web/test1.php php
+				/Users/aomman/Desktop/Webserv_v2/test1.php php
 	lend
 	location /var/www/html:
 		autoindex on
-		root /Users/orbiay/Desktop
+		root /Users/fbouanan/Desktop
 		return 301 /test2
 		index file_name2
-		upload on
+		upload off
 		error_pages: 122 133 144
 			/fileL11|/fileL12|fileL13
-		cgi: off
-				/Users/orbiay/Desktop/web/test.php php
+		cgi: on
+				/Users/aomman/Desktop/Webserv_v2/test2.php php
 	lend
 end
 server:
@@ -45,9 +45,9 @@ server:
 		root /valid_path_files2
 		upload on
 		return 301 /tests0l0
-		error_pages: 400 414 404
-			/files1L11|/files1L12|/files1L13
+		error_pages: 1 2 3
+			/files1L11|/files1L12|files1L13
 		cgi: off
-				/Users/orbiay/Desktop/web/cgi2.php php
+				/Users/fbouanan/Desktop/lkhra/cgi2.php php
 	lend
 end
