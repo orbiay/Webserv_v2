@@ -52,10 +52,7 @@ void	Location::check_errors(void) const
 		|| (this->upload == true && this->autoindex == true))
 		throw (SyntaxError());
 	if (this->status != 301)
-	{
-		std::cout << this->status << std::endl;
 		throw (SyntaxError());
-	}
 }
 
 void	Location::set_cgi_path(std::string line)
@@ -74,7 +71,6 @@ void	Location::set_cgi(std::string	line)
 {
 	size_t	i;
 	i = line.find(" ");
-	std::cout << "cgi" << std::endl;
 	line = line.substr(i + 1, line.length());
 	if (line == "on")
 		cgi = true;
@@ -87,6 +83,9 @@ void	Location::set_error_path(std::string line)
 		return ;
 	i = line.find("/");
 	this->error_path = line.substr(i, line.length());
+	this->files_path = split(this->error_path, '|');
+	//std::cout << this->files_path[1] << std::endl;
+	//exit (0);
 }
 
 std::string	Location::set_values(std::string line)

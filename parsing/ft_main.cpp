@@ -25,10 +25,9 @@ int parsing(int argc, char **argv, char **env)
 		(void)argc;
 		Config c(argv);
 		std::cout << c.s[0].L[0].cgi << std::endl;
-		std::cout << c.s[0].L[0].autoindex << std::endl;
-		std::cout << c.s[0].L[1].autoindex << std::endl;
-		std::cout << c.s[0].L[2].autoindex << std::endl;
-		//exit (0);
+		std::cout << c.s[1].L[0].error_cods[2] << std::endl;
+		std::cout << c.s[1].L[0].files_path[2] << std::endl;
+		exit (0);
 	}
 	return (0);
 }
