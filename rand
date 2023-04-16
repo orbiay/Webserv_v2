@@ -2,13 +2,13 @@ X-Powered-By: PHP/8.0.2
 Content-type: text/html; charset=UTF-8
 
 <br />
-<b>Warning</b>:  Undefined array key "avatar" in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>6</b><br />
+<b>Warning</b>:  Undefined array key "avatar" in <b>/Users/fbouanan/Desktop/lkhra/test.php</b> on line <b>6</b><br />
 <br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>7</b><br />
+<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/fbouanan/Desktop/lkhra/test.php</b> on line <b>7</b><br />
 <br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>8</b><br />
+<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/fbouanan/Desktop/lkhra/test.php</b> on line <b>8</b><br />
 <br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>9</b><br />
+<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/fbouanan/Desktop/lkhra/test.php</b> on line <b>9</b><br />
 <br />
-<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/aomman/Desktop/Webserv_v2/test.php</b> on line <b>10</b><br />
+<b>Warning</b>:  Trying to access array offset on value of type null in <b>/Users/fbouanan/Desktop/lkhra/test.php</b> on line <b>10</b><br />
 Not allowed

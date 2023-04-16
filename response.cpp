@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/16 05:41:08 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:47:33 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 void Response::size_file(std::string file_name)
 {
+	std::cout<<"file name == "<<file_name<<std::endl;
+
 	std::ifstream file(file_name, std::ifstream::ate | std::ifstream::binary);
     if (file.is_open())
 	{
@@ -26,7 +28,6 @@ void Response::size_file(std::string file_name)
     else {
         client.is_delete = true;
 		file.close();
-		//exit(0);
     }
 }
 
@@ -165,7 +166,6 @@ void Response::Post(Server &server, int flag) {
 
 void Response::Delete(Server &server) {
 	(void)server;
-
 }
 
 Response::~Response() {

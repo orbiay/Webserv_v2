@@ -152,12 +152,15 @@ int check_url_size (std::string url) {
 std::string get_pure_one(std::string &location_val,std::string url)
 {
 	// std::cout<<<<
+	//if (location_val.lenght() == url.lenght())
+	std::cout<<"location = "<<location_val<<" url == "<<url<<std::endl;
 	std::string::iterator c = url.begin() + location_val.length();
-	c++;
 	std::string str;
 	std::cout<<"c = "<<*c<<std::endl;
 	for(;c != url.end();c++)
 		str.push_back(*c);//segfault if url is a directory
+	std::cout<<"str = "<<str<<std::endl;
+	//exit(0);
 	return str;
 }
 

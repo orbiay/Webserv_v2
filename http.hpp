@@ -31,7 +31,6 @@
 #include <signal.h>
 #include "parsing/location.hpp"
 #include"parsing/config.hpp"
-int	cgi_post(Pserver &s, Client &c, char **envm = NULL);
 
 
 #define DIRE 1
@@ -45,7 +44,7 @@ typedef struct s_hcode {
 // void cgi(Pserver &s);
 std::string getErrorFileName(Client &client ,std::string code);
 size_t	getFileSize(const std::string& name);
-
+std::string size_t_to_string(size_t value);
 class Http{
     public:
     Http();

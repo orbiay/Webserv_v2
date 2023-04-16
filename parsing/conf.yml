@@ -1,7 +1,7 @@
-nserv: 2
+nserv: 1
 body_size 10000000000000000000
 server:
-	listen 127.0.0.255:8080
+	listen 127.0.0.255:8081
 	methods POST GET DELETE
 	location /var:
 		root /Users/fbouanan/Desktop/
@@ -18,36 +18,21 @@ server:
 		upload on
 		return 301 /test1
 		index file_name1
-		root /Users/fbouanan/Desktop
+		root /Users/orbiay/Desktop
 		error_pages: 122 133 144
 			/fileL11|/fileL12|fileL13
 		cgi: off
-				/Users/fbouanan/Desktop/lkhra/test1.php php
+				/Users/orbiay/Desktop/web/test1.php php
 	lend
 	location /var/www/html:
 		autoindex on
-		root /Users/fbouanan/Desktop
+		root /Users/orbiay/Desktop
 		return 301 /test2
 		index file_name2
 		upload on
 		error_pages: 122 133 144
 			/fileL11|/fileL12|fileL13
 		cgi: off
-				/Users/fbouanan/Desktop/lkhra/test2.php php
-	lend
-end
-server:
-	listen 2.2.2.2:9090
-	methods POST GET DELETE
-	location /exampls1l2:
-		index file_names2
-		autoindex off
-		root /valid_path_files2
-		upload on
-		return 301 /tests0l0
-		error_pages: 400 414 404    
-			/files1L11|/files1L12|/files1L13
-		cgi: off
-				/Users/fbouanan/Desktop/lkhra/cgi2.php php
+				/Users/orbiay/Desktop/web/test.php php
 	lend
 end
