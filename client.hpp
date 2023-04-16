@@ -42,7 +42,6 @@ class Client{
 	std::string file_name;
 	int h;
 	char hex_c[10];
-	// char *_body;
 	std::string   sizefile;
     std::string   extension;
 	int post_fd;

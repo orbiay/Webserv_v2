@@ -15,13 +15,13 @@ server:
 	lend
 	location /exampl1:
 		autoindex off
-		upload on
+		upload off
 		return 301 /test1
 		index file_name1
 		root /Users/fbouanan/Desktop
 		error_pages: 200
 			/path_for_error_file1
-		cgi: off
+		cgi: on
 				/Users/fbouanan/Desktop/lkhra/test1.php php
 	lend
 	location /var/www/html:
@@ -29,10 +29,10 @@ server:
 		root /Users/fbouanan/Desktop
 		return 301 /test2
 		index file_name2
-		upload on
-		error_pages: 222
-			/path_for_error_file2
-		cgi: off
+		upload off
+		error_pages: 222 301 201
+			/path_for_f1 | /asdas | /fsd
+		cgi: on
 				/Users/fbouanan/Desktop/lkhra/test2.php php
 	lend
 end

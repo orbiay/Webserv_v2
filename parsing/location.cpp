@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/15 01:11:58 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/15 22:58:02 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,14 @@ void	Location::check_errors(void) const
 		|| this->upload_val == ""
 		|| this->error_cods.size() == 0
 		|| this->error_path == "")
+		{
+			throw (SyntaxError());
+		}
+	if ((this->cgi == true && this->upload == true) || (this->cgi == false && this->upload == false))
+		{
+		std::cout << "here" << std::endl;
 		throw (SyntaxError());
-	if ((this->cgi == true && this->upload == true) || (this->cgi == true && this->autoindex == true)
-		|| (this->upload == true && this->autoindex == true))
-		throw (SyntaxError());
+		}
 	if (this->status != 301)
 	{
 		std::cout << this->status << std::endl;
