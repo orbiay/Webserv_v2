@@ -43,9 +43,10 @@ class Response{
 		int read_and_write(Client &client);
 		void size_file(std::string file_name);
 		int is_directory_or_file(std::string path);
-		void autoindex_mode(bool &auto_index,std::string &default_index,std::string root,Server &server);
+		void autoindex_mode(bool &auto_index,std::string &default_index,std::string root,Server &server,Client &client);
 		void file_handler(Server &server);
 		void directory_handler(Server &server);
+		bool check_if_exist(Server &server);
 };
 
 #endif

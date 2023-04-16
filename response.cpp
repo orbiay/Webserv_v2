@@ -17,6 +17,8 @@
 
 void Response::size_file(std::string file_name)
 {
+	std::cout<<"file name == "<<file_name<<std::endl;
+
 	std::ifstream file(file_name, std::ifstream::ate | std::ifstream::binary);
     if (file.is_open())
 	{
@@ -26,7 +28,6 @@ void Response::size_file(std::string file_name)
     else {
         client.is_delete = true;
 		file.close();
-		//exit(0);
     }
 }
 
