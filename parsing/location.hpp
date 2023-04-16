@@ -41,6 +41,7 @@ class Location
 		std::string	cgi_path;
 		std::string cgi_extention;
 		std::vector<std::string> error_cods;
+		std::vector<std::string>files_path;
 		Location();
 	
 		class	PathError : public std::exception

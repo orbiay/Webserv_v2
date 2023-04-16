@@ -43,6 +43,8 @@ typedef struct s_hcode {
 } t_hcode;
 
 // void cgi(Pserver &s);
+std::string getErrorFileName(Client &client ,std::string code);
+size_t	getFileSize(const std::string& name);
 
 class Http{
     public:

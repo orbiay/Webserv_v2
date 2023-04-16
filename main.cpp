@@ -80,7 +80,7 @@ void run_server(std::vector<Server> &server_list)
 		fd_set writable = Server::current;
 		fd_set readable = Server::current;
 		ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
-		std::cout<<"max=========== "<<Server::maxfd<<std::endl;
+		// std::cout<<"max=========== "<<Server::maxfd<<std::endl;
 		if (ret < 0) {
 			std::perror("select() Error ");
 			exit(EXIT_FAILURE);

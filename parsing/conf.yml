@@ -1,27 +1,27 @@
 nserv: 2
-body_size 1000000
+body_size 10000000
 server:
 	listen 127.0.0.255:8080
-	methods POST GET DELETE
+	methods GET DELETE
 	location /var:
 		root /Users/fbouanan/Desktop/
-		upload off
+		upload on
 		return 301 http://facebook.com
 		autoindex off
-		cgi: on
+		cgi: off
 				/Users/fbouanan/Desktop/lkhra/test.php php
-		error_pages: 22
-			/path_for_error_file
+		error_pages: 22 21 32
+			/file1|/file2|file3
 	lend
 	location /exampl1:
 		autoindex off
-		upload off
+		upload on
 		return 301 /test1
 		index file_name1
 		root /Users/fbouanan/Desktop
-		error_pages: 200
-			/path_for_error_file1
-		cgi: on
+		error_pages: 122 133 144
+			/fileL11|/fileL12|fileL13
+		cgi: off
 				/Users/fbouanan/Desktop/lkhra/test1.php php
 	lend
 	location /var/www/html:
@@ -29,10 +29,10 @@ server:
 		root /Users/fbouanan/Desktop
 		return 301 /test2
 		index file_name2
-		upload off
-		error_pages: 222 301 201
-			/path_for_f1 | /asdas | /fsd
-		cgi: on
+		upload on
+		error_pages: 122 133 144
+			/fileL11|/fileL12|fileL13
+		cgi: off
 				/Users/fbouanan/Desktop/lkhra/test2.php php
 	lend
 end
@@ -45,8 +45,8 @@ server:
 		root /valid_path_files2
 		upload on
 		return 301 /tests0l0
-		error_pages: 322
-			/path_for_error_file13
+		error_pages: 400 414 404 413 405 404 201 403 301
+			/files1L11|/files1L12|/files1L13
 		cgi: off
 				/Users/fbouanan/Desktop/lkhra/cgi2.php php
 	lend

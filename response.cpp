@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/15 01:38:27 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/16 05:41:08 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void Response::Post(Server &server, int flag) {
 			// printf("here\n");
 		if (flag == FILE) {
 			rename(client.file_name.c_str(), path.c_str());
-			server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
+			server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"201")))+"\r\n\r\n",getErrorFileName(this->client, "201"),client);
 		}
 		else if(flag == DIRE) {
 			std::cout << "root_val = " << "|" << this->client.location.root_val << "|" << std :: endl;
@@ -143,10 +143,10 @@ void Response::Post(Server &server, int flag) {
 			if (!this->client.location.index_val.empty()) {
 				// std::cout << "here 1" << std::endl;
 				rename(client.file_name.c_str(), (this->client.location.root_val + this->client.location.index_val).c_str());
-				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: 215\r\n\r\n","201success.html",client);
+				server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"201")))+"\r\n\r\n",getErrorFileName(this->client, "201"),client);
 			}
 			else {
-				server.write_in_socket_client("HTTP/1.1 403 Forbidden\nContent-Type: text/html\nContent-Length: 214\r\n\r\n","403forbidden.html",client);
+				server.write_in_socket_client("HTTP/1.1 403 Forbidden\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"403")))+"\r\n\r\n",getErrorFileName(this->client, "403"),client);
 			}
 		}
 
