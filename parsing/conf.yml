@@ -2,13 +2,13 @@ nserv: 2
 body_size 10000000000000000000
 server:
 	listen 127.0.0.255:8080
-	methods GET DELETE
+	methods POST GET DELETE
 	location /var:
 		root /Users/fbouanan/Desktop/
-		upload on
+		upload off
 		return 301 http://facebook.com
 		autoindex off
-		cgi: off
+		cgi: on
 				/Users/fbouanan/Desktop/lkhra/test.php php
 		error_pages: 22 21 32
 			/file1|/file2|file3
@@ -45,7 +45,7 @@ server:
 		root /valid_path_files2
 		upload on
 		return 301 /tests0l0
-		error_pages: 400 414 404 413 405 404 201 403 301
+		error_pages: 400 414 404    
 			/files1L11|/files1L12|/files1L13
 		cgi: off
 				/Users/fbouanan/Desktop/lkhra/cgi2.php php
