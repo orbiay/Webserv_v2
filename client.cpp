@@ -18,6 +18,8 @@ std::string generateRandomString(int length) {
 }
 
 Client::Client() {
+	fd_rand = 0;
+	fd_rand_body = 0;
 	fd_client = -1;
 	read_size = 0;
 	address_length = sizeof(addresStorage);
@@ -45,6 +47,7 @@ Client::Client() {
 	readyToParse = false;
 	check = 0;
 	checker = false;
+	in_cgi = 0;
 	std::string m = "data/.";
 	file_name = m.append(generateRandomString(6));
 	file_name.append(".mp4");
@@ -53,4 +56,5 @@ Client::Client() {
 
 Client::~Client() {
 	std::cout<<"Destructor called"<<std::endl;
+	//close(file);
 }

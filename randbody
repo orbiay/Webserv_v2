@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple PHP Code Example</title>
+</head>
+<body>
+	<form method="POST">
+		<label>Enter your name:</label>
+		<input type="text" name="name">
+		<input type="submit" value="Submit">
+	</form>
+
+	</body>
+</html>

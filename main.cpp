@@ -80,7 +80,7 @@ void run_server(std::vector<Server> &server_list)
 		fd_set writable = Server::current;
 		fd_set readable = Server::current;
 		ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
-		// std::cout<<"max=========== "<<Server::maxfd<<std::endl;
+		std::cout<<"max=========== "<<Server::maxfd<<std::endl;
 		if (ret < 0) {
 			std::perror("select() Error ");
 			exit(EXIT_FAILURE);
@@ -119,8 +119,6 @@ void run_server(std::vector<Server> &server_list)
 								perror("close() failed");
 							server.clients.erase(std::next(server.clients.begin(), i));
 							std::cout << "The client droped secsusfully \n";
-							//if (i == 2)
-							//	while(1);
 							i--;
 							
 						}

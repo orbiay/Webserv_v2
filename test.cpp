@@ -33,6 +33,5 @@ int main() {
     } else {
         std::cout << "Substring not found" << std::endl;
     }
-
     return 0;
 }

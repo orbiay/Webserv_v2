@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:20:30 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/16 05:57:51 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:30:13 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	Location::set_cgi_path(std::string line)
 	size_t	i;
 	size_t	j;
 	i = line.find("/");
-	this->cgi_path = line.substr(i, line.length() - 1);
+	this->cgi_path = line.substr(i, line.length() - 8);
 	j = line.find(" ");
 	if (j == std::string::npos)
 		return ;

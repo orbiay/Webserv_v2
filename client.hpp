@@ -5,6 +5,8 @@
 #include "parsing/location.hpp"
 class Client{
 	public:
+	int fd_rand;
+	int fd_rand_body;
 	Client();
 	~Client();
 	size_t read_size;
@@ -53,6 +55,7 @@ class Client{
 	bool checker;
 	std::string rand_file;
 	
+	int in_cgi;
 	/*************************/
     std::string url;
     std::string client_header;

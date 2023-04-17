@@ -219,7 +219,6 @@ void Server::read_from_socket_client(Client &client)
 
 void Server::write_in_socket_client(std::string str, std::string file , Client &client)
 {
-	std::cout<<"header "<<str<<std::endl;
 	char *s;
 	s = new char[1024];
     memset(s, '\0', 1024);
@@ -243,7 +242,6 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     }
     // write(1,"\n",1);
 	int b = send(client.fd_client,s,i,0);
-	std::cout << " send = "<< b << std::endl;
 	if (b == 0)
 		usleep(1);
 	client.read_size += b;
