@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:40 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/16 20:47:33 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/17 02:14:53 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,54 @@ void Response::Post(Server &server, int flag) {
 	}
 }
 
-void Response::Delete(Server &server) {
-	(void)server;
+int delete_directory_contents(const std::string& dir_path) {
+    DIR* dir = opendir(dir_path.c_str());
+    if (!dir) {
+        std::cerr << "Error opening directory " << dir_path << std::endl;
+        return 1;
+    }
+
+    dirent* entry;
+    while ((entry = readdir(dir))) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        std::string entry_path = dir_path + "/" + entry->d_name;
+        if (entry->d_type == DT_DIR) {
+            delete_directory_contents(entry_path);
+            rmdir(entry_path.c_str());
+        } else {
+            unlink(entry_path.c_str());
+        }
+    }
+    closedir(dir);
+	return 0;
+}
+
+void Response::Delete(Server &server, int flag) {
+	std::string path = this->client.location.root_val + this->client.location.location_val;
+	std::cout << "path = " << path << std::endl;
+	if (flag == FILE) {
+		int file_to_delete = open(path.c_str(),0);
+		if (file_to_delete < 0) {
+			server.write_in_socket_client("HTTP/1.1 404 Not Found\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"404")))+"\r\n\r\n",getErrorFileName(this->client, "404"),client);
+		}
+		if (remove(path.c_str()) == 0) {
+			server.write_in_socket_client("HTTP/1.1 204 No Content\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"204")))+"\r\n\r\n",getErrorFileName(this->client, "204"),client);
+		}
+	}
+	else if (flag == DIRE) {
+		if (path.rfind("/") == path.size() - 1) {
+			if(delete_directory_contents(path))
+				server.write_in_socket_client("HTTP/1.1 500 No Content\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"500")))+"\r\n\r\n",getErrorFileName(this->client, "500"),client);
+			else
+				server.write_in_socket_client("HTTP/1.1 204 No Content\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"204")))+"\r\n\r\n",getErrorFileName(this->client, "204"),client);
+		}
+		else {
+			server.write_in_socket_client("HTTP/1.1 409 Conflict\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"409")))+"\r\n\r\n",getErrorFileName(this->client, "409"),client);
+		}
+	}
 }
 
 Response::~Response() {
