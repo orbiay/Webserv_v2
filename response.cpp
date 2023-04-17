@@ -57,11 +57,21 @@ std::string Response::getContentType(Server &server) {
 	std::string fileExtension = str.substr(pos);
 	if (fileExtension == ".mp4")
 		return "video/mp4";
-    if (fileExtension == ".html" || fileExtension == ".htm") {
+    else if (fileExtension == ".html" || fileExtension == ".htm") {
         return "text/html";
-    } else if (fileExtension == ".css") {
+    } else if (fileExtension == ".php") {
+        return "text/html";
+	}
+	else if (fileExtension == ".css") {
         return "text/css";
-    } else if (fileExtension == ".js") {
+    }
+	else if (fileExtension == ".json") {
+        return "application/json";
+    }
+	else if (fileExtension == ".pdf") {
+        return "application/pdf";
+    }
+    else if (fileExtension == ".js") {
         return "application/javascript";
     } else if (fileExtension == ".json") {
         return "application/json";

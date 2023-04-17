@@ -213,10 +213,10 @@ int	is_file(Client &client) {
 	return (0);
 }
 
-int find_index(Server &server, std::string method) {
+int find_index(Client &client, std::string method) {
 	int i = 0;
 	while(i < 3) {
-		if (server.server_config.L[0].methods[i] == method)
+		if (client.location.methods[i] == method)
 			return (1);
 		i++;
 	}
@@ -230,11 +230,11 @@ void	check_methods(Server &server, Client &client)
 	//res.client = &client;
 	// res.client = client.parse;
 	// std::cout << "method = " << server.server_config.methods[0] << std::endl;
-	if (client.parse._data["method"] == "GET" && find_index(server, "GET")) {
+	if (client.parse._data["method"] == "GET" && find_index(client, "GET")) {
 		res.Get(server);
 		//server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
 	}
-	else if (client.parse._data["method"] == "POST" && find_index(server, "POST")) {
+	else if (client.parse._data["method"] == "POST" && find_index(client, "POST")) {
 		if (is_file(client)) {
 			res.Post(server, FILE);
 			// res.Post(server);
@@ -244,18 +244,18 @@ void	check_methods(Server &server, Client &client)
 		}
 	}
 
-	else if (client.parse._data["method"] == "DELETE" && find_index(server, "DELETE")) {
-		if (is_file(client)) {
+	else if (client.parse._data["method"] == "DELETE" && find_index(client, "DELETE")) {
+		if (access((client.location.root_val + client.location.location_val).c_str(), F_OK) == 0) {
 			res.Delete(server, FILE);
 		}
 		else {
 			res.Delete(server, DIRE);
 		}
 	}
-	else {
-		server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);
-		return ;
-	}
+	// else {
+	// 	server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);
+	// 	return ;
+	// }
 }
 
 		//-------------------------------------------------------------------------------------------
@@ -295,8 +295,20 @@ std::string getErrorFileName(Client &client ,std::string code) {
 
 }
 
+int isMethodValid(parseRequest &p) {
+	if (p._data["method"] != "POST" && p._data["method"] != "GET" && p._data["method"] != "DELETE") {
+		return -1;
+	}
+	return 0;
+}
+
 void	parseRequest::check_request(Server &server,Client &iter) {
 	if (!iter.checker) {
+
+		if (isMethodValid(*this) == -1) {
+			server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"405")))+"\r\n\r\n",getErrorFileName(iter, "405"), iter);
+			return ;
+		}
 		// printf("here\n");
 		if (this->_data["method"] == "POST") {
 			if (this->_data["Content-Length"].length() == 1){
@@ -327,12 +339,12 @@ void	parseRequest::check_request(Server &server,Client &iter) {
 			server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"413")))+ "\r\n\r\n",getErrorFileName(iter, "413"), iter);
 			return ;
 		}
-		// if (!iter.location.redirec.empty()) {
-		// 	std::cout << "redirec = " << iter.location.redirec << std::endl;
-		// 	// server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
-		// 	server.write_in_socket_client("HTTP/1.1 301 MOVED PERMANENTLY\nLocation: " + iter.location.redirec + "\nContent-Type: text/html\nContent-Length: 200\r\n\r\n", getErrorFileName(iter, "301"), iter);
-		// 	return ;
-		// }
+		if (!iter.location.redirec.empty()) {
+			std::cout << "redirec = " << iter.location.redirec << std::endl;
+			// server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
+			server.write_in_socket_client("HTTP/1.1 301 MOVED PERMANENTLY\nLocation: " + iter.location.redirec + "\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"413")))+ "\r\n\r\n", getErrorFileName(iter, "301"), iter);
+			return ;
+		}
 		iter.checker = true;
 	}
 	check_methods(server, iter);

@@ -68,7 +68,6 @@ void	Config::set_body_size(std::ifstream &rf)
 		{
 			i = line.find(" ");
 			line = line.substr(i + 1, line.length());
-			//std::cout << line << std::endl;
 			std::stringstream stream(line);
 			stream >> this->body_size;
 			return ;

@@ -99,15 +99,15 @@ int	CGI::cgi(Pserver &s, Client &c)
 	}
 	int	fd[2];
 	char	*argc_s[3];
-	if (s.L[0].cgi_extention == "php")
+	if (c.location.cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	if (s.L[0].cgi_extention == "cpp")
+	if (c.location.cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
-	if (s.L[0].cgi_extention == "js")
+	if (c.location.cgi_extention == "js")
 		argc_s[0] = (char *)"/usr/bin/node";
-	if (s.L[0].cgi_extention == "py")
+	if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
-	if (s.L[0].cgi_extention == "c")
+	if (c.location.cgi_extention == "c")
 		argc_s[0] = (char *)"/usr/bin/gcc";
 	argc_s[1] = (char *)s.L[0].cgi_path.c_str();
 	argc_s[2] = NULL;
