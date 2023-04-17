@@ -17,8 +17,6 @@
 
 void Response::size_file(std::string file_name)
 {
-	std::cout<<"file name == "<<file_name<<std::endl;
-
 	std::ifstream file(file_name, std::ifstream::ate | std::ifstream::binary);
     if (file.is_open())
 	{
@@ -154,13 +152,52 @@ void Response::Post(Server &server, int flag) {
 	}
 	else if (client.location.cgi)
 	{
-		CGI C;
-		int	f;
-		f = C.cgi(server.server_config, client, NULL);
-		size_t rand_size = getFileSize("rand");
-		std::string str = size_t_to_string(rand_size);
-		server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: application/json\nContent-Length: " + str + "\r\n\r\n","rand",client);
-		
+		CGI c;
+		c.cgi(server.server_config, client);
+		if(client.in_cgi == 0)
+		{
+			client.fd_rand = open("./rand",O_RDONLY);
+			client.fd_rand_body = open("./randbody", O_CREAT | O_TRUNC | O_RDWR);
+			size_file("./rand");
+			int len = std::atoi(client.sizefile.c_str());
+			char *s = new char[len + 1];
+			memset(s,0,len + 1);
+			int sizereaded = read(client.fd_rand,s,len);
+			if (sizereaded)
+			{
+				std::string str(s);
+				size_t pos = str.find("\r\n\r\n");
+				if (pos != std::string::npos)
+				{
+					std::string body = str.substr(pos + 4);
+					client.header ="HTTP/1.1 200 OK\r\nContent-Length:" + std::to_string(body.length()) +  "\r\n"+ str.substr(0, pos) + "\r\nConnection: closed\r\n\r\n";
+					write(client.fd_rand_body,body.c_str(),body.length());
+					close(client.fd_rand);
+					close(client.fd_rand_body);
+					delete [] s;
+				}
+				else 
+				{
+					close(client.fd_rand);
+					close(client.fd_rand_body);
+					delete [] s;
+					close(client.fd_client);
+					FD_CLR(client.fd_client,&Server::current);
+					client.is_delete = true;
+				}
+			}
+			else {
+				close(client.fd_rand);
+				close(client.fd_rand_body);
+				delete [] s;
+				close(client.fd_client);
+				FD_CLR(client.fd_client,&Server::current);
+				client.is_delete = true;
+			}
+			client.in_cgi = 1;
+			return ;
+		}
+		server.write_in_socket_client(client.header,"./randbody",client);
 	}
 }
 

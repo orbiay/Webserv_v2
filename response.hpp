@@ -47,6 +47,7 @@ class Response{
 		void file_handler(Server &server);
 		void directory_handler(Server &server);
 		bool check_if_exist(Server &server);
+		int cgi_handler(Server &server);
 };
 
 #endif

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include"CGI.hpp"
+#include<sys/wait.h>
 
 CGI::~CGI(){}
 CGI::CGI(){}
@@ -31,6 +32,8 @@ int	CGI::cgi(Pserver &s, Client &c)
 	env["SERVER_PORT"] = s.ports;
 	env["SERVER_PROTOCOL"] = "HTTP/1.1";
 	env["HTTP_COOKIE"] = c.parse._data["Cookie"];
+	env["PATH_INFO"] = c.location.root_val + c.location.location_val ;
+	env["name"] = "get";
 	std::map<std::string, std::string>::iterator it;
 	std::string	envp[env.size()];
 	it = env.begin();
@@ -51,11 +54,11 @@ int	CGI::cgi(Pserver &s, Client &c)
 	while (i < j)
 	{
 		envm[i] = (char *)envp[i].c_str();
+		std::cout << envm[i] << std::endl;
 		i++;
 	}
 	envm[i] = NULL;
 	// std::ifstream f(c.location.cgi_path);
-	std::cout << "|" << c.location.cgi_path << "|" <<std::endl;
 	std::ifstream f(c.location.cgi_path);
 	if (!f.good())
 	{
@@ -65,9 +68,8 @@ int	CGI::cgi(Pserver &s, Client &c)
 	// exit (0);
 	int	fd[2];
 	char	*argc_s[3];
-	std::cout << s.L[0].cgi_extention << std::endl;
 	if (s.L[0].cgi_extention == "php")
-		argc_s[0] = (char *)"/Users/fbouanan/Desktop/lkhra/php-cgi";
+		argc_s[0] = (char *)"/Users/orbiay/Desktop/web/php-cgi";
 	if (s.L[0].cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
 	if (s.L[0].cgi_extention == "js")
@@ -78,7 +80,7 @@ int	CGI::cgi(Pserver &s, Client &c)
 		argc_s[0] = (char *)"/usr/bin/gcc";
 	argc_s[1] = (char *)s.L[0].cgi_path.c_str();
 	argc_s[2] = NULL;
-	int	tmp_fd = open("rand", O_CREAT | O_RDWR, 0644);
+	int	tmp_fd = open("rand", O_CREAT | O_RDWR | O_TRUNC , 0644);
 	int	fd_cline = open(c.file_name.c_str(), std::ios::in);
 	if (access(argc_s[1], F_OK) == 0)
 	{
@@ -99,6 +101,9 @@ int	CGI::cgi(Pserver &s, Client &c)
 		close (fd[1]);
 		dup2 (fd[0], STDIN_FILENO);
 	}
+	waitpid(-1, NULL, WUNTRACED);
+	close (tmp_fd);
+	close(fd_cline);
 	// i = 0;
 	// while (envm[i])
 	// {
@@ -135,7 +140,9 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	env["SERVER_ADMIN"] = "abdelilahoma@gmail.com";
 	env["SERVER_PORT"] = s.ports;
 	env["SERVER_PROTOCOL"] = "HTTP/1.1";
+	env["PATH_INFO"] = c.location.root_val + c.location.location_val ;
 	env["HTTP_COOKIE"] = line.substr(8, line.length());
+	env["name"] = "mobo";
 	std::map<std::string, std::string>::iterator it;
 	std::string	envp[env.size()];
 	it = env.begin();
@@ -159,7 +166,6 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	}
 	envm[i] = NULL;
 	std::ifstream f(c.location.cgi_path);
-	std::cout<<c.location.cgi_path<<std::endl;
 	if (!f.good())
 	{
 		std::cout << "Unable to open file" << std::endl;		
@@ -168,7 +174,7 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	int	fd[2];
 	char	*argc_s[3];
 	if (s.L[0].cgi_extention == "php")
-		argc_s[0] = (char *)"/Users/fbouanan/Desktop/lkhra/php-cgi";
+		argc_s[0] = (char *)"/Users/orbiay/Desktop/web/php-cgi";
 	if (s.L[0].cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
 	if (s.L[0].cgi_extention == "js")
@@ -200,6 +206,9 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 		close (fd[1]);
 		dup2 (fd[0], STDIN_FILENO);
 	}
+	waitpid(-1, NULL, WUNTRACED);
+	close (tmp_fd);
+	close(fd_cline);
 	// i = 0;
 	// while (envm[i])
 	// {

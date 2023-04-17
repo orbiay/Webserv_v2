@@ -1,5 +1,6 @@
 #include"response.hpp"
 #include"CGI.hpp"
+
 std::string get_html_file(std::string& links)
 {
 	int fd = open("./www/serve.html", O_RDWR);
@@ -42,7 +43,6 @@ void Response::autoindex_mode(bool &auto_index,std::string &default_index,std::s
 				links += link_maker(client.path,info-> d_name);
 				info = readdir(Directory);
 			}
-			//std::cout<<"HOLALALALAL"<<std::endl;
 			std::string body = get_html_file(links);
 			if (body == "error")
 			{
@@ -68,18 +68,71 @@ void init_vars(std::string &root,bool &auto_index,std::string &default_index,Ser
 	default_index = client.location.index_val;
 }
 
+int Response::cgi_handler(Server &server)
+{
+	if (client.location.cgi && client.location.cgi_extention == client.path.substr(client.path.rfind(".") + 1, client.path.length()))
+	{
+		CGI c;
+		c.cgi(server.server_config, client);
+		if(client.in_cgi == 0)
+		{
+			client.fd_rand = open("./rand",O_RDONLY);
+			client.fd_rand_body = open("./randbody", O_CREAT | O_TRUNC | O_RDWR);
+			size_file("./rand");
+			int len = std::atoi(client.sizefile.c_str());
+			char *s = new char[len + 1];
+			memset(s,0,len + 1);
+			int sizereaded = read(client.fd_rand,s,len);
+			if (sizereaded)
+			{
+				std::string str(s);
+				size_t pos = str.find("\r\n\r\n");
+				if (pos != std::string::npos)
+				{
+					std::string body = str.substr(pos + 4);
+					client.header ="HTTP/1.1 200 OK\r\nContent-Length:" + std::to_string(body.length()) +  "\r\n"+ str.substr(0, pos) + "\r\nConnection: closed\r\n\r\n";
+					write(client.fd_rand_body,body.c_str(),body.length());
+					close(client.fd_rand);
+					close(client.fd_rand_body);
+					delete [] s;
+				}
+				else 
+				{
+					close(client.fd_rand);
+					close(client.fd_rand_body);
+					delete [] s;
+					close(client.fd_client);
+					FD_CLR(client.fd_client,&Server::current);
+					client.is_delete = true;
+				}
+			}
+			else {
+				close(client.fd_rand);
+				close(client.fd_rand_body);
+				delete [] s;
+				close(client.fd_client);
+				FD_CLR(client.fd_client,&Server::current);
+				client.is_delete = true;
+			}
+			client.in_cgi = 1;
+			return 1;
+		}
+		server.write_in_socket_client(client.header,"./randbody",client);
+		return 1;
+	}
+	return 0;
+}
+
 void Response::file_handler(Server &server)
 {
 	if (is_directory_or_file(client.path) == FILE)
 	{
-		CGI c;
-		c.cgi(server.server_config,client);
-		size_t rand_size = getFileSize("rand");
-		std::string str = size_t_to_string(rand_size);
-		server.write_in_socket_client("HTTP/1.1 201 OK\nContent-Type: application/json\nContent-Length: " + str + "\r\n\r\n","rand",client);
-		//size_file(client.path);
-		//client.header = "HTTP/1.1 200 OK\nContent-Type: " + client.content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: //closed\r\n\r\n";
-		//server.write_in_socket_client(client.header,client.path,client);
+		if(!cgi_handler(server))
+		{
+			size_file(client.path);
+			client.header = "HTTP/1.1 200 OK\nContent-Type: " + client.content_type + "\nContent-Length:" + client.sizefile + "\r\nConnection: //closed\r\n\r\n";
+			server.write_in_socket_client(client.header,client.path,client);
+		}
 	}
 	else
 		return;
@@ -118,7 +171,6 @@ void Response::directory_handler(Server &server)
 			if (check_if_exist(server))
 			{
 				size_file(client.path + default_index);
-				std::cout<<"hola"<<std::endl;
 				client.extension = default_index;
 				client.client_header = "HTTP/1.1 200 OK\nContent-Type:  "+ getContentType(server) +"\nContent-Length: " + client.sizefile + "\r\nConnection: 	closed\r\n\r\n";
 				server.write_in_socket_client(client.client_header,client.path + default_index , client);
@@ -140,12 +192,12 @@ void Response::directory_handler(Server &server)
 void Response::Get(Server &server) {
 	// exit(0);
 	std::string root = client.location.root_val;
-	addslash(root);
 	client.path = root + client.location.location_val;
 	client.extension = client.location.location_val;
     client.content_type = getContentType(server);
 	std::ifstream infile(client.path);
 	//addslash(root);
+	// exit(0);
 	if (!infile.good())
 	{
 		size_file(getErrorFileName(client, "404"));
