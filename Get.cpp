@@ -126,7 +126,7 @@ void Response::directory_handler(Server &server)
 		}
 		else if (auto_index == false)
 		{
-			client.client_header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length:"+std::to_string(getFileSize(getErrorFileName(client,"400")))+ "\r\nConnection: closed\r\n\r\n";
+			client.client_header = "HTTP/1.1 403 Forbidden\nContent-Type:text/html\nContent-Length:"+std::to_string(getFileSize(getErrorFileName(client,"403")))+ "\r\nConnection: closed\r\n\r\n";
 			server.write_in_socket_client(client.client_header,getErrorFileName(client, "403"), client);
 		}
 	}
@@ -138,7 +138,7 @@ void Response::directory_handler(Server &server)
 
 
 void Response::Get(Server &server) {
-
+	// exit(0);
 	std::string root = client.location.root_val;
 	addslash(root);
 	client.path = root + client.location.location_val;

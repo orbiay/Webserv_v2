@@ -5,10 +5,10 @@ server:
 	methods POST GET DELETE
 	location /var:
 		root /Users/fbouanan/Desktop
-		upload off
+		upload on
 		return 301 http://facebook.com
 		autoindex off
-		cgi: on
+		cgi: off
 				/Users/fbouanan/Desktop/lkhra/test.php php
 		error_pages: 22 21 32
 			/file1|/file2|file3
