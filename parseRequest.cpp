@@ -166,6 +166,7 @@ int	matched_location(Server &server ,std::string url,Client &client)
 	// printf("here\n");
 	// std::cout << "url = " << url << std::endl;
 	int i = 0;
+	client.link_location = url;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
 	std::vector<size_t> vec;
 	Location save;
@@ -215,7 +216,7 @@ int	is_file(Client &client) {
 int find_index(Server &server, std::string method) {
 	int i = 0;
 	while(i < 3) {
-		if (server.server_config.methods[i] == method)
+		if (server.server_config.L[0].methods[i] == method)
 			return (1);
 		i++;
 	}

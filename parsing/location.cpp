@@ -26,6 +26,28 @@ std::vector<std::string> split(const std::string& str, char delimiter = ' ')
     return (parts);
 }
 
+void	Location::set_method(std::string line)
+{
+	size_t	GIT;
+	size_t	DELETE;
+	size_t	POST;
+	GIT = line.find("GET");
+	if (GIT == std::string::npos)
+		this->methods[0] = "";
+	else
+		this->methods[0] = this->methods[0] = line.substr(GIT, 3);
+	POST = line.find("POST");
+	if (POST == std::string::npos)
+		this->methods[1] = "";
+	else
+		this->methods[1] = line.substr(POST, 4);
+	DELETE = line.find("DELETE");
+	if (DELETE == std::string::npos)
+		this->methods[2] = "";
+	else
+		this->methods[2] = line.substr(DELETE, 6);
+}
+
 Location::Location()
 {
 }
@@ -51,6 +73,8 @@ void	Location::check_errors(void) const
 	if (this->status != 301)
 		throw (SyntaxError());
 	if (this->error_cods.size() != this->files_path.size())
+		throw (SyntaxError());
+	if (this->methods[0] == "" && this->methods[1] == "" && this->methods[2] == "")
 		throw (SyntaxError());
 }
 
@@ -192,6 +216,8 @@ void	Location::set_root(std::ifstream &rf)
 		getline(rf, line);
 		if (line == "\tlend")
 			return ;
+		if (line.compare(0, 9, "\t\tmethods") == 0)
+			this->set_method(line);
 		if (line.compare(0, 6, "\t\troot") == 0)
 			this->root_val = this->set_values(line);
 		if (line.compare(0, 7, "\t\tindex") == 0)

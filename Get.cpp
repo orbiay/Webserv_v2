@@ -22,9 +22,12 @@ void addslash(std::string &root)
 	if (*(root.end() - 1) != '/')
 		root += "/";
 }
-std::string link_maker(std::string &path,std::string name)
+std::string link_maker(std::string &path,std::string name,Client &client)
 {
-	std::string link = "      <li><a href=\"/" + path + "\">" + name + "</a></li>\n";
+	(void)path;
+	if (client.link_location[client.link_location.length() - 1 ] != '/')
+		client.link_location += '/';
+	std::string link = "      <li><a href=\"" + client.link_location + name + "\">" + name + "</a></li>\n";
 	return (link);
 }
 void Response::autoindex_mode(bool &auto_index,std::string &default_index,std::string root,Server &server,Client &client)
@@ -40,7 +43,7 @@ void Response::autoindex_mode(bool &auto_index,std::string &default_index,std::s
 			struct dirent *info = readdir(Directory);
 			while(info != NULL)
 			{
-				links += link_maker(client.path,info-> d_name);
+				links += link_maker(client.path,info-> d_name,client);
 				info = readdir(Directory);
 			}
 			std::string body = get_html_file(links);
@@ -101,8 +104,8 @@ int Response::cgi_handler(Server &server)
 					close(client.fd_rand);
 					close(client.fd_rand_body);
 					delete [] s;
-					close(client.fd_client);
-					FD_CLR(client.fd_client,&Server::current);
+					//close(client.fd_client);
+					//FD_CLR(client.fd_client,&Server::current);
 					client.is_delete = true;
 				}
 			}
@@ -110,8 +113,8 @@ int Response::cgi_handler(Server &server)
 				close(client.fd_rand);
 				close(client.fd_rand_body);
 				delete [] s;
-				close(client.fd_client);
-				FD_CLR(client.fd_client,&Server::current);
+				//close(client.fd_client);
+				//FD_CLR(client.fd_client,&Server::current);
 				client.is_delete = true;
 			}
 			client.in_cgi = 1;

@@ -1,19 +1,20 @@
 nserv: 1
 body_size 10000000000000000000
 server:
-	listen 127.0.0.255:8080
-	methods GET DELETE POST
+	listen 127.0.0.255:8081
 	location /var:
+		methods GET DELETE POST
 		root /Users/aomman/Desktop
-		upload on
+		upload off
 		return 301 http://facebook.com
 		autoindex off
-		cgi: off
+		cgi: on
 				/Users/aomman/Desktop/Webserv_v2/test.php php
 		error_pages: 22 21 32
 			/file1|/file2|file3
 	lend
 	location /exampl1:
+		methods POST DELETE GET
 		autoindex off
 		upload on
 		return 301 /test1
@@ -25,6 +26,7 @@ server:
 				/Users/orbiay/Desktop/web/test1.php php
 	lend
 	location /var/www/html:
+		methods GET DELETE POST
 		autoindex on
 		root /Users/orbiay/Desktop
 		return 301 /test2

@@ -99,12 +99,6 @@ void	Config::set_conf_nserv()
 	this->nserv = s.size();
 }
 
-void	Config::server_methods(Pserver serv)
-{
-	if ((serv.methods[0] == "") && (serv.methods[1] == "") && (serv.methods[2] == ""))
-		throw (SyntaxError());
-}
-
 void	Config::set_loc_conf(char **argv)
 {
 	std::map<std::string, std::string> config;
@@ -149,7 +143,6 @@ void	Config::set_loc_conf(char **argv)
 			s[i].L.push_back(l[0]);
 			j++;
 		}
-		this->server_methods(s[i]);
 		this->s.push_back(s[i]);
 		i++;
 	}

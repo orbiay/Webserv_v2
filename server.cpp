@@ -144,7 +144,8 @@ void Server::read_from_socket_client(Client &client)
 	char line[10240];
 	memset(line,'\0', 10240);
 	int i  = recv(client.fd_client, line, 10240, 0);
-
+	//std::cout << "|" << line << "|" << std::endl;
+	//exit(0);
 	// if request doesn't exist chenge is_delete variable to true for drop it.
 	if (!client.alrChecked) {
 		client.ret = is_carriage(std::string(line), client);

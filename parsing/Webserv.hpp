@@ -27,7 +27,6 @@ class Pserver
 		int			nloc;
 		int			end;
 		int			lend;
-		std::string methods[3];
 
 
 		std::vector<Location> L;
@@ -42,7 +41,6 @@ class Pserver
 		int			get_port(void) const;
 
 		void	set_nLocation(std::ifstream &f);
-		void	set_method(std::ifstream &rf);
 
 		void	set_nserv(std::ifstream &rf);
 		int		get_nserv(void) const;

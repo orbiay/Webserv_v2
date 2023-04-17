@@ -54,7 +54,7 @@ class Client{
 	int check;
 	bool checker;
 	std::string rand_file;
-	
+	std::string link_location;
 	int in_cgi;
 	/*************************/
     std::string url;
@@ -62,6 +62,8 @@ class Client{
     std::string content_type;
 	std::string path;
 	Location location;
+	bool flag_cgi;
+	std::map<std::string, std::string> env;
     /*************************/
 	socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;

@@ -129,6 +129,7 @@ void Response::Post(Server &server, int flag) {
 	// std::cout << "|" << server.server_config.L[0].root_val << "|" << std::endl;
 	// std::cout << "|" << server.server_config.L[0].upload << "|" << std::endl;
 	// exit(0);
+	int i = 0;
 	if (this->client.location.upload) {
 		// std::cout << "upload" << std::endl;
 			// printf("here\n");
@@ -153,7 +154,7 @@ void Response::Post(Server &server, int flag) {
 	else if (client.location.cgi)
 	{
 		CGI c;
-		c.cgi(server.server_config, client);
+		c.cgi(server.server_config, client, NULL);
 		if(client.in_cgi == 0)
 		{
 			client.fd_rand = open("./rand",O_RDONLY);
@@ -197,7 +198,9 @@ void Response::Post(Server &server, int flag) {
 			client.in_cgi = 1;
 			return ;
 		}
+		std::cout << "i = " <<  i++ << std::endl;
 		server.write_in_socket_client(client.header,"./randbody",client);
+		return ;
 	}
 }
 

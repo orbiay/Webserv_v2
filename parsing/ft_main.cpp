@@ -24,8 +24,7 @@ int parsing(int argc, char **argv, char **env)
 		(void)env;
 		(void)argc;
 		Config c(argv);
-		std::cout << c.s[0].L[0].cgi << std::endl;
-		//exit (0);
+		std::cout << c.s[0].L[1].methods[0] << std::endl;
 	}
 	return (0);
 }

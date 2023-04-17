@@ -40,6 +40,7 @@ class Location
 		std::string	error_path;
 		std::string	cgi_path;
 		std::string cgi_extention;
+		std::string methods[3];
 		std::vector<std::string> error_cods;
 		std::vector<std::string>files_path;
 		Location();
@@ -85,6 +86,8 @@ class Location
 
 		void	set_error_path(std::string);
 		std::string	get_error_path(void) const;
+
+		void	set_method(std::string line);
 
 		void	set_cgi(std::string line);
 		void	set_cgi_path(std::string line);
