@@ -247,7 +247,12 @@ void	check_methods(Server &server, Client &client)
 	}
 
 	else if (client.parse._data["method"] == "DELETE" && find_index(server, "DELETE")) {
-		// DELETE();
+		if (is_file(client)) {
+			res.Delete(server, FILE);
+		}
+		else {
+			res.Delete(server, DIRE);
+		}
 	}
 	else {
 		server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);

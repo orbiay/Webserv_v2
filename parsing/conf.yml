@@ -4,7 +4,7 @@ server:
 	listen 127.0.0.255:8081
 	methods POST GET DELETE
 	location /var:
-		root /Users/fbouanan/Desktop/
+		root /Users/fbouanan/Desktop
 		upload off
 		return 301 http://facebook.com
 		autoindex off

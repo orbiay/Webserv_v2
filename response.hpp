@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:44:53 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/03/17 18:39:28 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/17 00:04:50 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class Response{
 
 		void Get(Server &server);
 		void Post(Server &server, int flag);
-		void Delete(Server &server);
+		void Delete(Server &server, int flag);
 		std::string getContentType(Server &server);
 		int read_and_write(Client &client);
 		void size_file(std::string file_name);
