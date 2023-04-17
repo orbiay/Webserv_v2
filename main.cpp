@@ -150,13 +150,13 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av, char **env)
 {
+	(void)env;
 	if (ac != 2){
 		std::cout << "Invalid Arguments" << std::endl;
 		return 1;
 	}
 	try
 	{
-		parsing (ac, av, env);
 		signal(SIGPIPE, SIG_IGN);
 		Config conf(av);
 		std::cout << "here" << std::endl;

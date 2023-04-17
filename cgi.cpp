@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aomman <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/15 00:28:59 by aomman            #+#    #+#             */
-/*   Updated: 2023/04/16 20:53:10 by fbouanan         ###   ########.fr       */
+/*   Created: 2023/04/17 23:17:29 by aomman            #+#    #+#             */
+/*   Updated: 2023/04/17 23:17:32 by aomman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include"CGI.hpp"
 #include<sys/wait.h>
@@ -18,7 +19,6 @@ CGI::CGI(){}
 
 int	CGI::cgi(Pserver &s, Client &c)
 {
-	std::cout << "From GET" << std::endl;
 	std::string line;
 	std::stringstream cont(c.header);
 	std::string holder;
@@ -26,9 +26,6 @@ int	CGI::cgi(Pserver &s, Client &c)
 	std::string http_accpet;
 	std::string local_host;
 	std::string cookie;
-	std::cout << "+++++++++++++++++++++" << std::endl;
-	std::cout << c.header << std::endl;
-	std::cout << "+++++++++++++++++++++" << std::endl;
 	if (c.flag_cgi == false)
 	{
 		while (!cont.eof())
@@ -87,7 +84,6 @@ int	CGI::cgi(Pserver &s, Client &c)
 	while (i < j)
 	{
 		envm[i] = (char *)envp[i].c_str();
-		std::cout <<"*"<< envm[i] <<"*"<< std::endl;
 		i++;
 	}
 	envm[i] = NULL;
@@ -135,20 +131,20 @@ int	CGI::cgi(Pserver &s, Client &c)
 	waitpid(-1, NULL, WUNTRACED);
 	close (tmp_fd);
 	close(fd_cline);
-	 i = 0;
-	 while (envm[i])
-	 {
-	 	delete []envm[i];
-	 	i++;	
-	 }
-	 delete []envm;
+	//i = 0;
+	//while (envm[i])
+	//{
+	//	delete envm[i];
+	//	i++;	
+	//}
+	delete []envm;
+	envm = nullptr;
     f.close();
 	return (0);
 }
 
 int	CGI::cgi(Pserver &s, Client &c, char **envm)
 {
-	std::cout << "From Post" << std::endl;
 	std::string line;
 	std::stringstream cont(c.header);
 	std::string holder;
@@ -156,8 +152,6 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	std::string http_accpet;
 	std::string local_host;
 	std::string cookie;
-	std::cout << c.header << std::endl;
-	std::cout << "----------------------------" << std::endl;
 	if (c.flag_cgi == false)
 	{
 		while (!cont.eof())
@@ -217,7 +211,6 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	while (it != c.env.end())
 	{
 		envp[i] = it->first + "=" + it->second;
-		std::cout << envp[i] << std::endl;
 		i++;
 		j++;
 		++it;
@@ -227,10 +220,8 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	while (i < j)
 	{
 		envm[i] = (char *)envp[i].c_str();
-		std::cout <<"*"<< envm[i] <<"*"<< std::endl;
 		i++;
 	}
-	std::cout << "+++++++++++++++++++++++" << std::endl;
 	envm[i] = NULL;
 	std::ifstream f(c.location.cgi_path);
 	if (!f.good())
@@ -274,13 +265,14 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	waitpid(-1, NULL, WUNTRACED);
 	close (tmp_fd);
 	close(fd_cline);
-	 i = 0;
-	 while (envm[i])
-	 {
-	 	delete []envm[i];
-	 	i++;	
-	 }
-	 delete []envm;
+	// i = 0;
+	// while (envm[i])
+	// {
+	// 	delete []envm[i];
+	// 	i++;	
+	// }
+	delete []envm;
+	envm = nullptr;
     f.close();
 	return (0);
 }

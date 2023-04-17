@@ -13,7 +13,8 @@
 #include "http.hpp"
 
 
-parseRequest::parseRequest() {
+parseRequest::parseRequest()
+{
 	
 }
 
