@@ -6,7 +6,7 @@
 /*   By: fbouanan <fbouanan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 02:12:46 by fbouanan          #+#    #+#             */
-/*   Updated: 2023/04/16 05:24:23 by fbouanan         ###   ########.fr       */
+/*   Updated: 2023/04/17 15:25:40 by fbouanan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,11 @@ void Server::read_from_socket_client(Client &client)
 			client.parse.parse_request(client.header);
 			// std::cout << "content = " << client.parse._data["Content-Length"] << std::endl;
 			client.b_pos = client.ret + 4;
+			if (client.parse._data["method"] == "GET" && (client.header.length()+4 != std::string(line).length())) {
+				// std::cout << "400" << std::endl;
+				// exit(1);
+				write_in_socket_client("HTTP/1.1 400 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"400")))+"\r\n\r\n",getErrorFileName(client, "400"), client);
+			}
 			client.isChuncked = checkifchuncked(client.header);
 			client.j = 1;
 			client.alrChecked = true;
@@ -195,11 +200,11 @@ void Server::read_from_socket_client(Client &client)
 					client.ready = true;
 				}
 			}
-			// else {
-			// 	close(client.file);
-			// 	client.bodyReady = true;
-			// 	client.ready = true;
-			// }
+			else {
+				close(client.file);
+				client.bodyReady = true;
+				client.ready = true;
+			}
 		}
 	}
 	else if (client.isChuncked) {

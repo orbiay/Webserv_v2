@@ -7,7 +7,7 @@ server:
 		root /Users/orbiay/Desktop
 		upload off
 		return 301 http://facebook.com
-		autoindex on
+		autoindex off
 		cgi: on
 				/Users/orbiay/Desktop/web/test.php php
 		error_pages: 22 21 32
