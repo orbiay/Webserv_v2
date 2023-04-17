@@ -54,7 +54,7 @@ class Client{
 	int check;
 	bool checker;
 	std::string rand_file;
-	
+	std::string link_location;
 	int in_cgi;
 	/*************************/
     std::string url;

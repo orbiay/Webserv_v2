@@ -166,6 +166,7 @@ int	matched_location(Server &server ,std::string url,Client &client)
 	// printf("here\n");
 	// std::cout << "url = " << url << std::endl;
 	int i = 0;
+	client.link_location = url;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
 	std::vector<size_t> vec;
 	Location save;
