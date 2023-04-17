@@ -9,7 +9,7 @@
 int parsing(int argc, char **argv, char **env);
 bool Http::finish = false;
 
-int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserver server)
+int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserver &server)
 {
 	(void)i;
 	struct sockaddr_in address;
@@ -24,7 +24,7 @@ int create_socket_and_bind_it(int i,std::vector<struct sockaddr_in>  &addr,Pserv
 	Http http;
 	http.create_socket();
 	http.naming_socket(address);
-	http.bind();
+	http.bind(server);
 	return(http.fd_server);
 }
 
@@ -168,7 +168,6 @@ int main (int ac, char **av, char **env)
 
 		id_servers = create_servers(sed_struct,conf.s);
 	  
-
 
 		std::vector<Server> server_list;
 		std::vector<Server>::iterator iter;

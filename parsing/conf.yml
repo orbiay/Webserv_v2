@@ -1,7 +1,7 @@
 nserv: 1
 body_size 10000000000000000000
 server:
-	listen 127.0.0.255:8080
+	listen 127.0.0.255:8082
 	location /var:
 		methods GET DELETE POST
 		root /Users/aomman/Desktop

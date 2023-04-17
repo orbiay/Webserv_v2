@@ -135,13 +135,13 @@ int	CGI::cgi(Pserver &s, Client &c)
 	waitpid(-1, NULL, WUNTRACED);
 	close (tmp_fd);
 	close(fd_cline);
-	// i = 0;
-	// while (envm[i])
-	// {
-	// 	delete []envm[i];
-	// 	i++;	
-	// }
-	// delete []envm;
+	 i = 0;
+	 while (envm[i])
+	 {
+	 	delete []envm[i];
+	 	i++;	
+	 }
+	 delete []envm;
     f.close();
 	return (0);
 }
@@ -274,13 +274,13 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	waitpid(-1, NULL, WUNTRACED);
 	close (tmp_fd);
 	close(fd_cline);
-	// i = 0;
-	// while (envm[i])
-	// {
-	// 	delete []envm[i];
-	// 	i++;	
-	// }
-	// delete []envm;
+	 i = 0;
+	 while (envm[i])
+	 {
+	 	delete []envm[i];
+	 	i++;	
+	 }
+	 delete []envm;
     f.close();
 	return (0);
 }

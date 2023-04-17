@@ -31,6 +31,7 @@
 #include <signal.h>
 #include "parsing/location.hpp"
 #include"parsing/config.hpp"
+#include <netdb.h>
 
 
 #define DIRE 1
@@ -52,7 +53,7 @@ class Http{
     struct sockaddr_in def_socket;
     void create_socket();
     void naming_socket(struct sockaddr_in address);
-    void bind();
+    void bind(Pserver &conf);
     ~Http();
     static bool finish;
 };
