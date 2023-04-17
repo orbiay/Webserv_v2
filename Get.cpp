@@ -104,8 +104,8 @@ int Response::cgi_handler(Server &server)
 					close(client.fd_rand);
 					close(client.fd_rand_body);
 					delete [] s;
-					close(client.fd_client);
-					FD_CLR(client.fd_client,&Server::current);
+					//close(client.fd_client);
+					//FD_CLR(client.fd_client,&Server::current);
 					client.is_delete = true;
 				}
 			}
@@ -113,8 +113,8 @@ int Response::cgi_handler(Server &server)
 				close(client.fd_rand);
 				close(client.fd_rand_body);
 				delete [] s;
-				close(client.fd_client);
-				FD_CLR(client.fd_client,&Server::current);
+				//close(client.fd_client);
+				//FD_CLR(client.fd_client,&Server::current);
 				client.is_delete = true;
 			}
 			client.in_cgi = 1;

@@ -245,17 +245,17 @@ void	check_methods(Server &server, Client &client)
 	}
 
 	else if (client.parse._data["method"] == "DELETE" && find_index(server, "DELETE")) {
-		if (is_file(client)) {
+		if (access((client.location.root_val + client.location.location_val).c_str(), F_OK) == 0) {
 			res.Delete(server, FILE);
 		}
 		else {
 			res.Delete(server, DIRE);
 		}
 	}
-	else {
-		server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);
-		return ;
-	}
+	// else {
+	// 	server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);
+	// 	return ;
+	// }
 }
 
 		//-------------------------------------------------------------------------------------------
@@ -295,8 +295,20 @@ std::string getErrorFileName(Client &client ,std::string code) {
 
 }
 
+int isMethodValid(parseRequest &p) {
+	if (p._data["method"] != "POST" && p._data["method"] != "GET" && p._data["method"] != "DELETE") {
+		return -1;
+	}
+	return 0;
+}
+
 void	parseRequest::check_request(Server &server,Client &iter) {
 	if (!iter.checker) {
+
+		if (isMethodValid(*this) == -1) {
+			server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"405")))+"\r\n\r\n",getErrorFileName(iter, "405"), iter);
+			return ;
+		}
 		// printf("here\n");
 		if (this->_data["method"] == "POST") {
 			if (this->_data["Content-Length"].length() == 1){
@@ -327,12 +339,12 @@ void	parseRequest::check_request(Server &server,Client &iter) {
 			server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"413")))+ "\r\n\r\n",getErrorFileName(iter, "413"), iter);
 			return ;
 		}
-		// if (!iter.location.redirec.empty()) {
-		// 	std::cout << "redirec = " << iter.location.redirec << std::endl;
-		// 	// server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
-		// 	server.write_in_socket_client("HTTP/1.1 301 MOVED PERMANENTLY\nLocation: " + iter.location.redirec + "\nContent-Type: text/html\nContent-Length: 200\r\n\r\n", getErrorFileName(iter, "301"), iter);
-		// 	return ;
-		// }
+		if (!iter.location.redirec.empty()) {
+			std::cout << "redirec = " << iter.location.redirec << std::endl;
+			// server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: 220\r\n\r\n","413error.html", iter);
+			server.write_in_socket_client("HTTP/1.1 301 MOVED PERMANENTLY\nLocation: " + iter.location.redirec + "\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"413")))+ "\r\n\r\n", getErrorFileName(iter, "301"), iter);
+			return ;
+		}
 		iter.checker = true;
 	}
 	check_methods(server, iter);

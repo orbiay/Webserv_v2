@@ -83,7 +83,8 @@ void run_server(std::vector<Server> &server_list)
 		std::cout<<"max=========== "<<Server::maxfd<<std::endl;
 		if (ret < 0) {
 			std::perror("select() Error ");
-			exit(EXIT_FAILURE);
+			//exit(EXIT_FAILURE);
+			return ;
 		}
 		if (!ret)
 			continue;
@@ -118,7 +119,7 @@ void run_server(std::vector<Server> &server_list)
 							if (close(client.fd_client) != 0 || close(client.file) != 0)
 								perror("close() failed");
 							server.clients.erase(std::next(server.clients.begin(), i));
-							std::cout << "The client droped secsusfully \n";
+							std::cout << "The client dropped successfully \n";
 							i--;
 							
 						}
@@ -149,6 +150,10 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av, char **env)
 {
+	if (ac != 2){
+		std::cout << "Invalid Arguments" << std::endl;
+		return 1;
+	}
 	try
 	{
 		signal(SIGPIPE, SIG_IGN);
@@ -182,6 +187,7 @@ int main (int ac, char **av, char **env)
 			iter++;
 		}
 		run_server(server_list);
+		while (1);
 	}
 	catch(std::exception &e)
 	{

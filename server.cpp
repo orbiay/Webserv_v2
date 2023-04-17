@@ -144,7 +144,11 @@ void Server::read_from_socket_client(Client &client)
 	char line[10240];
 	memset(line,'\0', 10240);
 	int i  = recv(client.fd_client, line, 10240, 0);
-
+	if (i < 0)
+	{
+		client.is_delete = true;
+		return;
+	}
 	// if request doesn't exist chenge is_delete variable to true for drop it.
 	if (!client.alrChecked) {
 		client.ret = is_carriage(std::string(line), client);
@@ -238,7 +242,8 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
             client.is_delete = true;
         }
         client.start_writting = 0;
-		write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023));
+		if (write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023)) < 0)
+			client.is_delete = true;
 		return ;
     }
     else if (client.start_writting == 0)
@@ -247,8 +252,6 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
     }
     // write(1,"\n",1);
 	int b = send(client.fd_client,s,i,0);
-	if (b == 0)
-		usleep(1);
 	client.read_size += b;
 	//std::cout<<"->>>>>>>>"<<client.read_size<<std::endl;
     if (b < 1023)
