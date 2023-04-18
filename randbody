@@ -1,9 +1,13 @@
 
+<!DOCTYPE html>
 <html>
 <head>
-<title>Hello World - First CGI Program</title>
+	<title>Increment Counter Example</title>
 </head>
 <body>
-<h2>Hello World! This is my first CGI program</h2>
+	<h1>Counter: 46</h1>
+	<form method="POST">
+		<button type="submit" name="increment">Increment Counter</button>
+	</form>
 </body>
 </html>

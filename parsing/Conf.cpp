@@ -70,6 +70,9 @@ void	Config::set_body_size(std::ifstream &rf)
 			line = line.substr(i + 1, line.length());
 			std::stringstream stream(line);
 			stream >> this->body_size;
+			std::cout << this->body_size << std::endl;
+			if (this->body_size <= 0)
+				throw (SyntaxError());
 			return ;
 		}
 	}
