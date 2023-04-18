@@ -1,16 +1,16 @@
 nserv: 1
 body_size 10000000000000000000
 server:
-  listen 127.0.0.1:8080
-  location /var:
+	listen 127.0.0.1:8080
+	location /var:
 		methods GET DELETE POST
 		root /Users/orbiay/Desktop
 		upload off
 		autoindex off
 		cgi: on
-				/Users/aomman/Desktop/Webserv_v2/test.php php
-		error_pages: 22 21 32
-			/file1|/file2|/file3
+				/Users/orbiay/Desktop/web/test.php php
+		error_pages: 404 21 32
+			/Users/orbiay/Desktop/web/fouad.html|/file2|/file3
 	lend
 	location /exampl1:
 		methods GET DELETE POST

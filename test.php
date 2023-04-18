@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-methods GET DELETE POST
-=======
 <?php
 session_start(); // start session to store the counter value
 
@@ -27,4 +24,3 @@ if(isset($_POST['increment'])) { // check if the increment button is clicked
 	</form>
 </body>
 </html>
->>>>>>> 809a4d3e36d7a09c4e19d0e241327263e0446a4b

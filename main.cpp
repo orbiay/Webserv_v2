@@ -123,6 +123,7 @@ void run_server(std::vector<Server> &server_list)
 							i--;
 							
 						}
+						//exit(0);
 					}
 				}
 			}
