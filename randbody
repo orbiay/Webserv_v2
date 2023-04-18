@@ -1,0 +1,13 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Increment Counter Example</title>
+</head>
+<body>
+	<h1>Counter: 46</h1>
+	<form method="POST">
+		<button type="submit" name="increment">Increment Counter</button>
+	</form>
+</body>
+</html>

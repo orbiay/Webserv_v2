@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 X-Powered-By: PHP/8.0.2
 Content-type: text/html; charset=UTF-8
@@ -9,11 +10,22 @@ Content-type: text/html; charset=UTF-8
 Content-Type: text/html
 
 >>>>>>> 58ea47cc79ccae5787d79c6084b6f587ada6e6c1
+=======
+X-Powered-By: PHP/8.0.2
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Content-type: text/html; charset=UTF-8
+
+
+<!DOCTYPE html>
+>>>>>>> 809a4d3e36d7a09c4e19d0e241327263e0446a4b
 <html>
 <head>
-<title>Simple CGI Example</title>
+	<title>Increment Counter Example</title>
 </head>
 <body>
+<<<<<<< HEAD
 <<<<<<< HEAD
 	<form method="POST">
 		<label>Enter your name:</label>
@@ -29,3 +41,11 @@ Content-Type: text/html
 </body>
 </html>
 >>>>>>> 58ea47cc79ccae5787d79c6084b6f587ada6e6c1
+=======
+	<h1>Counter: 48</h1>
+	<form method="POST">
+		<button type="submit" name="increment">Increment Counter</button>
+	</form>
+</body>
+</html>
+>>>>>>> 809a4d3e36d7a09c4e19d0e241327263e0446a4b
