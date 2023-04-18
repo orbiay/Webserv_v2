@@ -84,7 +84,7 @@ void run_server(std::vector<Server> &server_list)
 		if (ret < 0) {
 			std::perror("select() Error ");
 			//exit(EXIT_FAILURE);
-			return ;
+			continue;
 		}
 		if (!ret)
 			continue;
@@ -187,7 +187,6 @@ int main (int ac, char **av, char **env)
 			iter++;
 		}
 		run_server(server_list);
-		while (1);
 	}
 	catch(std::exception &e)
 	{

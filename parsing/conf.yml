@@ -6,9 +6,9 @@ server:
 		methods GET DELETE POST
 		root /Users/orbiay/Desktop
 		upload off
-		autoindex off
+		autoindex on
 		cgi: on
-				/Users/orbiay/Desktop/web/test.php php
+				/Users/orbiay/Desktop/web/test.py py
 		error_pages: 404 21 32
 			/Users/orbiay/Desktop/web/fouad.html|/file2|/file3
 	lend

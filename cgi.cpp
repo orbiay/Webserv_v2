@@ -103,7 +103,7 @@ int	CGI::cgi(Pserver &s, Client &c)
 	int	fd[2];
 	char	*argc_s[3];
 	if (c.location.cgi_extention == "php")
-		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
+		argc_s[0] = (char *)"/Users/orbiay/Desktop/web/php-cgi";
 	else if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
@@ -135,6 +135,12 @@ int	CGI::cgi(Pserver &s, Client &c)
 	
 	close (tmp_fd);
 	close(fd_cline);
+	i = 0;
+	while (envm[i])
+	{
+		delete []envm[i];
+		i++;
+	}
 	delete []envm;
 	envm = nullptr;
     f.close();
@@ -230,7 +236,7 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	int	fd[2];
 	char	*argc_s[3];
 	if (c.location.cgi_extention == "php")
-		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
+		argc_s[0] = (char *)"/Users/orbiay/Desktop/web/php-cgi";
 	else if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
@@ -259,6 +265,12 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	waitpid(-1, NULL, WUNTRACED);
 	close (tmp_fd);
 	close(fd_cline);
+	i = 0;
+	while (envm[i])
+	{
+		delete []envm[i];
+		i++;
+	}
 	delete []envm;
 	envm = nullptr;
     f.close();

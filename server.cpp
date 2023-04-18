@@ -217,7 +217,7 @@ void Server::read_from_socket_client(Client &client)
 			char *holder;
 			holder = substr_no_null(line, client.b_pos, i, i);
 			handel_chunked(client, holder, i - client.b_pos);
-			delete(holder);
+			delete []holder;
 			client.j = 0;
 		}
 		else {
@@ -244,6 +244,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
         client.start_writting = 0;
 		if (write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023)) <= 0)
 			client.is_delete = true;
+		delete [] s;
 		return ;
     }
     else if (client.start_writting == 0)
@@ -261,7 +262,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 		close(client.fd_file);
 		close(client.fd_client);
 		FD_CLR(client.fd_client,&current);
-		delete(s);
+		delete [] s;
         return;
     }
     if (i < 1023)
@@ -270,10 +271,10 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 		close(client.fd_file);
 		close(client.fd_client);
 		FD_CLR(client.fd_client,&current);
-   		delete(s);
+   		delete [] s;
         return;
     }
-	delete(s);
+	delete [] s;
 }
 
 
