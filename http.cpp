@@ -36,6 +36,7 @@ void Http::bind(Pserver &conf)
 {
     int use = 1;
     struct addrinfo hints;
+    memset(&hints,0,sizeof(struct addrinfo));
     hints.ai_family = AF_INET; 
     hints.ai_socktype = SOCK_STREAM; 
     struct addrinfo* results;

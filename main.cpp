@@ -105,7 +105,7 @@ void run_server(std::vector<Server> &server_list)
 				// IF statement for Request.
 				if (FD_ISSET(client.fd_client, &readable))
 				{
-					fcntl(client.fd_client, F_SETFL, O_NONBLOCK);
+					fcntl(client.fd_client, F_SETFL, O_NONBLOCK); //WARNING
 					server.read_from_socket_client(client);
 				}
 				// IF statement for Response.

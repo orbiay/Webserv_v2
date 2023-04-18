@@ -144,7 +144,7 @@ void Server::read_from_socket_client(Client &client)
 	char line[10240];
 	memset(line,'\0', 10240);
 	int i  = recv(client.fd_client, line, 10240, 0);
-	if (i < 0)
+	if (i <= 0)
 	{
 		client.is_delete = true;
 		return;
@@ -242,7 +242,7 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
             client.is_delete = true;
         }
         client.start_writting = 0;
-		if (write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023)) < 0)
+		if (write(client.fd_client,str.c_str(),strnlen(str.c_str(),1023)) <= 0)
 			client.is_delete = true;
 		return ;
     }
@@ -270,9 +270,10 @@ void Server::write_in_socket_client(std::string str, std::string file , Client &
 		close(client.fd_file);
 		close(client.fd_client);
 		FD_CLR(client.fd_client,&current);
+   		delete(s);
         return;
     }
-   	delete(s);
+	delete(s);
 }
 
 

@@ -1,12 +1,13 @@
 nserv: 1
-body_size 10000000000
+body_size 1000000000000
 server:
 	listen 127.0.0.1:8080
 	methods GET DELETE POST
 	location /var:
-		root /Users/orbiay/Desktop
+		root /Users/orbiay/Desktop/web/
 		upload on
-		autoindex off
+		autoindex on
+		index f.html
 		cgi: off
 				/Users/orbiay/Desktop/web/test.php php
 		error_pages: 22 21 32
