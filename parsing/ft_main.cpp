@@ -19,7 +19,7 @@ int parsing(int argc, char **argv, char **env)
 	(void)argc;
 	Config c(argv);
 	std::cout << c.s[0].L[0].methods[0] << std::endl;
-	std::cout << c.s[0].L[0].redirec << std::endl;
+	std::cout << c.s[0].L[1].redirec << std::endl;
 
 	return (0);
 }

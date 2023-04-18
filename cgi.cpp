@@ -73,7 +73,6 @@ int	CGI::cgi(Pserver &s, Client &c)
 	while (it != c.env.end())
 	{
 		envp[i] = it->first + "=" + it->second;
-		std::cout << envp[i] << std::endl;
 		i++;
 		j++;
 		++it;
@@ -87,30 +86,31 @@ int	CGI::cgi(Pserver &s, Client &c)
 		i++;
 	}
 	envm[i] = NULL;
+	std::cout << "|" <<c.location.cgi_path << "|" << std::endl;
 	std::ifstream f(c.location.cgi_path);
 	if (!f.good())
 	{
 		std::cout << "Unable to open file" << std::endl;
 		return (1);
 	}
+	std::cout<< "|" << "heeeeeeer"<<c.location.cgi_extention << "|" << std::endl;
 	int	fd[2];
 	char	*argc_s[3];
 	if (c.location.cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	if (c.location.cgi_extention == "cpp")
+	else if (c.location.cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
-	if (c.location.cgi_extention == "js")
-		argc_s[0] = (char *)"/usr/bin/node";
-	if (c.location.cgi_extention == "py")
-		argc_s[0] = (char *)"/usr/bin/python";
-	if (c.location.cgi_extention == "c")
+	else if (c.location.cgi_extention == "c")
 		argc_s[0] = (char *)"/usr/bin/gcc";
-	argc_s[1] = (char *)s.L[0].cgi_path.c_str();
+	else if (c.location.cgi_extention == "pl")
+		argc_s[0] = (char *)"/usr/bin/perl";
+	argc_s[1] = (char *)c.location.cgi_path.c_str();
 	argc_s[2] = NULL;
 	int	tmp_fd = open("rand", O_CREAT | O_RDWR | O_TRUNC , 0644);
 	int	fd_cline = open(c.file_name.c_str(), std::ios::in);
 	if (access(argc_s[1], F_OK) == 0)
 	{
+		std::cout << "heeeeeeer" << std::endl;
 		pipe(fd);
 		if (fork() == 0)
 		{
@@ -128,7 +128,9 @@ int	CGI::cgi(Pserver &s, Client &c)
 		close (fd[1]);
 		dup2 (fd[0], STDIN_FILENO);
 	}
-	waitpid(-1, NULL, WUNTRACED);
+	while (waitpid(-1, NULL, WNOHANG) == 0)
+		continue;
+	
 	close (tmp_fd);
 	close(fd_cline);
 	//i = 0;
@@ -231,16 +233,19 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	}
 	int	fd[2];
 	char	*argc_s[3];
-	if (s.L[0].cgi_extention == "php")
+	std::cout << "heeeeeeer"<<c.location.cgi_extention << std::endl;
+	if (c.location.cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	if (s.L[0].cgi_extention == "cpp")
+	if (c.location.cgi_extention == "cpp")
 		argc_s[0] = (char *)"/usr/bin/c++";
-	if (s.L[0].cgi_extention == "py")
+	if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
-	if (s.L[0].cgi_extention == "c")
+	if (c.location.cgi_extention == "c")
 		argc_s[0] = (char *)"/usr/bin/gcc";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
 	argc_s[2] = NULL;
+	std::cout << argc_s[0] << std::endl;
+	std::cout << argc_s[1] << std::endl;
 	int	tmp_fd = open("rand", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	int	fd_cline = open(c.file_name.c_str(), std::ios::in);
 	if (access(argc_s[1], F_OK) == 0)
