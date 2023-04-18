@@ -6,7 +6,6 @@ server:
 		methods GET DELETE POST
 		root /Users/aomman/Desktop
 		upload off
-		return 301 https://facebook.com
 		autoindex off
 		cgi: on
 				/Users/aomman/Desktop/Webserv_v2/cgi_python.py py

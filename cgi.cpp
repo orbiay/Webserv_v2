@@ -108,6 +108,8 @@ int	CGI::cgi(Pserver &s, Client &c)
 		argc_s[0] = (char *)"/usr/bin/python";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
 	argc_s[2] = NULL;
+	std::cout << "----------------------->" << argc_s[0] << std::endl;
+	std::cout << "----------------------->" << argc_s[1] << std::endl;
 	int	tmp_fd = open("rand", O_CREAT | O_RDWR | O_TRUNC , 0644);
 	int	fd_cline = open(c.file_name.c_str(), std::ios::in);
 	if (access(argc_s[1], F_OK) == 0)

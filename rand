@@ -1,10 +1,11 @@
-Content-Type: text/html
+Content-type:text/html
+
 
 <html>
 <head>
-<title>Simple CGI Example</title>
+<title>Hello World - First CGI Program</title>
 </head>
 <body>
-<h1>Hello, World!</h1>
+<h2>Hello World! This is my first CGI program</h2>
 </body>
 </html>
