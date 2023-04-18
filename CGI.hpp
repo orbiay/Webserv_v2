@@ -24,6 +24,7 @@ class	CGI
 		//int	filename;
 		int cgi(Pserver &s, Client &c, char **env);
 		int	cgi(Pserver &s, Client &c);
+		std::string getContentType(std::string cgi_extention);
 		~CGI();
 };
 #endif

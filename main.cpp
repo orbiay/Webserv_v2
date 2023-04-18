@@ -158,8 +158,8 @@ int main (int ac, char **av, char **env)
 	try
 	{
 		signal(SIGPIPE, SIG_IGN);
+		parsing(ac, av, env);
 		Config conf(av);
-		std::cout << "here" << std::endl;
 		int i = 0;
 		int num_srver = conf.s.size();
 		std::vector<struct sockaddr_in>  sed_struct;

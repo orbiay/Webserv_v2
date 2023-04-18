@@ -82,12 +82,14 @@ void	Location::set_cgi_path(std::string line)
 {
 	size_t	i;
 	size_t	j;
+	size_t	r;
 	i = line.find("/");
-	this->cgi_path = line.substr(i, line.length() - 8);
+	r = line.rfind(" ");
+	this->cgi_path = line.substr(i, r - 4);
 	j = line.find(" ");
 	if (j == std::string::npos)
 		return ;
-	this->cgi_extention = line.substr(j + 1, line.length());
+	this->cgi_extention = line.substr(j + 1, line.length() - r);
 }
 
 void	Location::set_cgi(std::string	line)
@@ -255,7 +257,7 @@ void	Location::set_location(std::ifstream &rf)
 	this->upload_val = "";
 	this->status_str = "";
 	this->error_path = "";
-	this->redirec = "";    
+	this->redirec = "";
 	this->status = 301;
 	std::string line;
 

@@ -166,6 +166,7 @@ int	matched_location(Server &server ,std::string url,Client &client)
 {
 	// printf("here\n");
 	// std::cout << "url = " << url << std::endl;
+	// std::vector<std::string>::iterator itar = server.server_config.L[0].error_cods.begin();
 	int i = 0;
 	client.link_location = url;
 	std::vector<Location>::iterator it = server.server_config.L.begin();
@@ -253,10 +254,10 @@ void	check_methods(Server &server, Client &client)
 			res.Delete(server, DIRE);
 		}
 	}
-	// else {
-	// 	server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);
-	// 	return ;
-	// }
+	else {
+		server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(client,"405")))+"\r\n\r\n",getErrorFileName(client, "405"), client);
+		return ;
+	}
 }
 
 		//-------------------------------------------------------------------------------------------
@@ -279,8 +280,9 @@ std::string getErrorFileName(Client &client ,std::string code) {
 
 	std::vector<std::string>::iterator it = client.location.error_cods.begin();
 	std::vector<std::string>::iterator it1 = client.location.files_path.begin();
-
+	std::cout << "-----------------" << *it << std::endl;
 	while (it != client.location.error_cods.end()) {
+		printf("here-------------------\n");
 		if (*it == code) {
 			fileName = *it1;
 			std::cout << "fileName = " << fileName << std::endl;
@@ -306,6 +308,11 @@ int isMethodValid(parseRequest &p) {
 void	parseRequest::check_request(Server &server,Client &iter) {
 	if (!iter.checker) {
 
+		int _check_matched_location = matched_location(server ,this->_data["path"],iter);
+		if (_check_matched_location == -1) {
+    		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"404")))+"\r\n\r\n",getErrorFileName(iter, "404"), iter);
+			return ;
+		}
 		if (isMethodValid(*this) == -1) {
 			server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"405")))+"\r\n\r\n",getErrorFileName(iter, "405"), iter);
 			return ;
@@ -330,11 +337,6 @@ void	parseRequest::check_request(Server &server,Client &iter) {
 			return ;
 		}
 
-		int _check_matched_location = matched_location(server ,this->_data["path"],iter);
-		if (_check_matched_location == -1) {
-    		server.write_in_socket_client("HTTP/1.1 404 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"404")))+"\r\n\r\n",getErrorFileName(iter, "404"), iter);
-			return ;
-		}
 		if ((size_t)std::atoi(this->_data["Content-Length"].c_str()) > server.body_size){
 			//std::cout << "body size = " << std::atoi(iter.location.body_size.c_str()) << std::endl; 
 			server.write_in_socket_client("HTTP/1.1 413 KO\nContent-Type: text/html\nContent-Length: "+std::to_string(getFileSize(getErrorFileName(iter,"413")))+ "\r\n\r\n",getErrorFileName(iter, "413"), iter);

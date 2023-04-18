@@ -1,14 +1,20 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 X-Powered-By: PHP/8.0.2
 Content-type: text/html; charset=UTF-8
 
 <!DOCTYPE html>
+=======
+Content-Type: text/html
+
+>>>>>>> 58ea47cc79ccae5787d79c6084b6f587ada6e6c1
 <html>
 <head>
-	<title>Simple PHP Code Example</title>
+<title>Simple CGI Example</title>
 </head>
 <body>
+<<<<<<< HEAD
 	<form method="POST">
 		<label>Enter your name:</label>
 		<input type="text" name="name">
@@ -18,3 +24,8 @@ Content-type: text/html; charset=UTF-8
 	Hello, asdasd!</body>
 </html>
 >>>>>>> e842ba9f3c52fd209fa30cc7ef5b2da678772705
+=======
+<h1>Hello, World!</h1>
+</body>
+</html>
+>>>>>>> 58ea47cc79ccae5787d79c6084b6f587ada6e6c1
