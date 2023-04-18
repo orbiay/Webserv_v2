@@ -1,19 +1,19 @@
-nserv: 1
+nserv: 2
 body_size 1000000000000
 server:
 	listen 127.0.0.1:8080
-	methods GET DELETE POST
 	location /var:
 		root /Users/orbiay/Desktop/web/
+		methods GET DELETE POST
 		upload on
 		autoindex on
-		index f.html
 		cgi: off
 				/Users/orbiay/Desktop/web/test.php php
 		error_pages: 22 21 32
-			/file1|/file2|file3
+			/file1|/file2|/file3
 	lend
 	location /exampl1:
+		methods POST DELETE GET
 		autoindex off
 		upload on
 		return 301 /test1
@@ -25,6 +25,45 @@ server:
 				/Users/orbiay/Desktop/web/test1.php php
 	lend
 	location /var/www/html:
+		methods GET DELETE POST
+		autoindex on
+		root /Users/orbiay/Desktop
+		return 301 /test2
+		index file_name2
+		upload on
+		error_pages: 122 133 144
+			/fileL11|/fileL12|fileL13
+		cgi: off
+				/Users/orbiay/Desktop/web/test.php php
+	lend
+end
+
+server:
+	listen 127.0.0.1:8083
+	location /var:
+		root /Users/orbiay/Desktop/web/
+		methods GET DELETE POST
+		upload on
+		autoindex on
+		cgi: off
+				/Users/orbiay/Desktop/web/test.php php
+		error_pages: 22 21 32
+			/file1|/file2|/file3
+	lend
+	location /exampl1:
+		methods POST DELETE GET
+		autoindex off
+		upload on
+		return 301 /test1
+		index file_name1
+		root /Users/orbiay/Desktop
+		error_pages: 122 133 144
+			/fileL11|/fileL12|fileL13
+		cgi: off
+				/Users/orbiay/Desktop/web/test1.php php
+	lend
+	location /var/www/html:
+		methods GET DELETE POST
 		autoindex on
 		root /Users/orbiay/Desktop
 		return 301 /test2

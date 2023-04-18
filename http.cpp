@@ -43,6 +43,7 @@ void Http::bind(Pserver &conf)
     setsockopt(fd_server,SOL_SOCKET,SO_REUSEADDR, &use,sizeof(use));
     std::cout<<conf.host.c_str()<<std::endl;
     int status = getaddrinfo(conf.host.c_str(), "http", &hints, &results);
+    //(void)status;
     if (status != 0) {
         std::cerr << "Failed to perform DNS lookup: " << gai_strerror(status) << std::endl;
          exit(2); ;

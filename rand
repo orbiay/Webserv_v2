@@ -1,0 +1,20 @@
+<<<<<<< HEAD
+=======
+X-Powered-By: PHP/8.0.2
+Content-type: text/html; charset=UTF-8
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple PHP Code Example</title>
+</head>
+<body>
+	<form method="POST">
+		<label>Enter your name:</label>
+		<input type="text" name="name">
+		<input type="submit" value="Submit">
+	</form>
+
+	Hello, asdasd!</body>
+</html>
+>>>>>>> e842ba9f3c52fd209fa30cc7ef5b2da678772705

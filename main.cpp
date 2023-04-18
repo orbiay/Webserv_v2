@@ -80,7 +80,7 @@ void run_server(std::vector<Server> &server_list)
 		fd_set writable = Server::current;
 		fd_set readable = Server::current;
 		ret = select(Server::maxfd + 1, &readable, &writable, nullptr, 0);
-		std::cout<<"max=========== "<<Server::maxfd<<std::endl;
+		//std::cout<<"max=========== "<<Server::maxfd<<std::endl;
 		if (ret < 0) {
 			std::perror("select() Error ");
 			//exit(EXIT_FAILURE);
@@ -150,6 +150,7 @@ int Server::maxfd = 0;
 
 int main (int ac, char **av, char **env)
 {
+	(void)env;
 	if (ac != 2){
 		std::cout << "Invalid Arguments" << std::endl;
 		return 1;
@@ -158,8 +159,7 @@ int main (int ac, char **av, char **env)
 	{
 		signal(SIGPIPE, SIG_IGN);
 		Config conf(av);
-		if (parsing (ac, av, env) == 1)
-			return (1);
+		std::cout << "here" << std::endl;
 		int i = 0;
 		int num_srver = conf.s.size();
 		std::vector<struct sockaddr_in>  sed_struct;

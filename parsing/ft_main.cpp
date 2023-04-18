@@ -12,20 +12,14 @@
 
 #include"config.hpp"
 #include"Webserv.hpp"
-#include"../client.hpp"
-
-void	cgi(Pserver &s, Client &c);
-int	cgi_post(Pserver &s, Client &c, char **env);
 
 int parsing(int argc, char **argv, char **env)
 {
-	if (argc == 2)
-	{
-		(void)env;
-		(void)argc;
-		Config c(argv);
-		std::cout << c.s[0].L[0].cgi << std::endl;
-		//exit (0);
-	}
+	(void)env;
+	(void)argc;
+	Config c(argv);
+	std::cout << c.s[0].L[0].methods[0] << std::endl;
+	std::cout << c.s[0].L[0].redirec << std::endl;
+
 	return (0);
 }

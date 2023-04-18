@@ -62,6 +62,8 @@ class Client{
     std::string content_type;
 	std::string path;
 	Location location;
+	bool flag_cgi;
+	std::map<std::string, std::string> env;
     /*************************/
 	socklen_t 				address_length;
 	struct sockaddr_storage addresStorage;

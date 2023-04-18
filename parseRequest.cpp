@@ -13,7 +13,8 @@
 #include "http.hpp"
 
 
-parseRequest::parseRequest() {
+parseRequest::parseRequest()
+{
 	
 }
 
@@ -213,10 +214,10 @@ int	is_file(Client &client) {
 	return (0);
 }
 
-int find_index(Server &server, std::string method) {
+int find_index(Client &client, std::string method) {
 	int i = 0;
 	while(i < 3) {
-		if (server.server_config.methods[i] == method)
+		if (client.location.methods[i] == method)
 			return (1);
 		i++;
 	}
@@ -230,11 +231,11 @@ void	check_methods(Server &server, Client &client)
 	//res.client = &client;
 	// res.client = client.parse;
 	// std::cout << "method = " << server.server_config.methods[0] << std::endl;
-	if (client.parse._data["method"] == "GET" && find_index(server, "GET")) {
+	if (client.parse._data["method"] == "GET" && find_index(client, "GET")) {
 		res.Get(server);
 		//server.write_in_socket_client("HTTP/1.1 405 KO\nContent-Type: text/html\nContent-Length: 221\r\n\r\n","405error.html", client);
 	}
-	else if (client.parse._data["method"] == "POST" && find_index(server, "POST")) {
+	else if (client.parse._data["method"] == "POST" && find_index(client, "POST")) {
 		if (is_file(client)) {
 			res.Post(server, FILE);
 			// res.Post(server);
@@ -244,7 +245,7 @@ void	check_methods(Server &server, Client &client)
 		}
 	}
 
-	else if (client.parse._data["method"] == "DELETE" && find_index(server, "DELETE")) {
+	else if (client.parse._data["method"] == "DELETE" && find_index(client, "DELETE")) {
 		if (access((client.location.root_val + client.location.location_val).c_str(), F_OK) == 0) {
 			res.Delete(server, FILE);
 		}

@@ -18,6 +18,7 @@ std::string generateRandomString(int length) {
 }
 
 Client::Client() {
+	flag_cgi = false;
 	fd_rand = 0;
 	fd_rand_body = 0;
 	fd_client = -1;
