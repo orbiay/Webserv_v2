@@ -17,6 +17,13 @@
 CGI::~CGI(){}
 CGI::CGI(){}
 
+std::string CGI::getContentType(std::string cgi_extention)
+{
+    if (cgi_extention == "php") 
+        return "text/html";
+	return ("text/html");
+}
+
 int	CGI::cgi(Pserver &s, Client &c)
 {
 	std::string line;
@@ -86,7 +93,6 @@ int	CGI::cgi(Pserver &s, Client &c)
 		i++;
 	}
 	envm[i] = NULL;
-	std::cout << "|" <<c.location.cgi_path << "|" << std::endl;
 	std::ifstream f(c.location.cgi_path);
 	if (!f.good())
 	{
@@ -98,12 +104,8 @@ int	CGI::cgi(Pserver &s, Client &c)
 	char	*argc_s[3];
 	if (c.location.cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	else if (c.location.cgi_extention == "cpp")
-		argc_s[0] = (char *)"/usr/bin/c++";
-	else if (c.location.cgi_extention == "c")
-		argc_s[0] = (char *)"/usr/bin/gcc";
-	else if (c.location.cgi_extention == "pl")
-		argc_s[0] = (char *)"/usr/bin/perl";
+	else if (c.location.cgi_extention == "py")
+		argc_s[0] = (char *)"/usr/bin/python";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
 	argc_s[2] = NULL;
 	int	tmp_fd = open("rand", O_CREAT | O_RDWR | O_TRUNC , 0644);
@@ -236,12 +238,8 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	std::cout << "heeeeeeer"<<c.location.cgi_extention << std::endl;
 	if (c.location.cgi_extention == "php")
 		argc_s[0] = (char *)"/Users/aomman/Desktop/Webserv_v2/php-cgi";
-	if (c.location.cgi_extention == "cpp")
-		argc_s[0] = (char *)"/usr/bin/c++";
-	if (c.location.cgi_extention == "py")
+	else if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
-	if (c.location.cgi_extention == "c")
-		argc_s[0] = (char *)"/usr/bin/gcc";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
 	argc_s[2] = NULL;
 	std::cout << argc_s[0] << std::endl;

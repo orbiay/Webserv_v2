@@ -6,9 +6,10 @@ server:
 		methods GET DELETE POST
 		root /Users/aomman/Desktop
 		upload off
+		return 301 https://facebook.com
 		autoindex off
 		cgi: on
-				/Users/aomman/Desktop/Webserv_v2/test.php php
+				/Users/aomman/Desktop/Webserv_v2/cgi_python.py py
 		error_pages: 22 21 32
 			/file1|/file2|/file3
 	lend

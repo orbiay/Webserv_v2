@@ -1,17 +1,10 @@
-X-Powered-By: PHP/8.0.2
-Content-type: text/html; charset=UTF-8
+Content-Type: text/html
 
-<!DOCTYPE html>
 <html>
 <head>
-	<title>Simple PHP Code Example</title>
+<title>Simple CGI Example</title>
 </head>
 <body>
-	<form method="POST">
-		<label>Enter your name:</label>
-		<input type="text" name="name">
-		<input type="submit" value="Submit">
-	</form>
-
-	Hello, asdasdasdasd!</body>
+<h1>Hello, World!</h1>
+</body>
 </html>
