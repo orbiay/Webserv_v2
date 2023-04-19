@@ -103,7 +103,7 @@ int	CGI::cgi(Pserver &s, Client &c)
 	int	fd[2];
 	char	*argc_s[3];
 	if (c.location.cgi_extention == "php")
-		argc_s[0] = (char *)"/Users/orbiay/Desktop/web/php-cgi";
+		argc_s[0] = (char *)(c.location.root_val + "/php-cgi").c_str();
 	else if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();
@@ -236,7 +236,7 @@ int	CGI::cgi(Pserver &s, Client &c, char **envm)
 	int	fd[2];
 	char	*argc_s[3];
 	if (c.location.cgi_extention == "php")
-		argc_s[0] = (char *)"/Users/orbiay/Desktop/web/php-cgi";
+		argc_s[0] = (char *)(c.location.root_val + "/php-cgi").c_str();
 	else if (c.location.cgi_extention == "py")
 		argc_s[0] = (char *)"/usr/bin/python";
 	argc_s[1] = (char *)c.location.cgi_path.c_str();

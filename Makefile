@@ -14,7 +14,7 @@ NAME = Webserv
 all : $(NAME)
 
 $(NAME) : $(SRC) ${OBJS}
-		$(CC) $(CPPFLAGS) $(SRC) ${OBJS} -o $(NAME)
+		$(CC) $(SRC) ${OBJS} -o $(NAME)
 
 clean :
 	rm -rf $(NAME)

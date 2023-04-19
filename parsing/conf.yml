@@ -4,13 +4,13 @@ server:
 	listen 127.0.0.1:8080
 	location /var:
 		methods GET DELETE POST
-		root /Users/orbiay/Desktop
+		root /mnt/c/Users/aomman/Desktop/WebServ
 		upload off
 		autoindex on
 		cgi: on
-				/Users/orbiay/Desktop/web/test.py py
+				/mnt/c/Users/aomman/Desktop/WebServtest.py py
 		error_pages: 404 21 32
-			/Users/orbiay/Desktop/web/fouad.html|/file2|/file3
+			/mnt/c/Users/aomman/Desktop/WebServfouad.html|/file2|/file3
 	lend
 	location /exampl1:
 		methods GET DELETE POST
